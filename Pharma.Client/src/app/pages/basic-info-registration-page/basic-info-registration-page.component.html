@@ -1,0 +1,47 @@
+<div class="modernForm">
+    <div class="imageSection">
+        <div class="image">
+            <div class="overlay"></div>
+            <img src="https://i.ibb.co/wRWNy8q/pexels-yuri-manei-2272854.jpg" alt="pexels-yuri-manei-2272854">
+        </div>
+        <div class="textInside p-3">
+            <h1 style="color: darkgrey;">Get Health Records Using EHMR</h1>
+            <p class="tagLine" style="color: rgb(247, 234, 234);">Per Scan</p>
+        </div>
+        <div class="service">
+            <p><span class="price">100 Rs</span> / Month</p>
+        </div>
+    </div>
+    <div class="contactForm">
+        <h3 class="pb-2">Pharmacy Registration Form</h3>
+        <form>
+            <div class="name">
+                <label for="fullName">Full Name:</label>
+                <input type="text" name="fullName" id="fullName" placeholder="ex: Lindsey Wilson" required />
+                <div class="iconName"><i class="fa-solid fa-user"></i></div>
+            </div>
+            <div class="name">
+                <label for="email">Your Email:</label>
+                <input type="email" name="email" id="email" required />
+                <div class="iconName"><i class="fa-solid fa-envelope"></i></div>
+            </div>
+            <div class="name">
+                <label for="Password">Password:</label>
+                <input type="password" name="password" id="password" required />
+                <div class="iconName"><i class="fa-solid fa-lock"></i></div>
+            </div>
+            <div class="name">
+                <label for="Password">Confirm Password:</label>
+                <input type="password" name="password" id="password" required />
+                <div class="iconName"><i class="fa-solid fa-lock"></i></div>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="checkbox" name="checkbox" required>
+                <label for="checkbox">By signing up, you agree to the
+                    <p><a href="#">Play Term of Service</a></p>
+                </label>
+            </div>
+            <p-button label="Register Now" [rounded]="true" (onClick)="login()" severity="success" />
+        </form>
+    </div>
+</div>
