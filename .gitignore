@@ -55,3 +55,7 @@ Services/Patient/Patient.Api/Logs/*
 Services/Patient/Patient.Api/Properties/
 Services/Patient/Patient.Api/Properties/PublishProfiles/FolderProfile.pubxml.user
 Services/Patient/Patient.Api/UploadedFiles/
+*.jfm
+*.dbmdl
+*.log
+Pharmacy.Client/.vscode/
