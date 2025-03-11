@@ -5,7 +5,7 @@ using Pharmacy.Application.Features.Authentication.Services;
 
 namespace Pharmacy.Api.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
