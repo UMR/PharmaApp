@@ -38,68 +38,53 @@ namespace Pharmacy.Application.Features.Authentication.Services
         #region Methods
 
         public async Task<TokenResponseDto> RegisterAsync(UserRegisterRequestDto request)
-        {
-            //if (!await semaphore.WaitAsync(100))
-            //{
-            //    throw new Exception("Server is busy. Please try again later.");
-            //}
-            //else
-            //{
-                try
+        {             
+            var validator = new UserRegisterDtoValidator(_serviceProvider);
+            var validationResult = await validator.ValidateAsync(request);
+
+            if (validationResult.IsValid == false)
+            {
+                throw new ValidationRequestException(validationResult.Errors);
+            }
+
+            Guid userId = Guid.NewGuid();
+            var user = new Pharmacy.Domain.User();
+            user.Id = userId;
+            user.Pin = request.Pin;
+            user.Status = (byte)UserStatusEnum.Pending;
+            user.CreatedBy = userId;
+            user.CreatedDate = DateTime.UtcNow;
+
+            if (request.LoginId.Contains("@"))
+            {
+                user.Email = request.LoginId;
+                user.EnrolledBy = "Email";
+            }
+            else
+            {
+                user.Mobile = request.LoginId;
+                user.EnrolledBy = "Mobile";
+            }
+
+            var role = await _roleRepository.GetByNameAsync(RoleEnum.Pharmacist.ToString());
+
+            if (role != null)
+            {
+                user.UserRoles = new UserRole[] { new UserRole() { UserId = userId, RoleId = role.Id } };
+            }
+
+            var createdUserId = await _userRepository.CreateAsync(user);
+
+            if (createdUserId != Guid.Empty)
+            {
+                var response = await _identityService.GetToken(request.LoginId, request.Pin);
+                if (response != null && !string.IsNullOrEmpty(response.AccessToken))
                 {
-                    var validator = new UserRegisterDtoValidator(_serviceProvider);
-                    var validationResult = await validator.ValidateAsync(request);
-
-                    if (validationResult.IsValid == false)
-                    {
-                        throw new ValidationRequestException(validationResult.Errors);
-                    }
-
-                    Guid userId = Guid.NewGuid();
-                    var user = new Pharmacy.Domain.User();
-                    user.Id = userId;
-                    user.Pin = request.Pin;
-                    user.Status = (byte)UserStatusEnum.Pending;
-                    user.CreatedBy = userId;
-                    user.CreatedDate = DateTime.UtcNow;
-
-                    if (request.LoginId.Contains("@"))
-                    {
-                        user.Email = request.LoginId;
-                        user.EnrolledBy = "Email";
-                    }
-                    else
-                    {
-                        user.Mobile = request.LoginId;
-                        user.EnrolledBy = "Mobile";
-                    }
-
-                    var role = await _roleRepository.GetByNameAsync(RoleEnum.Pharmacist.ToString());
-
-                    if (role != null)
-                    {
-                        user.UserRoles = new UserRole[] { new UserRole() { UserId = userId, RoleId = role.Id } };
-                    }
-
-                    var createdUserId = await _userRepository.CreateAsync(user);
-
-                    if (createdUserId != Guid.Empty)
-                    {
-                        var response = await _identityService.GetToken(request.LoginId, request.Pin);
-                        if (response != null && !string.IsNullOrEmpty(response.AccessToken))
-                        {
-                            return response;
-                        }
-                    }
-
-                    return new TokenResponseDto();
-
+                    return response;
                 }
-                finally
-                {
-                    //semaphore.Release();
-                }
-            //}
+            }
+
+            return new TokenResponseDto();        
         }
 
         public async Task<TokenResponseDto> LoginAsync(UserLoginRequestDto request)

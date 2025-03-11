@@ -7,5 +7,6 @@ namespace Pharmacy.Application.Features.User.Services
         Task<UserInfoDto> GetUserAsync(string loginId, string pin);
         Task<bool> IsActiveAsync(Guid id);
         Task<UserInfoDto> GetByIdAsync(Guid id);
+        Task UpdateAsync(Guid id, UserUpdateDto request);
     }
 }

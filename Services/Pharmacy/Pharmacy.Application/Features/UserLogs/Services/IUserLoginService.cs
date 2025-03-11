@@ -2,5 +2,6 @@
 {
     public interface IUserLoginService
     {
+        Task CreateAsync(Guid userId);
     }
 }

@@ -9,5 +9,8 @@ namespace Pharmacy.Application.Contracts.Persistence
         Task<User> GetByIdAsync(Guid id);
         Task<bool> IsExistAsync(string loginId);
         Task<Guid> CreateAsync(User user);
+        Task<bool> UpdateAsync(User user);
+        Task<bool> IsExistEmailAsync(Guid id, string email);
+        Task<bool> IsExistMobileAsync(Guid id, string mobile);
     }
 }

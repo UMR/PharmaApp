@@ -51,5 +51,23 @@ namespace Pharmacy.Persistence.Repositories
             await _context.SaveChangesAsync();
             return user.Id;
         }
+
+        public async Task<bool> UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            return await _context.SaveChangesAsync() > 0 ? true : false;
+        }
+
+        public async Task<bool> IsExistEmailAsync(Guid id, string email)
+        {
+            var result = await _context.Users.AsNoTracking().AnyAsync(u => u.Id != id && u.Email.ToUpper() == email.Trim().ToUpper());
+            return result;
+        }
+
+        public async Task<bool> IsExistMobileAsync(Guid id, string mobile)
+        {
+            var result = await _context.Users.AsNoTracking().AnyAsync(u => u.Id != id && u.Mobile == mobile.Trim());
+            return result;
+        }
     }
 }

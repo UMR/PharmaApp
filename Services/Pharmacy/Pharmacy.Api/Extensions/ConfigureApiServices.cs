@@ -1,5 +1,8 @@
 ﻿using Microsoft.OpenApi.Models;
 using Pharmacy.Api.Constants;
+using Pharmacy.Api.Filters;
+using Pharmacy.Application.Common.Constants;
+using Pharmacy.Application.Features.CurrentUser.Services;
 
 namespace Pharmacy.Api.Extensions
 {
@@ -7,21 +10,22 @@ namespace Pharmacy.Api.Extensions
     { 
         public static WebApplicationBuilder AddApiServices(this WebApplicationBuilder builder)
         {
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             builder.Services.AddControllers(config =>
             {
-                //config.Filters.Add<ApiExceptionFilterAttribute>();
+                config.Filters.Add<ApiExceptionFilterAttribute>();
                 config.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().
                     RequireAuthenticatedUser().
                     RequireClaim(builder.Configuration["IdentityServer:ClaimType"], builder.Configuration["IdentityServer:ClaimValue"]).Build()));
             });
 
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy(RoleConstant.Patient, policy => policy.RequireRole(RoleConstant.Patient));
-            //    options.AddPolicy(RoleConstant.Doctor, policy => policy.RequireRole(RoleConstant.Doctor));
-            //    options.AddPolicy(RoleConstant.Admin, policy => policy.RequireRole(RoleConstant.Admin));
-            //});
-
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(RoleConstant.Admin, policy => policy.RequireRole(RoleConstant.Admin));
+                options.AddPolicy(RoleConstant.Pharmacist, policy => policy.RequireRole(RoleConstant.Pharmacist));
+                options.AddPolicy($"{RoleConstant.Pharmacist}Active" , policy => policy.RequireRole(RoleConstant.Pharmacist));
+            });
 
             builder.Services.AddCors(o =>
             {
