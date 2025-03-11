@@ -24,7 +24,7 @@ namespace Pharmacy.Api.Extensions
             {
                 options.AddPolicy(RoleConstant.Admin, policy => policy.RequireRole(RoleConstant.Admin));
                 options.AddPolicy(RoleConstant.Pharmacist, policy => policy.RequireRole(RoleConstant.Pharmacist));
-                options.AddPolicy($"{RoleConstant.Pharmacist}Active" , policy => policy.RequireRole(RoleConstant.Pharmacist));
+                //options.AddPolicy($"{RoleConstant.Pharmacist}Active" , policy => policy.RequireRole(RoleConstant.Pharmacist));
             });
 
             builder.Services.AddCors(o =>
