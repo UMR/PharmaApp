@@ -1,0 +1,7 @@
+﻿USE [PharmaAppDB]
+GO
+
+INSERT INTO [dbo].[Role]([Id], [Name])
+VALUES 
+('9552B0C8-0C36-4160-95C7-CE7583462F92', 'Admin'),
+('BC689DA4-744A-436C-9F26-39885C3DF098', 'Pharmacist');
