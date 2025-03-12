@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
 import { first, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastMessageService } from '../../../service/toast-message.service';
 
 @Component({
   selector: 'app-otp',
@@ -14,7 +15,7 @@ export class OtpComponent implements OnInit {
   /**
    *
    */
-  constructor(private authService: AuthenticationService, private pharmacyMerchantService: PharmacyMerchantService, private router: Router) {
+  constructor(private authService: AuthenticationService, private pharmacyMerchantService: PharmacyMerchantService, private router: Router, private toastService: ToastMessageService) {
 
   }
   _otpTimer: Subscription | any;
@@ -51,14 +52,46 @@ export class OtpComponent implements OnInit {
   }
 
   verifyOtp() {
-    this.pharmacyMerchantService.registerUser(this.user)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/']);
-        },
-        error: error => {
-        }
-      });
+    const otp = 123456;
+    if (otp == this.otp) {
+      this.registerUser();
+    }
+    else {
+      this.toastService.showError('Error', 'Invalid OTP');
+    }
+
   }
+  registerUser() {
+    if (this.user) {
+      const requestModel = {
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        email: this.user.email,
+        mobile: this.user.mobile,
+        pin: this.user.pin,
+      }
+      this.pharmacyMerchantService.registerUser(requestModel)
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            this.toastService.showSuccess('Success', 'User registered successfully');
+            this.router.navigate(['/']);
+          },
+          error: error => {
+          }
+        });
+    }
+  }
+  beforeUnloadHandler(event: BeforeUnloadEvent) {
+    const confirmationMessage = 'Are you sure you want to leave? Changes you made may not be saved.';
+    event.returnValue = confirmationMessage;
+    return confirmationMessage;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  handleBeforeUnload(event: BeforeUnloadEvent): void {
+    this.beforeUnloadHandler(event);
+  }
+
+
 }

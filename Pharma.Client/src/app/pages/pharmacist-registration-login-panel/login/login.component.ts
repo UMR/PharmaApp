@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../../../service/authentication.service';
+import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent {
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder) {
+  constructor(private router: Router, private fb: FormBuilder, private merchantService: PharmacyMerchantService) {
 
   }
   ngOnInit(): void {

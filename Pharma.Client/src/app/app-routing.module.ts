@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'otp-verification',
-    component: OtpComponent
+    component: OtpComponent,
   },
   {
     path: 'vital-scan',

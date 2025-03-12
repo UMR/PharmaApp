@@ -48,18 +48,21 @@ export class RegistrationComponent {
   generateOtp(arg0: number) {
     let loginId = this.userRegistrationForm.value.mobile;
     if (loginId != null) {
-      this.pharmacyMerchantService.generateOtp(loginId)
-        .pipe(first())
-        .subscribe({
-          next: () => {
-            this.otpTimer = 60;
-            this.authService.setOtpTimer(this.otpTimer);
-            this.router.navigate(['/otp-vreification']);
-          },
-          error: () => {
-            this.loading = false;
-          }
-        });
+      // this.pharmacyMerchantService.generateOtp(loginId)
+      //   .pipe(first())
+      //   .subscribe({
+      //     next: () => {
+      //       this.otpTimer = 60;
+      //       this.authService.setOtpTimer(this.otpTimer);
+      //       this.router.navigate(['/otp-vreification']);
+      //     },
+      //     error: () => {
+      //       this.loading = false;
+      //     }
+      //   });
+      this.otpTimer = 60;
+      this.authService.setOtpTimer(this.otpTimer);
+      this.router.navigate(['/otp-vreification']);
     }
   }
   NavigateToOtpPage() {

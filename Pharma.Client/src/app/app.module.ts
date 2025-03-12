@@ -12,8 +12,10 @@ import { PrimengModule } from './common/primeng/primeng.module';
 import { WasmService } from './service/wasm.service';
 import { LoginComponent } from './pages/pharmacist-registration-login-panel/login/login.component';
 import { RegistrationComponent } from './pages/pharmacist-registration-login-panel/registration/registration.component';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/otp.component';
+import { MessageService } from 'primeng/api';
+import { jwtInterceptorInterceptor } from './interceptor/jwt-interceptor.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,11 @@ import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/ot
     provideAnimationsAsync(),
     providePrimeNG(),
     WasmService,
-    provideHttpClient()
+    MessageService,
+    provideHttpClient(),
+    {
+      provide: HTTP_INTERCEPTORS, useFactory: () => jwtInterceptorInterceptor, multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
