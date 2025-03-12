@@ -21,6 +21,13 @@ namespace Pharmacy.Persistence.Repositories
             return user;
         }
 
+        public async Task<User> GetAsync(string loginId)
+        {
+            var user = await _context.Users.AsNoTracking()
+                .FirstOrDefaultAsync(u => (u.Email.ToUpper() == loginId.Trim().ToUpper() || u.Mobile == loginId.Trim()));
+            return user;
+        }
+
         public async Task<byte?> IsActiveAsync(Guid id)
         {
             var status = await _context.Users
