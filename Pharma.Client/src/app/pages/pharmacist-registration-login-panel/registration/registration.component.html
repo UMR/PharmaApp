@@ -1,0 +1,109 @@
+<div class="modernForm">
+    <div class="imageSection">
+        <div class="image">
+            <div class="overlay"></div>
+            <img src="https://i.ibb.co/wRWNy8q/pexels-yuri-manei-2272854.jpg" crossorigin="anonymous"
+                alt="pexels-yuri-manei-2272854">
+        </div>
+        <div class="textInside p-3">
+            <h1 style="color: darkgrey;">Get Health Records Using EHMR</h1>
+            <p class="tagLine" style="color: rgb(247, 234, 234);">Per Scan</p>
+        </div>
+        <div class="service">
+            <p><span class="price">100 Rs</span> / Month</p>
+        </div>
+    </div>
+    <div class="contactForm">
+        <h3 class="pb-3">Pharmacy Registration</h3>
+        <form [formGroup]="userRegistrationForm" (ngSubmit)="onSubmit()">
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="firstName" formControlName="firstName" autocomplete="off"
+                        class="form-control" />
+                    <label for="firstName">First Name</label>
+                </p-floatlabel>
+                @if(submitted && f.firstName.errors){
+                @if(f.firstName.errors.required){
+                <p-message severity="error" variant="simple" size="small">First Name is required!</p-message>
+                }
+                }
+            </div>
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="lastName" formControlName="lastName" autocomplete="off"
+                        class="form-control" />
+                    <label for="lastName">Last Name</label>
+                </p-floatlabel>
+            </div>
+
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="email" formControlName="email" autocomplete="off" class="form-control" />
+                    <label for="email">Email</label>
+                </p-floatlabel>
+                @if(submitted && f.email.errors){
+                @if(f.email.errors.email){
+                <p-message severity="error" variant="simple" size="small">Email is Invalid!</p-message>
+                }
+                }
+            </div>
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="mobile" formControlName="mobile" autocomplete="off" class="form-control" />
+                    <label for="mobile">Phone Number</label>
+                </p-floatlabel>
+                @if(submitted && f.mobile.errors){
+                @if(f.mobile.errors.required){
+                <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
+                }
+                }
+            </div>
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <p-password formControlName="pin" [toggleMask]="true" fluid="true" />
+                    <label for="pin">Pin</label>
+                </p-floatlabel>
+            </div>
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <p-password formControlName="confirmPin" [feedback]="false" [toggleMask]="true" fluid="true" />
+                    <label for="confirmPin">Confirm Pin</label>
+                </p-floatlabel>
+
+                @if (submitted && f.confirmPin.errors) {
+                @if (f.confirmPin.errors.required) {
+                <p-message severity="error" variant="simple" size="small">
+                    Confirm Pin is required
+                </p-message>
+                }
+                @if (f.confirmPin.errors?.mismatch) {
+                <p-message severity="error" variant="simple" size="small">
+                    Pin and Confirm Pin must match!
+                </p-message>
+                }
+                }
+            </div>
+
+            <div class="checkbox">
+                <input type="checkbox" id="checkbox" formControlName="termsAccepted">
+                <label for="checkbox">
+                    By signing up, you agree to the
+                    <p><a href="#">Terms of Service</a></p>
+                </label>
+
+                @if (submitted && f.termsAccepted.errors?.required) {
+                <p-message severity="error" variant="simple" size="small">
+                    * You must agree to the Terms of Service.
+                </p-message>
+                }
+            </div>
+
+            <p-button label="Register Now" type="submit" [rounded]="true" severity="success" />
+
+            <div class="py-2">
+                <p>* Already Have Account!<a (click)="login()" style="text-decoration: none; cursor: pointer;">Login</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

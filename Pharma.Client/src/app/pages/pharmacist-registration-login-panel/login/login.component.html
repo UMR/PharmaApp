@@ -1,0 +1,50 @@
+<div class="modernForm">
+    <div class="imageSection">
+        <div class="image">
+            <div class="overlay"></div>
+            <img src="https://i.ibb.co/wRWNy8q/pexels-yuri-manei-2272854.jpg" crossorigin="anonymous"
+                alt="pexels-yuri-manei-2272854">
+        </div>
+        <div class="textInside p-3">
+            <h1 style="color: darkgrey;">Get Health Records Using EHMR</h1>
+            <p class="tagLine" style="color: rgb(247, 234, 234);">Per Scan</p>
+        </div>
+        <div class="service">
+            <p><span class="price">100 Rs</span> / Month</p>
+        </div>
+    </div>
+    <div class="contactForm">
+        <h3 class="pb-3">Pharmacy Login</h3>
+        <form [formGroup]="userloginForm" (ngSubmit)="login()">
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="loginId" formControlName="loginId" autocomplete="off" class="form-control" />
+                    <label for="loginId">Phone Number</label>
+                </p-floatlabel>
+                @if(f.loginId.errors){
+                @if(f.loginId.errors.required){
+                <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
+                }
+                }
+            </div>
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <p-password formControlName="pin" feedback="false" [toggleMask]=" true" fluid="true" />
+                    <label for="pin">Pin</label>
+                </p-floatlabel>
+                @if(f.pin.errors){
+                @if(f.pin.errors.required){
+                <p-message severity="error" variant="simple" size="small">Pin is required!</p-message>
+                }
+                }
+            </div>
+
+            <p-button label="Login" type="submit" [rounded]="true" severity="success" />
+            <div class="py-2">
+                <p class="bold">* Don't Have Account!<a (click)="register()"
+                        style="text-decoration: none; cursor: pointer;">Register
+                        Now</a> </p>
+            </div>
+        </form>
+    </div>
+</div>

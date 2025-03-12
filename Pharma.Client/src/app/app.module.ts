@@ -7,29 +7,36 @@ import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BasicInfoRegistrationPageComponent } from './pages/basic-info-registration-page/basic-info-registration-page.component';
 import { BinahScanComponent } from './pages/binah-scan/binah-scan.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from './common/primeng/primeng.module';
 import { WasmService } from './service/wasm.service';
-import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { LoginComponent } from './pages/pharmacist-registration-login-panel/login/login.component';
+import { RegistrationComponent } from './pages/pharmacist-registration-login-panel/registration/registration.component';
+import { provideHttpClient } from '@angular/common/http';
+import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/otp.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BasicInfoRegistrationPageComponent,
     BinahScanComponent,
-    LandingPageComponent
+    LoginComponent,
+    RegistrationComponent,
+    OtpComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    PrimengModule
+    PrimengModule,
+    FormsModule
 
   ],
   providers: [
     provideAnimationsAsync(),
     providePrimeNG(),
-    WasmService
+    WasmService,
+    provideHttpClient()
   ],
   bootstrap: [AppComponent]
 })

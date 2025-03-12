@@ -1,0 +1,31 @@
+<div class="modernForm">
+    <div class="imageSection">
+        <div class="image">
+            <div class="overlay"></div>
+            <img src="https://i.ibb.co/wRWNy8q/pexels-yuri-manei-2272854.jpg" crossorigin="anonymous"
+                alt="pexels-yuri-manei-2272854">
+        </div>
+        <div class="textInside p-3">
+            <h1 style="color: darkgrey;">Get Health Records Using EHMR</h1>
+            <p class="tagLine" style="color: rgb(247, 234, 234);">Per Scan</p>
+        </div>
+        <div class="service">
+            <p><span class="price">100 Rs</span> / Month</p>
+        </div>
+    </div>
+    <div class="contactForm">
+        <h3 class="pb-3">Otp Verification</h3>
+        <p class="tagLine" style="color: red; font-weight: bold;font-size: 14px;" class="lead">Enter the OTP sent to
+            your mobile number
+        </p> <span>Timer : {{otpTimer}}</span>
+        <div class="name">
+            <p-inputotp [(ngModel)]="otp" [length]="6">
+                <ng-template #input let-token let-events="events">
+                    <input class="custom-otp-input" (input)="events.input($event)" (keydown)="events.keydown($event)"
+                        type="text" [attr.value]="token" [maxLength]="1" />
+                </ng-template>
+            </p-inputotp>
+        </div>
+        <p-button label="Submit Otp" type="submit" [rounded]="true" severity="success" (onClick)="verifyOtp()" />
+    </div>
+</div>
