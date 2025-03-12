@@ -57,14 +57,16 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Scripts" />
-    <Folder Include="Scripts\2024-03-10" />
+    <Folder Include="Scripts\2025-03-10" />
+    <Folder Include="Scripts\2025-03-12" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\2024-03-10\01_AS_01_DataBase_Create.sql" />
-    <None Include="Scripts\2024-03-10\02_AS_02_CREATE_TABLE_USER.sql" />
-    <None Include="Scripts\2024-03-10\03_AS_03_CREATE_TABLE_ROLE.sql" />
-    <None Include="Scripts\2024-03-10\04_AS_04_CREATE_TABLE_USER_ROLE.sql" />
-    <None Include="Scripts\2024-03-10\05_AS_05_INSERT_INTO_ROLE_TABLE.sql" />
-    <None Include="Scripts\2024-03-10\06_AS_06_CREATE_TABLE_USER_LOGIN.sql" />
+    <None Include="Scripts\2025-03-10\01_AS_01_DataBase_Create.sql" />
+    <None Include="Scripts\2025-03-10\02_AS_02_CREATE_TABLE_USER.sql" />
+    <None Include="Scripts\2025-03-10\03_AS_03_CREATE_TABLE_ROLE.sql" />
+    <None Include="Scripts\2025-03-10\04_AS_04_CREATE_TABLE_USER_ROLE.sql" />
+    <None Include="Scripts\2025-03-10\05_AS_05_INSERT_INTO_ROLE_TABLE.sql" />
+    <None Include="Scripts\2025-03-10\06_AS_06_CREATE_TABLE_USER_LOGIN.sql" />
+    <None Include="Scripts\2025-03-12\01_AS_01_CREATE_TABLE_Pharmacy.sql" />
   </ItemGroup>
 </Project>

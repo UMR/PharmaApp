@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Application.Constants;
 using Pharmacy.Application.Contracts.Persistence;
 using System.Text.RegularExpressions;
@@ -13,25 +15,38 @@ namespace Pharmacy.Application.Features.Authentication.Validators
         {
             _userRepository = serviceProvider.GetService<IUserRepository>();
 
-            RuleFor(a => a.LoginId)
+            RuleFor(u => u.FirstName)
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required")
-                .Must(BeAValidEmailOrMobile)
-                .WithMessage("{PropertyName} must be a valid email address or mobile number")
+                .Length(3, 30)
+                .WithMessage("{PropertyName} must be between 3 to 30 characters");
+
+            RuleFor(u => u.LastName)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required")
+                .Length(3, 30)
+                .WithMessage("{PropertyName} must be between 3 to 30 characters");
+
+            RuleFor(u => u.Email)
                 .MustAsync(BeUniqueLoginId)
                 .WithMessage("{PropertyName} already exists")
-                .OverridePropertyName("LoginId");
+                .MustAsync(IsValidEmail)
+                .WithMessage("{PropertyName} must be a valid email address");
 
-            RuleFor(a => a.Pin)
+            RuleFor(u => u.Mobile)
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .Matches(RegexConstant.SixDigitInteger)
-                .WithMessage("{PropertyName} must be exactly 6 digits");           
-        }
+                .WithMessage("{PropertyName} is required")
+                .MustAsync(BeUniqueLoginId)
+                .WithMessage("{PropertyName} already exists")
+                .MustAsync(IsValidMobileNumber)
+                .WithMessage("{PropertyName} must be a valid mobile number");
 
-        private bool BeAValidEmailOrMobile(string loginId)
-        {
-            return IsValidEmail(loginId) || IsValidMobileNumber(loginId);
+            RuleFor(u => u.Pin)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required")
+                .Matches(RegexConstant.SixDigitInteger)
+                .WithMessage("{PropertyName} must be exactly 6 digits");
+        
         }
 
         private async Task<bool> BeUniqueLoginId(string loginId, CancellationToken cancellationToken)
@@ -39,7 +54,7 @@ namespace Pharmacy.Application.Features.Authentication.Validators
             return !await _userRepository.IsExistAsync(loginId);
         }
 
-        private bool IsValidMobileNumber(string loginId)
+        private async Task<bool> IsValidMobileNumber(string loginId, CancellationToken cancellationToken)
         {
             foreach (var pattern in RegexConstant.Mobile)
             {
@@ -52,7 +67,7 @@ namespace Pharmacy.Application.Features.Authentication.Validators
             return false;
         }
 
-        private bool IsValidEmail(string loginId)
+        private async Task<bool> IsValidEmail(string loginId, CancellationToken cancellationToken)
         {
             bool isEmail = Regex.IsMatch(loginId, RegexConstant.Email, RegexOptions.IgnoreCase);
             return isEmail;

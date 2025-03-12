@@ -7,19 +7,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{FD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pharmacy", "Pharmacy", "{49CDDA65-C4A8-4AF6-84D2-972E30ED9356}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharmacy.Api", "Services\Pharmacy\Pharmacy.Api\Pharmacy.Api.csproj", "{82693FEC-3954-42FB-8A7B-71FBF0BBFA98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharmacy.Api", "Services\Pharmacy\Pharmacy.Api\Pharmacy.Api.csproj", "{82693FEC-3954-42FB-8A7B-71FBF0BBFA98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharmacy.Application", "Services\Pharmacy\Pharmacy.Application\Pharmacy.Application.csproj", "{1B9459E3-8D6C-4704-8F40-01AF3EDAA0E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharmacy.Application", "Services\Pharmacy\Pharmacy.Application\Pharmacy.Application.csproj", "{1B9459E3-8D6C-4704-8F40-01AF3EDAA0E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharmacy.Domain", "Services\Pharmacy\Pharmacy.Domain\Pharmacy.Domain.csproj", "{E1D55F87-5D9B-498D-8D5E-D030CFB0DA02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharmacy.Domain", "Services\Pharmacy\Pharmacy.Domain\Pharmacy.Domain.csproj", "{E1D55F87-5D9B-498D-8D5E-D030CFB0DA02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharmacy.Infrastructure", "Services\Pharmacy\Pharmacy.Infrastructure\Pharmacy.Infrastructure.csproj", "{93A5591D-985D-4A4C-B68A-A32F72C00B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharmacy.Infrastructure", "Services\Pharmacy\Pharmacy.Infrastructure\Pharmacy.Infrastructure.csproj", "{93A5591D-985D-4A4C-B68A-A32F72C00B57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharmacy.Persistence", "Services\Pharmacy\Pharmacy.Persistence\Pharmacy.Persistence.csproj", "{263796A0-C2DC-4FD8-BE98-B325DCD0ADBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharmacy.Persistence", "Services\Pharmacy\Pharmacy.Persistence\Pharmacy.Persistence.csproj", "{263796A0-C2DC-4FD8-BE98-B325DCD0ADBC}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Pharmacy.Database", "Services\Pharmacy\Pharmacy.Database\Pharmacy.Database.sqlproj", "{B3EBBA09-3FBC-47AD-B05A-1C6531029E49}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Pharmacy.Client", "Pharmacy.Client\Pharmacy.Client.esproj", "{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharma.Client", "Pharma.Client\Pharma.Client.csproj", "{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,12 +53,10 @@ Global
 		{B3EBBA09-3FBC-47AD-B05A-1C6531029E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3EBBA09-3FBC-47AD-B05A-1C6531029E49}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3EBBA09-3FBC-47AD-B05A-1C6531029E49}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,7 +69,6 @@ Global
 		{93A5591D-985D-4A4C-B68A-A32F72C00B57} = {49CDDA65-C4A8-4AF6-84D2-972E30ED9356}
 		{263796A0-C2DC-4FD8-BE98-B325DCD0ADBC} = {49CDDA65-C4A8-4AF6-84D2-972E30ED9356}
 		{B3EBBA09-3FBC-47AD-B05A-1C6531029E49} = {49CDDA65-C4A8-4AF6-84D2-972E30ED9356}
-		{D06793DB-38DE-43D5-BC6A-6EBC4CCD2963} = {FD805490-AA74-4F94-B4E7-9B1DD9EFAD68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9316A3C7-15FE-407F-8287-430AC8C49488}

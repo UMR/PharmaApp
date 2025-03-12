@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Pharmacy.Domain;
 
 namespace Pharmacy.Domain;
 
@@ -11,6 +10,8 @@ public partial class PharmaAppDbContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<Pharmacy> Pharmacies { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
@@ -22,6 +23,26 @@ public partial class PharmaAppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Pharmacy>(entity =>
+        {
+            entity.ToTable("Pharmacy");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.AddressLine1).HasMaxLength(60);
+            entity.Property(e => e.AddressLine2).HasMaxLength(60);
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.StoreLogo).HasMaxLength(120);
+            entity.Property(e => e.StoreName).HasMaxLength(120);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Owner).WithMany(p => p.Pharmacies)
+                .HasForeignKey(d => d.OwnerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Pharmacy_User");
+        });
+
         modelBuilder.Entity<Role>(entity =>
         {
             entity.ToTable("Role");

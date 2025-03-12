@@ -5,15 +5,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[User](
-	[Id] [uniqueidentifier] NOT NULL,
-	[FirstName] [nvarchar](50) NULL,
+	[Id] [uniqueidentifier] NOT NULL,	
+	[FirstName] [nvarchar](50) NOT NULL,
 	[LastName] [nvarchar](50) NULL,
 	[Mobile] [nvarchar](20) NULL,
 	[Email] [nvarchar](100) NULL,
 	[Pin] [nvarchar](50) NULL,
-	[DateOfBirth] [datetime] NULL,
 	[Status] [tinyint] NOT NULL,
-	[EnrolledBy] [nvarchar] (30) NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
 	[UpdatedBy] [uniqueidentifier] NULL,
