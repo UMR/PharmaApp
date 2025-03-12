@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Application.Contracts.Infrastructure;
 using Pharmacy.Infrastructure.Identity;
+using Pharmacy.Infrastructure.Otp;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Pharmacy.Infrastructure.Extensions
@@ -13,7 +14,9 @@ namespace Pharmacy.Infrastructure.Extensions
         {
             builder.AddIdentityServerServicesFromAppSettings();
             builder.AddIdentityAuthentication();
+            builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IIdentityService, IdentityService>();
+            builder.Services.AddScoped<IOtpService, OtpService>();
 
             return builder;
         }
