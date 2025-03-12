@@ -1,1 +1,19 @@
-<p>binah-scan works!</p>
+@if (!isStarted) {
+<div class="scan-button">
+    <button pButton label="Start Scan" (click)="startScan()"></button>
+</div>
+}
+
+@if (isStarted) {
+<div style="height: 500px; width: 300px; display: block; margin: 0 auto;">
+    <div class="monitor-wrapper">
+        <video #videoElement autoplay playsinline></video>
+    </div>
+    <button pButton (click)="startMeasuring()" label="Start Measuring"></button>
+</div>
+@if (vitals) {
+<div class="vitals-display">
+    <p>Vitals : {{vitals}}</p>
+</div>
+}
+}

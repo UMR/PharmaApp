@@ -2,7 +2,8 @@
     <div class="imageSection">
         <div class="image">
             <div class="overlay"></div>
-            <img src="https://i.ibb.co/wRWNy8q/pexels-yuri-manei-2272854.jpg" alt="pexels-yuri-manei-2272854">
+            <img src="https://i.ibb.co/wRWNy8q/pexels-yuri-manei-2272854.jpg" crossorigin="anonymous"
+                alt="pexels-yuri-manei-2272854">
         </div>
         <div class="textInside p-3">
             <h1 style="color: darkgrey;">Get Health Records Using EHMR</h1>
@@ -13,35 +14,49 @@
         </div>
     </div>
     <div class="contactForm">
-        <h3 class="pb-2">Pharmacy Registration Form</h3>
-        <form>
+        <h3 class="pb-3">Pharmacy Patient Portal</h3>
+        <form [formGroup]="userRegistrationForm" (ngSubmit)="login()">
             <div class="name">
-                <label for="fullName">Full Name:</label>
-                <input type="text" name="fullName" id="fullName" placeholder="ex: Lindsey Wilson" required />
-                <div class="iconName"><i class="fa-solid fa-user"></i></div>
+                <p-floatlabel variant="on">
+                    <input pInputText id="name" formControlName="name" autocomplete="off" class="form-control" />
+                    <label for="name">Name</label>
+                </p-floatlabel>
             </div>
             <div class="name">
-                <label for="email">Your Email:</label>
-                <input type="email" name="email" id="email" required />
-                <div class="iconName"><i class="fa-solid fa-envelope"></i></div>
+                <p-floatlabel variant="on">
+                    <input pInputText id="email" formControlName="email" autocomplete="off" class="form-control" />
+                    <label for="email">Email</label>
+                </p-floatlabel>
+            </div>
+
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="phoneNumber" formControlName="phoneNumber" autocomplete="off"
+                        class="form-control" />
+                    <label for="phoneNumber">Phone Number</label>
+                </p-floatlabel>
             </div>
             <div class="name">
-                <label for="Password">Password:</label>
-                <input type="password" name="password" id="password" required />
-                <div class="iconName"><i class="fa-solid fa-lock"></i></div>
+                <p-floatlabel variant="on">
+                    <input pInputText id="weight" formControlName="weight" autocomplete="off" class="form-control" />
+                    <label for="weight">Weight</label>
+                </p-floatlabel>
             </div>
             <div class="name">
-                <label for="Password">Confirm Password:</label>
-                <input type="password" name="password" id="password" required />
-                <div class="iconName"><i class="fa-solid fa-lock"></i></div>
+                <p-floatlabel variant="on">
+                    <p-datePicker formControlName="dateOfBirth" [maxDate]="currentDate"></p-datePicker>
+                    <label for="phoneNumber">Date of Birth</label>
+                </p-floatlabel>
             </div>
+
+
             <div class="checkbox">
-                <input type="checkbox" id="checkbox" name="checkbox" required>
+                <input type="checkbox" id="checkbox" name="checkbox">
                 <label for="checkbox">By signing up, you agree to the
                     <p><a href="#">Play Term of Service</a></p>
                 </label>
             </div>
-            <p-button label="Register Now" [rounded]="true" (onClick)="login()" severity="success" />
+            <p-button label="Register Now" type="submit" [rounded]="true" severity="success" />
         </form>
     </div>
 </div>

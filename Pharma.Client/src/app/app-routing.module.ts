@@ -2,10 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BasicInfoRegistrationPageComponent } from './pages/basic-info-registration-page/basic-info-registration-page.component';
 import { BinahScanComponent } from './pages/binah-scan/binah-scan.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 
 const routes: Routes = [
   {
     path: '',
+    component: LandingPageComponent
+  },
+  {
+    path: 'patient-registration',
     component: BasicInfoRegistrationPageComponent
   },
   {

@@ -68,15 +68,7 @@ a:hover {
 .contactForm h1 {
   padding: 15px 0;
 }
-input[type="email"],
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: rgb(177, 177, 177) 1px solid;
-  margin-top: 10px;
-}
+
 .name {
   position: relative;
   margin-bottom: 20px;
@@ -123,4 +115,11 @@ input[type="submit"]:hover {
   .contactForm {
     padding-right: 30px;
   }
+}
+
+::ng-deep .p-datepicker {
+  width: 100%;
+}
+::ng-deep .p-inputtext {
+  padding: 10px;
 }

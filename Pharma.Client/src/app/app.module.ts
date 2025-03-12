@@ -7,22 +7,29 @@ import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BasicInfoRegistrationPageComponent } from './pages/basic-info-registration-page/basic-info-registration-page.component';
 import { BinahScanComponent } from './pages/binah-scan/binah-scan.component';
-import { ButtonModule } from 'primeng/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PrimengModule } from './common/primeng/primeng.module';
+import { WasmService } from './service/wasm.service';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BasicInfoRegistrationPageComponent,
-    BinahScanComponent
+    BinahScanComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ButtonModule
+    ReactiveFormsModule,
+    PrimengModule
+
   ],
   providers: [
     provideAnimationsAsync(),
-    providePrimeNG()
+    providePrimeNG(),
+    WasmService
   ],
   bootstrap: [AppComponent]
 })
