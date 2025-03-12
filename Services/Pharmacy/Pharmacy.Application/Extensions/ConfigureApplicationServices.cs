@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pharmacy.Application.Features.Authentication.Services;
+using Pharmacy.Application.Features.PharmacyInfo.Services;
 using Pharmacy.Application.Features.User.Services;
 using Pharmacy.Application.Features.UserLogs.Services;
 using Pharmacy.Application.Mappings;
@@ -19,6 +20,7 @@ namespace Pharmacy.Application.Extensions
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserLoginService, UserLoginService>();
+            builder.Services.AddScoped<IPharmacyService, PharmacyService>();
             
             return builder;
         }

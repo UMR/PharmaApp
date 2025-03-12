@@ -31,6 +31,8 @@ public partial class User
 
     public string? EnrolledBy { get; set; }
 
+    public virtual ICollection<Pharmacy> Pharmacies { get; set; } = new List<Pharmacy>();
+
     public virtual ICollection<UserLogin> UserLogins { get; set; } = new List<UserLogin>();
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
