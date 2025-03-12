@@ -50,21 +50,14 @@ namespace Pharmacy.Application.Features.Authentication.Services
             Guid userId = Guid.NewGuid();
             var user = new Pharmacy.Domain.User();
             user.Id = userId;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.Mobile = request.Mobile;
             user.Pin = request.Pin;
             user.Status = (byte)UserStatusEnum.Pending;
             user.CreatedBy = userId;
             user.CreatedDate = DateTime.UtcNow;
-
-            if (request.LoginId.Contains("@"))
-            {
-                user.Email = request.LoginId;
-                user.EnrolledBy = "Email";
-            }
-            else
-            {
-                user.Mobile = request.LoginId;
-                user.EnrolledBy = "Mobile";
-            }
 
             var role = await _roleRepository.GetByNameAsync(RoleEnum.Pharmacist.ToString());
 
@@ -77,7 +70,7 @@ namespace Pharmacy.Application.Features.Authentication.Services
 
             if (createdUserId != Guid.Empty)
             {
-                var response = await _identityService.GetToken(request.LoginId, request.Pin);
+                var response = await _identityService.GetToken(request.Mobile, request.Pin);
                 if (response != null && !string.IsNullOrEmpty(response.AccessToken))
                 {
                     return response;
