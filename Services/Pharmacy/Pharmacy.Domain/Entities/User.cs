@@ -17,8 +17,6 @@ public partial class User
 
     public string? Pin { get; set; }
 
-    public DateTime? DateOfBirth { get; set; }
-
     public byte Status { get; set; }
 
     public Guid CreatedBy { get; set; }
@@ -28,8 +26,6 @@ public partial class User
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; }
-
-    public string? EnrolledBy { get; set; }
 
     public virtual ICollection<Pharmacy> Pharmacies { get; set; } = new List<Pharmacy>();
 
