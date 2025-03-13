@@ -36,10 +36,10 @@ namespace Pharmacy.Application.Features.Authentication.Validators
             RuleFor(u => u.Mobile)
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required")
-                .MustAsync(BeUniqueLoginId)
-                .WithMessage("{PropertyName} already exists")
                 .MustAsync(IsValidMobileNumber)
-                .WithMessage("{PropertyName} must be a valid mobile number");
+                .WithMessage("{PropertyName} must be a valid mobile number")
+                .MustAsync(BeUniqueLoginId)
+                .WithMessage("{PropertyName} already exists");
 
             RuleFor(u => u.Pin)
                 .NotEmpty()

@@ -1,36 +1,30 @@
-﻿using IdentityModel;
-using IdentityServer4.Validation;
-using Microsoft.Extensions.Logging;
-using Pharmacy.Application.Features.User.Services;
+﻿namespace Pharmacy.Infrastructure.Identity;
 
-namespace Pharmacy.Infrastructure.Identity
+public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 {
-    public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
+    private readonly ILogger<ResourceOwnerPasswordValidator> _logger;
+    private readonly IUserService _userService;
+
+    public ResourceOwnerPasswordValidator(ILogger<ResourceOwnerPasswordValidator> logger,
+    IUserService userService)
     {
-        private readonly ILogger<ResourceOwnerPasswordValidator> _logger;
-        private readonly IUserService _userService;
+        _logger = logger;
+        _userService = userService;
+    }
 
-        public ResourceOwnerPasswordValidator(ILogger<ResourceOwnerPasswordValidator> logger,
-        IUserService userService)
+    public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
+    {
+        try
         {
-            _logger = logger;
-            _userService = userService;
+            var user = await _userService.GetUserAsync(context.UserName, context.Password);
+            if (user != null)
+            {
+                context.Result = new GrantValidationResult(user.Id.ToString(), OidcConstants.AuthenticationMethods.Password);
+            }
         }
-
-        public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
+        catch (Exception ex)
         {
-            try
-            {
-                var user = await _userService.GetUserAsync(context.UserName, context.Password);
-                if (user != null)
-                {
-                    context.Result = new GrantValidationResult(user.Id.ToString(), OidcConstants.AuthenticationMethods.Password);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-            }
+            _logger.LogError(ex, ex.Message);
         }
     }
 }

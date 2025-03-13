@@ -93,7 +93,6 @@ namespace Pharmacy.Application.Features.User.Services
                 user.Email = request.Email;
             }
             user.Mobile = request.Mobile;
-            user.DateOfBirth = request.DateOfBirth;
             user.Status = (byte)UserStatusEnum.Active;
             user.UpdatedBy = id;
             user.UpdatedDate = DateTime.UtcNow;

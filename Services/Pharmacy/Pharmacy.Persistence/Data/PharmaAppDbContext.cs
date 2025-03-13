@@ -59,9 +59,7 @@ public partial class PharmaAppDbContext : DbContext
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.EnrolledBy).HasMaxLength(30);
             entity.Property(e => e.FirstName).HasMaxLength(50);
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Mobile).HasMaxLength(20);
