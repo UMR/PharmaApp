@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Application.Contracts.Infrastructure;
+using Pharmacy.Infrastructure.EmailClient;
 using Pharmacy.Infrastructure.Identity;
 using Pharmacy.Infrastructure.Otp;
+using Pharmacy.Infrastructure.SMSClient;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Pharmacy.Infrastructure.Extensions
@@ -17,6 +19,8 @@ namespace Pharmacy.Infrastructure.Extensions
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IIdentityService, IdentityService>();
             builder.Services.AddScoped<IOtpService, OtpService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<ISMSService, SMSService>();
 
             return builder;
         }

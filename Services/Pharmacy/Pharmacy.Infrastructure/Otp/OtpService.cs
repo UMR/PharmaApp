@@ -6,6 +6,8 @@ using Pharmacy.Application.Contracts.Infrastructure;
 using Pharmacy.Application.Contracts.Persistence;
 using Pharmacy.Application.Exceptions;
 using Pharmacy.Application.Models;
+using Pharmacy.Application.Models.Email;
+using Pharmacy.Application.Models.SMS;
 using Pharmacy.Application.Wrapper;
 using Pharmacy.Domain;
 
@@ -18,8 +20,8 @@ namespace Pharmacy.Infrastructure.Otp
         private readonly IMemoryCache _cache;
         private readonly IConfiguration _configuration;
         private readonly Random _random;
-        //private readonly IEmailService _emailService;
-        //private readonly ISMSService _smsService;
+        private readonly IEmailService _emailService;
+        private readonly ISMSService _smsService;
         private readonly IUserRepository _userRepository;
         private ILogger<OtpService> _logger;
 
@@ -29,16 +31,16 @@ namespace Pharmacy.Infrastructure.Otp
 
         public OtpService(IMemoryCache cache,
                         IConfiguration configuration,
-                        //IEmailService emailService,
-                        //ISMSService smsService,
+                        IEmailService emailService,
+                        ISMSService smsService,
                         IUserRepository userRepository,
                         ILogger<OtpService> logger)
         {
             _cache = cache;
             _random = new Random();
             _configuration = configuration;
-            //_emailService = emailService;
-            //_smsService = smsService;
+            _emailService = emailService;
+            _smsService = smsService;
             _userRepository = userRepository;
             _logger = logger;
         }
@@ -99,41 +101,41 @@ namespace Pharmacy.Infrastructure.Otp
 
             try
             {
-                //if (loginId.Contains("@"))
-                //{
-                //    string emailBody = $@"
-                //<html>
-                //<body>
-                //    <div style='display: flex; align-items: center; background-color: #f5f5f5; padding: 20px; border-radius: 10px;'>
-                //        <h1 style='margin: 0; font-size: 24px; color: #333;'>SCOHN <sup style='font-size: 8px;'>TM</h6></sup></h1>
-                //    </div>
-                //    <p>Your one-time password (OTP) is <strong><u style='color:red;'>{otp}</u></strong>.</p>
-                //    <p>This OTP is valid for {expireTimeInSecond / 60} minutes. Please do not share this OTP with anyone.</p>
-                //</body>
-                //</html>";
+                if (loginId.Contains("@"))
+                {
+                    string emailBody = $@"
+                <html>
+                <body>
+                    <div style='display: flex; align-items: center; background-color: #f5f5f5; padding: 20px; border-radius: 10px;'>
+                        <h1 style='margin: 0; font-size: 24px; color: #333;'>SCOHN <sup style='font-size: 8px;'>TM</h6></sup></h1>
+                    </div>
+                    <p>Your one-time password (OTP) is <strong><u style='color:red;'>{otp}</u></strong>.</p>
+                    <p>This OTP is valid for {expireTimeInSecond / 60} minutes. Please do not share this OTP with anyone.</p>
+                </body>
+                </html>";
 
-                //    await _emailService.SendEmailAsync(new Email
-                //    {
-                //        EmailAddress = [loginId],
-                //        EmailSubject = "Verify Your SCOHN Account with this OTP",
-                //        EmailBody = emailBody
-                //    });
-                //}
+                    //await _emailService.SendEmailAsync(new Email
+                    //{
+                    //    EmailAddress = [loginId],
+                    //    EmailSubject = "Verify Your SCOHN Account with this OTP",
+                    //    EmailBody = emailBody
+                    //});
+                }
 
-                //else
-                //{
-                //    var mobileNumber = loginId;
-                //    if (loginId.Length == 10)
-                //    {
-                //        mobileNumber = "91" + mobileNumber;
-                //    }
-                //    await _smsService.SendSMSAsync(new SMS
-                //    {
-                //        SMSAddress = [mobileNumber],
-                //        SMSSubject = "OTP for verification",
-                //        SMSBody = $"{otp}"
-                //    });
-                //}
+                else
+                {
+                    var mobileNumber = loginId;
+                    if (loginId.Length == 10)
+                    {
+                        mobileNumber = "91" + mobileNumber;
+                    }
+                    //await _smsService.SendSMSAsync(new SMS
+                    //{
+                    //    SMSAddress = [mobileNumber],
+                    //    SMSSubject = "OTP for verification",
+                    //    SMSBody = $"{otp}"
+                    //});
+                }
 
                 var cacheOptions = new MemoryCacheEntryOptions
                 {
@@ -144,7 +146,7 @@ namespace Pharmacy.Infrastructure.Otp
             }
             catch (Exception ex)
             {
-                //await _emailService.SendErrorEmailAsync(ex);
+                await _emailService.SendErrorEmailAsync(ex);
                 _logger.LogError(ex, "Error while sending email");
             }
 
@@ -167,24 +169,24 @@ namespace Pharmacy.Infrastructure.Otp
 
             try
             {
-                //if (loginId.Contains("@"))
-                //{
-                //    await _emailService.SendEmailAsync(new Email
-                //    {
-                //        EmailAddress = [loginId],
-                //        EmailSubject = "OTP for verification",
-                //        EmailBody = $"Your OTP is {otp}. It will expire in {expireTimeInSecond}"
-                //    });
-                //}
-                //else
-                //{
-                //    await _smsService.SendSMSAsync(new SMS
-                //    {
-                //        SMSAddress = [loginId],
-                //        SMSSubject = "OTP for verification",
-                //        SMSBody = $"{otp}"
-                //    });
-                //}
+                if (loginId.Contains("@"))
+                {
+                    //await _emailService.SendEmailAsync(new Email
+                    //{
+                    //    EmailAddress = [loginId],
+                    //    EmailSubject = "OTP for verification",
+                    //    EmailBody = $"Your OTP is {otp}. It will expire in {expireTimeInSecond}"
+                    //});
+                }
+                else
+                {
+                    //await _smsService.SendSMSAsync(new SMS
+                    //{
+                    //    SMSAddress = [loginId],
+                    //    SMSSubject = "OTP for verification",
+                    //    SMSBody = $"{otp}"
+                    //});
+                }
 
                 var cacheOptions = new MemoryCacheEntryOptions
                 {
@@ -195,7 +197,7 @@ namespace Pharmacy.Infrastructure.Otp
             }
             catch (Exception ex)
             {
-                //await _emailService.SendErrorEmailAsync(ex);
+                await _emailService.SendErrorEmailAsync(ex);
                 _logger.LogError(ex, "Error while sending email");
             }
 
