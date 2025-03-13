@@ -16,9 +16,14 @@
     <div class="contactForm">
         <h3 class="pb-3">Otp Verification</h3>
         <p class="tagLine" style="color: red; font-weight: bold;font-size: 14px;" class="lead">Enter the OTP sent to
-            your mobile number
-        </p> <span>Timer : {{otpTimer}}</span>
-        <div class="name">
+            your mobile number</p>
+        <div>
+            @if(!showResendBtn){
+            <span><i class="pi pi-clock"></i> {{otpTimer}}</span>
+
+            }
+        </div>
+        <div class="name my-3">
             <p-inputotp [(ngModel)]="otp" [length]="6">
                 <ng-template #input let-token let-events="events">
                     <input class="custom-otp-input" (input)="events.input($event)" (keydown)="events.keydown($event)"

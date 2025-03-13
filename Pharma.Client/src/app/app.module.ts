@@ -16,6 +16,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/otp.component';
 import { MessageService } from 'primeng/api';
 import { jwtInterceptorInterceptor } from './interceptor/jwt-interceptor.interceptor';
+import { OtherModule } from './common/other/other.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { jwtInterceptorInterceptor } from './interceptor/jwt-interceptor.interce
     AppRoutingModule,
     ReactiveFormsModule,
     PrimengModule,
-    FormsModule
+    FormsModule,
+    OtherModule
 
   ],
   providers: [

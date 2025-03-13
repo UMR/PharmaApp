@@ -128,3 +128,16 @@ input[type="submit"]:hover {
 ::ng-deep .p-password-input {
   width: 100%;
 }
+::ng-deep .wrap[_ngcontent-ng-c1987699856] {
+  border-radius: 25px !important;
+  width: 100% !important;
+  padding: 15px !important;
+}
+
+::ng-deep .flag {
+  width: 25px !important;
+}
+
+::ng-deep .ng-phone-number-input-modal-wrap {
+  width: 100% !important;
+}

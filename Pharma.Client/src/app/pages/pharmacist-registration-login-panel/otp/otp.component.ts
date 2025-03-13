@@ -1,9 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
 import { first, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastMessageService } from '../../../service/toast-message.service';
+import { forgotPin } from '../../../common/constant/auth-key';
 
 @Component({
   selector: 'app-otp',
@@ -11,16 +12,20 @@ import { ToastMessageService } from '../../../service/toast-message.service';
   templateUrl: './otp.component.html',
   styleUrl: './otp.component.css'
 })
-export class OtpComponent implements OnInit {
+export class OtpComponent implements OnInit, OnDestroy {
   /**
    *
    */
   constructor(private authService: AuthenticationService, private pharmacyMerchantService: PharmacyMerchantService, private router: Router, private toastService: ToastMessageService) {
 
   }
+
+  ngOnDestroy(): void {
+    this._otpTimer.unsubscribe();
+  }
   _otpTimer: Subscription | any;
   otpTimer: any;;
-  showResendBtn: boolean = false;
+  public showResendBtn: boolean = false;
   user: any;
   otp: any;
 
@@ -28,6 +33,7 @@ export class OtpComponent implements OnInit {
     this.getUser();
     this._otpTimer = this.authService.otpTimer$.subscribe((timer) => this.otpTimer = this.getTimer(timer));
   }
+
 
 
   getTimer(timer: number) {
@@ -102,6 +108,33 @@ export class OtpComponent implements OnInit {
         });
     }
   }
+
+  resendOtp() {
+    var forgotPinValue = localStorage.getItem(forgotPin);
+    var otpType = "1";
+    if (forgotPinValue) {
+      otpType = "2";
+    }
+    this.pharmacyMerchantService.generateOtp(this.user.mobile, otpType).subscribe({
+      next: (res) => {
+        if ((res as any).isSuccessful) {
+          this.toastService.showSuccess("Success", "OTP Resent successfully!");
+          this.otpTimer = (res as any).data.expireTimeInSecond;
+          this.startTimer(this.otpTimer);
+          this.showResendBtn = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+
+  startTimer(otpTimer: any) {
+    this.getTimer(otpTimer);
+  }
+
   beforeUnloadHandler(event: BeforeUnloadEvent) {
     const confirmationMessage = 'Are you sure you want to leave? Changes you made may not be saved.';
     event.returnValue = confirmationMessage;

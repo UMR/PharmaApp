@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
 import { first } from 'rxjs';
 import { AuthenticationService } from '../../../service/authentication.service';
+import { phoneNumberValidator } from '../../../common/Validator/phonenumber.validator';
 
 @Component({
   selector: 'app-registration',
@@ -18,6 +19,7 @@ export class RegistrationComponent {
   loading = false;
   submitted = false;
   otpTimer: any;
+  defaultCountry: string = 'IN'
   /**
    *
    */
@@ -31,7 +33,6 @@ export class RegistrationComponent {
 
 
   onSubmit() {
-    debugger;
     this.submitted = true;
 
     if (this.userRegistrationForm.invalid) {
@@ -40,7 +41,6 @@ export class RegistrationComponent {
 
     this.loading = true;
     this.generateOtp('1');
-    this.NavigateToOtpPage();
     this.authService.setUser(this.userRegistrationForm.value);
   }
 
@@ -62,9 +62,7 @@ export class RegistrationComponent {
         });
     }
   }
-  NavigateToOtpPage() {
-    this.router.navigate(['/otp-verification']);
-  }
+
 
   passwordMatchValidator(control: AbstractControl) {
     const pin = control.get('pin');
@@ -88,7 +86,10 @@ export class RegistrationComponent {
         firstName: [null, Validators.required],
         lastName: [null],
         email: [null, Validators.email],
-        mobile: [null, Validators.required],
+        mobile: ['', [
+          Validators.required,
+          phoneNumberValidator(this.defaultCountry)
+        ]],
         pin: [null, Validators.required],
         confirmPin: [null, Validators.required],
         termsAccepted: [false, Validators.requiredTrue],

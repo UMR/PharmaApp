@@ -49,9 +49,16 @@
             </div>
             <div class="name">
                 <p-floatlabel variant="on">
-                    <input pInputText id="mobile" formControlName="mobile" autocomplete="off" class="form-control" />
-                    <label for="mobile">Phone Number</label>
+                    <angular-phone-number-input formControlName="mobile" [defaultCountry]="defaultCountry"
+                        [preferredCountries]="['US', 'IN', 'BD']"
+                        onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
+                    </angular-phone-number-input>
                 </p-floatlabel>
+                @if(submitted && f.mobile.errors){
+                @if(f.mobile.errors.required){
+                <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
+                }
+                }
                 @if(submitted && f.mobile.errors){
                 @if(f.mobile.errors.required){
                 <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
