@@ -20,7 +20,11 @@ export class PharmacyMerchantService {
   }
 
   registerUser(user: any) {
-    return this.http.post(this.apiUrl + '/v1/Auth/Register', user);
+    return this.http.post(this.apiUrl + '/v1/Auth/Register', user).pipe(map(user => {
+      localStorage.setItem('pharmaKey', JSON.stringify(user));
+      this.userSubject.next(user);
+      return user;
+    }));
   }
   public get userValue() {
     return this.userSubject.value;
@@ -33,7 +37,7 @@ export class PharmacyMerchantService {
   login(user: any) {
     return this.http.post<any>(`${environment.apiUrl}/v1/Auth/Login`, user)
       .pipe(map(user => {
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('pharmaKey', JSON.stringify(user));
         this.userSubject.next(user);
         return user;
       }));
@@ -41,5 +45,10 @@ export class PharmacyMerchantService {
   verifyOtp(model: any) {
     const URI = `${environment.apiUrl}/v1/otp/verify`;
     return this.http.post(URI, model, { observe: 'response' });
+  }
+
+  logOut() {
+    localStorage.removeItem('pharmaKey');
+    this.userSubject.next(null);
   }
 }

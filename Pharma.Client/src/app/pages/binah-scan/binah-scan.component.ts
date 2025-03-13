@@ -3,6 +3,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MonitorService } from '../../service/monitor.service';
 import { SessionState } from '@binah/web-sdk';
 import { VitalSign, VitalSignsResults } from '@binah/web-sdk/dist/common/types';
+import { AuthenticationService } from '../../service/authentication.service';
+import { PharmacyMerchantService } from '../../service/pharmacy-merchant.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-binah-scan',
@@ -11,6 +14,7 @@ import { VitalSign, VitalSignsResults } from '@binah/web-sdk/dist/common/types';
   styleUrls: ['./binah-scan.component.css'],
 })
 export class BinahScanComponent implements OnInit {
+
   isStarted: boolean = false;
   processingTime: number | undefined;
   licenseKey: string | undefined;
@@ -20,7 +24,7 @@ export class BinahScanComponent implements OnInit {
 
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
 
-  constructor(private monitorService: MonitorService) { }
+  constructor(private monitorService: MonitorService, private authService: PharmacyMerchantService, private router: Router) { }
 
   ngOnInit(): void {
     this.getCameraDevices();
@@ -91,4 +95,27 @@ export class BinahScanComponent implements OnInit {
       console.error('Camera ID, processing time, or video element is not available.');
     }
   }
+
+  onLogoutClick() {
+    this.stopCamera();
+    this.monitorService.stopMeasuring();
+    this.authService.logOut();
+    this.router.navigate(['/pharmacy-login']);
+  }
+
+
+  stopCamera() {
+    if (this.videoElement && this.videoElement.nativeElement.srcObject) {
+      let stream = this.videoElement.nativeElement.srcObject as MediaStream;
+      let tracks = stream.getTracks();
+
+      tracks.forEach(track => {
+        track.stop()
+      });
+
+      this.videoElement.nativeElement.srcObject = null;
+    }
+  }
+
+
 }

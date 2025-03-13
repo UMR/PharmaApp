@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent {
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder, private merchantService: PharmacyMerchantService) {
+  constructor(private router: Router, private fb: FormBuilder, private merchantService: PharmacyMerchantService, private route: ActivatedRoute) {
 
   }
   ngOnInit(): void {
@@ -25,8 +26,19 @@ export class LoginComponent {
   }
 
   get f() { return this.userloginForm.controls; }
+
   login() {
-    this.router.navigate(['/vital-scan']);
+    this.merchantService.login(this.userloginForm.value).pipe(
+      first()
+    ).subscribe({
+      next: (res) => {
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/vital-scan';
+        this.router.navigateByUrl(returnUrl);
+      },
+      error: () => {
+        console.log("error");
+      }
+    });
   }
 
   initializeForm() {
