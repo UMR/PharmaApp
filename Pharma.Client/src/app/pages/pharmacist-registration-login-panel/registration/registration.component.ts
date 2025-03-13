@@ -39,30 +39,27 @@ export class RegistrationComponent {
     }
 
     this.loading = true;
-    this.generateOtp(1);
+    this.generateOtp('1');
     this.NavigateToOtpPage();
     this.authService.setUser(this.userRegistrationForm.value);
   }
 
 
-  generateOtp(arg0: number) {
+  generateOtp(arg0: string) {
     let loginId = this.userRegistrationForm.value.mobile;
     if (loginId != null) {
-      // this.pharmacyMerchantService.generateOtp(loginId)
-      //   .pipe(first())
-      //   .subscribe({
-      //     next: () => {
-      //       this.otpTimer = 60;
-      //       this.authService.setOtpTimer(this.otpTimer);
-      //       this.router.navigate(['/otp-vreification']);
-      //     },
-      //     error: () => {
-      //       this.loading = false;
-      //     }
-      //   });
-      this.otpTimer = 60;
-      this.authService.setOtpTimer(this.otpTimer);
-      this.router.navigate(['/otp-vreification']);
+      this.pharmacyMerchantService.generateOtp(loginId, arg0)
+        .pipe(first())
+        .subscribe({
+          next: (res) => {
+            this.otpTimer = (res as any).data.expireTimeInSecond;
+            this.authService.setOtpTimer(this.otpTimer);
+            this.router.navigate(['/otp-verification']);
+          },
+          error: () => {
+            this.loading = false;
+          }
+        });
     }
   }
   NavigateToOtpPage() {

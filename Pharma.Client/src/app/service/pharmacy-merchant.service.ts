@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.production';
 import { BehaviorSubject, map, Observable } from 'rxjs';
@@ -7,32 +7,39 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PharmacyMerchantService {
+  http: HttpClient;
   apiUrl: string = environment.apiUrl;
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   public user: Observable<null> | undefined;
 
 
-  constructor(private http: HttpClient) {
+  constructor(private httpBacked: HttpBackend) {
+    this.http = new HttpClient(this.httpBacked);
     this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
     this.user = this.userSubject.asObservable();
   }
 
   registerUser(user: any) {
-    return this.http.post(this.apiUrl + '/Auth/Register', user);
+    return this.http.post(this.apiUrl + '/v1/Auth/Register', user);
   }
   public get userValue() {
     return this.userSubject.value;
   }
 
-  generateOtp(user: any) {
-    return this.http.post(this.apiUrl + '/Auth/generate-otp', user);
+  generateOtp(userId: string, otpType: string) {
+    const URI = `${environment.apiUrl}/v1/otp/generate/${userId}/${otpType}`;
+    return this.http.post(URI, { observe: 'response' });
   }
   login(user: any) {
-    return this.http.post<any>(`${environment.apiUrl}/Auth/Login`, user)
+    return this.http.post<any>(`${environment.apiUrl}/v1/Auth/Login`, user)
       .pipe(map(user => {
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);
         return user;
       }));
+  }
+  verifyOtp(model: any) {
+    const URI = `${environment.apiUrl}/v1/otp/verify`;
+    return this.http.post(URI, model, { observe: 'response' });
   }
 }

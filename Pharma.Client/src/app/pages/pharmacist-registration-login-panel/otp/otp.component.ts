@@ -25,11 +25,13 @@ export class OtpComponent implements OnInit {
   otp: any;
 
   ngOnInit(): void {
-    this._otpTimer = this.authService.otpTimer$.subscribe((timer) => this.otpTimer = this.getTimer(60));
+    this.getUser();
+    this._otpTimer = this.authService.otpTimer$.subscribe((timer) => this.otpTimer = this.getTimer(timer));
   }
 
 
   getTimer(timer: number) {
+    console.log(timer);
     this.showResendBtn = false;
     let setTimer = setInterval(() => {
       if (timer <= 0) {
@@ -52,10 +54,28 @@ export class OtpComponent implements OnInit {
   }
 
   verifyOtp() {
-    const otp = 123456;
-    if (otp == this.otp) {
-      this.registerUser();
+    if (this.otp) {
+      const model = {
+        loginId: this.user.mobile,
+        otp: this.otp,
+        otpType: '1'
+      }
+      this.pharmacyMerchantService.verifyOtp(model)
+        .pipe(first())
+        .subscribe({
+          next: (res) => {
+            if (res.status == 200) {
+              this.registerUser();
+            }
+            this.toastService.showSuccess('Success', 'OTP verified successfully');
+
+          },
+          error: () => {
+            this.toastService.showError('Error', 'Invalid OTP');
+          }
+        });
     }
+
     else {
       this.toastService.showError('Error', 'Invalid OTP');
     }

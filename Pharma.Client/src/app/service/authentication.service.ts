@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthenticationService {
   private registeredUser = new BehaviorSubject<any>(null);
   registeredUser$ = this.registeredUser.asObservable();
-  private otpTimer = new BehaviorSubject<number>(0);
+  private otpTimer = new BehaviorSubject<any>('');
   otpTimer$ = this.otpTimer.asObservable();
 
   constructor() { }
@@ -15,7 +15,7 @@ export class AuthenticationService {
   setUser(user: any) {
     this.registeredUser.next(user);
   }
-  setOtpTimer(timer: number) {
+  setOtpTimer(timer: any) {
     this.otpTimer.next(timer);
   }
 }
