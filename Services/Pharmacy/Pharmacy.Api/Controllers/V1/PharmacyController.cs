@@ -25,7 +25,7 @@ namespace Pharmacy.Api.Controllers.V1
 
         #region Methods
 
-        [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
+        [Authorize(Policy = RoleConstant.Pharmacist)]
         [HttpPost("Update")]
         public async Task<IActionResult> UpdateAsync(PharmacyUpdateDto request)
         {
