@@ -25,7 +25,7 @@ namespace Pharmacy.Api.Controllers.V1
 
         #region Methods
 
-        [Authorize(Policy = RoleConstant.Pharmacist)]
+        [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
         [HttpPost("Update")]
         public async Task<IActionResult> UpdateAsync(PharmacyUpdateDto request)
         {
@@ -35,7 +35,7 @@ namespace Pharmacy.Api.Controllers.V1
             return Created();
         }
 
-        [Authorize(Policy = RoleConstant.Pharmacist)]
+        [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
         [HttpGet("GetQRCode")]
         public async Task<IActionResult> GenerateQRCode()
         {
