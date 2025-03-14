@@ -35,6 +35,15 @@ namespace Pharmacy.Api.Controllers.V1
             return Created();
         }
 
+        [Authorize(Policy = RoleConstant.Pharmacist)]
+        [HttpGet("GetQRCode")]
+        public async Task<IActionResult> GenerateQRCode()
+        {
+            string imageBase64String = _pharmacyService.GenerateQRCode();
+
+            return Ok(imageBase64String);
+        }
+
         #endregion
     }
 }
