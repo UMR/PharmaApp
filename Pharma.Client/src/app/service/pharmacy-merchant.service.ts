@@ -39,6 +39,7 @@ export class PharmacyMerchantService {
       .pipe(map(user => {
         localStorage.setItem('pharmaKey', JSON.stringify(user));
         this.userSubject.next(user);
+        console.log(this.userSubject.value);
         return user;
       }));
   }

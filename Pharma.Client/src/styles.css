@@ -23,10 +23,6 @@
     U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-body {
-  background: linear-gradient(to bottom right, #92c5fe 0%, #cbc2fb 100%);
-}
-
 * {
   font-family: "Poppins", sans-serif;
 }

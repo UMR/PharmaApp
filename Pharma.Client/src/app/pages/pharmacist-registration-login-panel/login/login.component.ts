@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
 import { first } from 'rxjs';
+import { ToastMessageService } from '../../../service/toast-message.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder, private merchantService: PharmacyMerchantService, private route: ActivatedRoute) {
+  constructor(private router: Router, private fb: FormBuilder, private merchantService: PharmacyMerchantService, private route: ActivatedRoute, private toastService: ToastMessageService) {
 
   }
   ngOnInit(): void {
@@ -33,6 +34,7 @@ export class LoginComponent {
     ).subscribe({
       next: (res) => {
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.toastService.showSuccess('Success', 'Login Successful');
         this.router.navigateByUrl(returnUrl);
       },
       error: () => {
