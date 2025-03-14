@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Pharmacy.Api.Constants;
 using Pharmacy.Api.Filters;
+using Pharmacy.Api.Policy;
 using Pharmacy.Application.Common.Constants;
 using Pharmacy.Application.Features.CurrentUser.Services;
 
@@ -11,6 +12,7 @@ namespace Pharmacy.Api.Extensions
         public static WebApplicationBuilder AddApiServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddSingleton<IAuthorizationHandler, ActivePharmacyHandler>();
 
             builder.Services.AddControllers(config =>
             {
@@ -24,7 +26,10 @@ namespace Pharmacy.Api.Extensions
             {
                 options.AddPolicy(RoleConstant.Admin, policy => policy.RequireRole(RoleConstant.Admin));
                 options.AddPolicy(RoleConstant.Pharmacist, policy => policy.RequireRole(RoleConstant.Pharmacist));
-                //options.AddPolicy($"{RoleConstant.Pharmacist}Active" , policy => policy.RequireRole(RoleConstant.Pharmacist));
+                options.AddPolicy($"Active{RoleConstant.Pharmacist}", policy =>
+                {
+                    policy.Requirements.Add(new ActivePharmacyRequirement());
+                });               
             });
 
             builder.Services.AddCors(o =>
