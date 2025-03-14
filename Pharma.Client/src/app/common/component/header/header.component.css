@@ -1,0 +1,30 @@
+nav {
+  height: 100%;
+}
+.side-nav-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.side-nav-btn:hover {
+  background-color: #9a4cfd;
+  border-radius: 30%;
+}
+.gradient-bg {
+  background: linear-gradient(90deg, #79273d, #9b4dff);
+  color: #fff;
+  transition: background 0.5s ease;
+}
+.dropdown-toggle::after {
+  font-size: 1.5rem;
+}
+
+@media screen and (max-width: 375px) {
+  .navbar-brand {
+    img {
+      width: 120px;
+    }
+  }
+}

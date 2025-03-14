@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark px-2 gradient-bg">
+    <div class="side-nav-btn p-2 me-3 text-light" (click)="sideNavToggle()">
+        <i class="pi pi-bars"></i>
+    </div>
+    <a class="navbar-brand" href="#">
+        <img src="./assets/images/SCOHN.png" height="60" width="180" alt="" srcset="">
+    </a>
+    <div class="navbar-collapse">
+    </div>
+    <div class="profile-logo text-center">
+        <ul class="navbar-nav d-flex align-items-center justify-content-center">
+            <li class="mx-5 mt-2" style="cursor: pointer;" (click)="onNotificationClick()">
+                <p-overlaybadge value="2">
+                    <i class="pi pi-bell" style="font-size: 1.3rem"></i>
+                </p-overlaybadge>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+
+                    <img src="./assets/images/user.jpg" alt="" height="40" width="40" class="rounded-circle">
+
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" style="cursor: pointer;" (click)="onLogoutClick()">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

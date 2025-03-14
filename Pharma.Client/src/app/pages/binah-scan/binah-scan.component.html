@@ -1,17 +1,3 @@
-<nav class="navbar navbar-expand navbar-dark bg-dark px-2 gradient-bg">
-    <div class="side-nav-btn p-2 me-3 text-light">
-        <i class="pi pi-bars"></i>
-    </div>
-    <div class="navbar-collapse">
-    </div>
-    <div class="profile-logo text-center">
-        <ul class="navbar-nav d-flex align-items-center justify-content-center">
-            <button pButton icon="pi pi-exit" (click)="onLogoutClick()" style="background-color: inherit;">Log
-                Out</button>
-        </ul>
-    </div>
-</nav>
-
 @if (!isStarted) {
 <div class="scan-button">
     <button pButton label="Start Scan" (click)="startScan()"></button>

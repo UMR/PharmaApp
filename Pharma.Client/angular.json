@@ -43,6 +43,11 @@
                 "glob": "**/*",
                 "input": "src/models",
                 "output": "/models"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
               }
             ],
             "styles": [

@@ -21,8 +21,8 @@
                     <input pInputText id="loginId" formControlName="loginId" autocomplete="off" class="form-control" />
                     <label for="loginId">Phone Number</label>
                 </p-floatlabel>
-                @if(f.loginId.errors){
-                @if(f.loginId.errors.required){
+                @if(f.loginId.errors && f.loginId.touched){
+                @if(f.loginId.errors.required ){
                 <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
                 }
                 }
@@ -32,7 +32,7 @@
                     <p-password formControlName="pin" feedback="false" [toggleMask]=" true" fluid="true" />
                     <label for="pin">Pin</label>
                 </p-floatlabel>
-                @if(f.pin.errors){
+                @if(f.pin.errors && f.pin.touched){
                 @if(f.pin.errors.required){
                 <p-message severity="error" variant="simple" size="small">Pin is required!</p-message>
                 }

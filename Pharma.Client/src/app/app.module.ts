@@ -17,6 +17,9 @@ import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/ot
 import { MessageService } from 'primeng/api';
 import { jwtInterceptorInterceptor } from './interceptor/jwt-interceptor.interceptor';
 import { OtherModule } from './common/other/other.module';
+import { PharmacyDashboardLayoutComponent } from './pages/pharmacist-dashboard-panel/pharmacy-dashboard-layout/pharmacy-dashboard-layout.component';
+import { HeaderComponent } from './common/component/header/header.component';
+import { SidebarComponent } from './common/component/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { OtherModule } from './common/other/other.module';
     BinahScanComponent,
     LoginComponent,
     RegistrationComponent,
-    OtpComponent
+    OtpComponent,
+    PharmacyDashboardLayoutComponent,
+    HeaderComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

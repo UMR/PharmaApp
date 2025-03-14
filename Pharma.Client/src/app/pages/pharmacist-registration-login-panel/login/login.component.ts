@@ -32,7 +32,7 @@ export class LoginComponent {
       first()
     ).subscribe({
       next: (res) => {
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/vital-scan';
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.router.navigateByUrl(returnUrl);
       },
       error: () => {

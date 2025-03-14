@@ -1,0 +1,97 @@
+.display-area {
+  flex: 1;
+  margin-left: 10px;
+  transition: margin-left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.display-area-shrink {
+  margin-left: 230px;
+}
+.main-layout {
+  display: flex;
+  margin-top: 60px;
+  height: calc(100% - 60px);
+}
+
+app-sidebar {
+  position: fixed;
+  top: 60px;
+  left: -100%;
+  width: 230px;
+  height: calc(100vh - 60px);
+  border-top: 1px solid white;
+  transition: left 0.3s ease;
+}
+
+.app-side-nav-open {
+  left: 0;
+  z-index: 1;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  app-sidebar {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    transition: left 0.3s ease;
+    width: 50px;
+    overflow: hidden;
+  }
+
+  .app-side-nav-open {
+    left: 0;
+  }
+
+  app-sidebar .sidebar-text {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: visibility 0.3s ease, opacity 0.3s ease;
+  }
+
+  app-sidebar.app-side-nav-open .sidebar-text {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .display-area {
+    margin-left: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  app-sidebar {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    transition: left 0.3s ease;
+    width: 230px;
+  }
+
+  .app-side-nav-open {
+    left: 0;
+  }
+
+  .display-area {
+    margin-left: 0;
+  }
+}
+
+.gradient-bg {
+  background: linear-gradient(90deg, #79273d, #9b4dff);
+  color: #fff;
+  transition: background 0.5s ease;
+}
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 60px;
+}

@@ -1,0 +1,10 @@
+<div class="side-nav-content">
+    <ul class="nav-list" [ngClass]="{ 'nav-list-open': sideNavStatus }">
+        <li class="nav-list-item" *ngFor="let item of filteredMenu" (click)="navigateTo(item.routerLink, item.name)"
+            [ngClass]="{ active: isActive(item.routerLink, item.name) }">
+            <i class="{{ item.icon }}"></i>
+            <span>{{ item.name }}</span>
+        </li>
+    </ul>
+</div>
+<p-confirmDialog />

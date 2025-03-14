@@ -1,0 +1,101 @@
+/* Sidebar content styles */
+.side-nav-content {
+  color: white;
+  width: 210px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  transition: width 0.3s ease; /* Smooth transition for width change */
+}
+
+.nav-list {
+  list-style: none;
+  height: 100%;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.nav-list-item {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
+  border-radius: 50px;
+}
+
+/* Hover effect for items */
+.nav-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+}
+
+/* Icon styles */
+.nav-list-item i {
+  font-size: 20px;
+  height: 25px;
+  width: 25px;
+  margin-right: 15px;
+  margin-left: 10px;
+  text-align: center;
+  line-height: 25px;
+  transition: opacity 0.3s ease;
+}
+
+/* Text styles */
+.nav-list-item span {
+  width: 170px;
+  text-transform: capitalize;
+  transition: opacity 0.3s ease, margin-left 0.3s ease;
+}
+.app-side-nav-open .nav-list-item span {
+  opacity: 0;
+  visibility: hidden;
+  margin-left: 0;
+}
+
+.app-side-nav-open .side-nav-content {
+  width: 60px;
+}
+
+.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.fa-credit-card,
+.fa-file {
+  font-size: 16px !important;
+}
+
+@media (max-width: 768px) {
+  app-sidebar {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    transition: left 0.3s ease;
+    width: 230px;
+  }
+
+  .app-side-nav-open {
+    left: 0;
+  }
+
+  .display-area {
+    margin-left: 0;
+  }
+
+  .app-side-nav-open .side-nav-content {
+    width: 60px;
+  }
+
+  .app-side-nav-open .nav-list-item span {
+    display: none;
+  }
+}

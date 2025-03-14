@@ -5,8 +5,21 @@ import { BinahScanComponent } from './pages/binah-scan/binah-scan.component';
 import { RegistrationComponent } from './pages/pharmacist-registration-login-panel/registration/registration.component';
 import { LoginComponent } from './pages/pharmacist-registration-login-panel/login/login.component';
 import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/otp.component';
+import { PharmacyDashboardLayoutComponent } from './pages/pharmacist-dashboard-panel/pharmacy-dashboard-layout/pharmacy-dashboard-layout.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: PharmacyDashboardLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: BinahScanComponent,
+        canActivate: [AuthGuard]
+      }
+    ]
+  },
   {
     path: 'patient-registration',
     component: BasicInfoRegistrationPageComponent
@@ -17,7 +30,8 @@ const routes: Routes = [
   },
   {
     path: 'vital-scan',
-    component: BinahScanComponent
+    component: BinahScanComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'pharmacy-registration',
