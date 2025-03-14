@@ -20,6 +20,7 @@ import { OtherModule } from './common/other/other.module';
 import { PharmacyDashboardLayoutComponent } from './pages/pharmacist-dashboard-panel/pharmacy-dashboard-layout/pharmacy-dashboard-layout.component';
 import { HeaderComponent } from './common/component/header/header.component';
 import { SidebarComponent } from './common/component/sidebar/sidebar.component';
+import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy-qr/pharmacy-qr.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SidebarComponent } from './common/component/sidebar/sidebar.component';
     OtpComponent,
     PharmacyDashboardLayoutComponent,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    PharmacyQrComponent
   ],
   imports: [
     BrowserModule,
