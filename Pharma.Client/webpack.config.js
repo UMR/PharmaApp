@@ -23,7 +23,7 @@ module.exports = {
     ],
   },
   devServer: {
-    port: 8002,
+    port: 9002,
     headers: {
       "Cross-Origin-Opener-Policy": "same-origin",
       "Cross-Origin-Embedder-Policy": "require-corp",
