@@ -53,6 +53,13 @@ public class PharmacyUrlService: IPharmacyUrlService
         return pharmacyUrl;
     }
 
+    public async Task<PharmacyUrl?> GetAsync(string url)
+    {
+        var pharmacyUrl = await _pharmacyUrlRepository.GetAsync(url);
+  
+        return pharmacyUrl;
+    }
+
     #endregion
 
     #region Private Methods
