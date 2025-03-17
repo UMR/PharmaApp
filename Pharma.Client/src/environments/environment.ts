@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:7001/api/v1'
+  apiUrl: 'https://umrtest.com/PharmaAuthAPI/api'
 };
