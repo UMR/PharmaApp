@@ -1,6 +1,7 @@
 ﻿using Pharmacy.Application.Common.Constants;
 using Pharmacy.Application.Features.PharmacyInfo.Dtos;
 using Pharmacy.Application.Features.PharmacyInfo.Services;
+using Pharmacy.Application.Features.PharmacyUrls.Services;
 
 namespace Pharmacy.Api.Controllers.V1
 {
@@ -11,14 +12,16 @@ namespace Pharmacy.Api.Controllers.V1
         #region Fields
 
         private readonly IPharmacyService _pharmacyService;
+        private readonly IPharmacyUrlService _pharmacyUrlService;
 
         #endregion
 
         #region Ctor
 
-        public PharmacyController(IPharmacyService pharmacyService)
+        public PharmacyController(IPharmacyService pharmacyService, IPharmacyUrlService pharmacyUrlService)
         {
             _pharmacyService = pharmacyService;
+            _pharmacyUrlService = pharmacyUrlService;
         }
 
         #endregion
@@ -42,6 +45,18 @@ namespace Pharmacy.Api.Controllers.V1
             string imageBase64String = await _pharmacyService.GenerateQRCodeAsync();
 
             return Ok(imageBase64String);
+        }
+
+        [HttpGet("GetPharmacyUrlTest")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GeneratePharmacyUrlTest(string pharmacyId, string userId)
+        {
+            Guid userGuid = Guid.Parse(userId);
+            Guid pharmacyGuid = Guid.Parse(pharmacyId);
+            
+            var result = await _pharmacyUrlService.GetTestAsync(pharmacyGuid, userGuid);
+
+            return Ok(result);
         }
 
         #endregion
