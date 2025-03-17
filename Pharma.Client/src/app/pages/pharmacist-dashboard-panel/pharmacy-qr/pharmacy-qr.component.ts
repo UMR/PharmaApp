@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
+import { BinahScanService } from '../../../service/binah-scan-service.service';
 
 @Component({
   selector: 'app-pharmacy-qr',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './pharmacy-qr.component.css'
 })
 export class PharmacyQrComponent implements OnInit {
-  constructor() { }
+  constructor(private binahScanService: BinahScanService) { }
+
+  qrCodeImage: any;
 
   ngOnInit(): void {
+    this.getQrCode();
+  }
+  getQrCode() {
+    this.binahScanService.getQrCode().subscribe({
+      next: (res) => {
+        this.qrCodeImage = `data:image/png;base64,${res}`;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
 }

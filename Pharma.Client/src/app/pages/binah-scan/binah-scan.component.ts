@@ -53,7 +53,7 @@ export class BinahScanComponent implements OnInit {
   startCamera() {
     if (this.licenseKey && this.videoElement) {
       navigator.mediaDevices
-        .getUserMedia({ video: { width: 1280, height: 720 } })
+        .getUserMedia({ video: { width: 600, height: 400 } })
         .then((stream) => {
           this.videoElement.nativeElement.srcObject = stream;
           this.videoElement.nativeElement.play();
@@ -65,8 +65,6 @@ export class BinahScanComponent implements OnInit {
   }
 
   async startMeasuring() {
-    debugger;
-    console.log(this.processingTime, this.videoElement);
     if (this.processingTime && this.videoElement) {
       await this.monitorService.createSession(this.videoElement.nativeElement, this.processingTime);
       this.monitorService.startMeasuring();

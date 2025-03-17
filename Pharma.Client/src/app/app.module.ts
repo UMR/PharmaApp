@@ -12,15 +12,15 @@ import { PrimengModule } from './common/primeng/primeng.module';
 import { WasmService } from './service/wasm.service';
 import { LoginComponent } from './pages/pharmacist-registration-login-panel/login/login.component';
 import { RegistrationComponent } from './pages/pharmacist-registration-login-panel/registration/registration.component';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/otp.component';
 import { MessageService } from 'primeng/api';
-import { jwtInterceptorInterceptor } from './interceptor/jwt-interceptor.interceptor';
 import { OtherModule } from './common/other/other.module';
 import { PharmacyDashboardLayoutComponent } from './pages/pharmacist-dashboard-panel/pharmacy-dashboard-layout/pharmacy-dashboard-layout.component';
 import { HeaderComponent } from './common/component/header/header.component';
 import { SidebarComponent } from './common/component/sidebar/sidebar.component';
 import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy-qr/pharmacy-qr.component';
+import { jwtInterceptor } from './interceptor/jwt-interceptor.interceptor';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,8 @@ import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy
     PharmacyDashboardLayoutComponent,
     HeaderComponent,
     SidebarComponent,
-    PharmacyQrComponent
+    PharmacyQrComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -41,7 +42,7 @@ import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy
     ReactiveFormsModule,
     PrimengModule,
     FormsModule,
-    OtherModule
+    OtherModule,
 
   ],
   providers: [
@@ -49,10 +50,11 @@ import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy
     providePrimeNG(),
     WasmService,
     MessageService,
-    provideHttpClient(),
-    {
-      provide: HTTP_INTERCEPTORS, useFactory: () => jwtInterceptorInterceptor, multi: true
-    }
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([jwtInterceptor])
+    ),
+
   ],
   bootstrap: [AppComponent]
 })

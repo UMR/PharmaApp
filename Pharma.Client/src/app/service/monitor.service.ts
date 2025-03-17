@@ -114,6 +114,7 @@ export class MonitorService {
   startMeasuring() {
     console.log(this.sessionState.value);
     if (this.sessionState.value === SessionState.ACTIVE) {
+      console.log(this.session);
       this.session!.start();
       this.error.next({ code: -1 });
     }
