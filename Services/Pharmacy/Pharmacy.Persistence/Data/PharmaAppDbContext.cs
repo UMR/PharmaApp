@@ -13,6 +13,8 @@ public partial class PharmaAppDbContext : DbContext
 
     public virtual DbSet<Pharmacy> Pharmacies { get; set; }
 
+    public virtual DbSet<PharmacyUrl> PharmacyUrls { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -41,6 +43,23 @@ public partial class PharmaAppDbContext : DbContext
                 .HasForeignKey(d => d.OwnerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Pharmacy_User");
+        });
+
+        modelBuilder.Entity<PharmacyUrl>(entity =>
+        {
+            entity.ToTable("Pharmacy_Url");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Url).HasMaxLength(20);
+
+            entity.HasOne(d => d.Pharmacy).WithMany(p => p.PharmacyUrls)
+                .HasForeignKey(d => d.PharmacyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Pharmacy_Url_Pharmacy");
         });
 
         modelBuilder.Entity<Role>(entity =>

@@ -26,4 +26,6 @@ public partial class Pharmacy
     public DateTime? UpdatedDate { get; set; }
 
     public virtual User Owner { get; set; } = null!;
+
+    public virtual ICollection<PharmacyUrl> PharmacyUrls { get; set; } = new List<PharmacyUrl>();
 }

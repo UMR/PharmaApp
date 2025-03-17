@@ -39,7 +39,7 @@ namespace Pharmacy.Api.Controllers.V1
         [HttpGet("GetQRCode")]
         public async Task<IActionResult> GenerateQRCode()
         {
-            string imageBase64String = _pharmacyService.GenerateQRCode();
+            string imageBase64String = await _pharmacyService.GenerateQRCodeAsync();
 
             return Ok(imageBase64String);
         }

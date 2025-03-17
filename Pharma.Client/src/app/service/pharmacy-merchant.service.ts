@@ -1,6 +1,6 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.production';
+import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({

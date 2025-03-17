@@ -5,6 +5,7 @@ using Pharmacy.Infrastructure.EmailClient;
 using Pharmacy.Infrastructure.Identity;
 using Pharmacy.Infrastructure.Otp;
 using Pharmacy.Infrastructure.SMSClient;
+using Pharmacy.Infrastructure.UniqueID;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Pharmacy.Infrastructure.Extensions;
@@ -20,6 +21,7 @@ public static class ConfigureInfrastructureServices
         builder.Services.AddScoped<IOtpService, OtpService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<ISMSService, SMSService>();
+        builder.Services.AddSingleton<IUniqueIdService, UniqueIdService>();
 
         return builder;
     }
