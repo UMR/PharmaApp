@@ -5,6 +5,6 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
     public interface IPharmacyService
     {
         Task UpdateAsync(PharmacyUpdateDto request);
-        string GenerateQRCode();
+        ValueTask<string> GenerateQRCodeAsync();
     }
 }

@@ -5,7 +5,7 @@ using Pharmacy.Application.Exceptions;
 using Pharmacy.Application.Features.CurrentUser.Services;
 using Pharmacy.Application.Features.PharmacyInfo.Dtos;
 using Pharmacy.Application.Features.PharmacyInfo.Validators;
-using Pharmacy.Domain;
+using Pharmacy.Application.Features.PharmacyUrls.Services;
 using QRCoder;
 
 namespace Pharmacy.Application.Features.PharmacyInfo.Services
@@ -17,18 +17,21 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
         private readonly ICurrentUserService _currentUserService;
         private readonly IPharmacyRepository _pharmacyRepository;
         private readonly IConfiguration _configuration;
-
+        private readonly IPharmacyUrlService _pharmacyUrlService;
+        
         #endregion
 
         #region Ctro
 
         public PharmacyService(ICurrentUserService currentUserService, 
             IPharmacyRepository pharmacyRepository,
-            IConfiguration configuration) 
+            IConfiguration configuration,
+            IPharmacyUrlService pharmacyUrlService) 
         { 
             _currentUserService = currentUserService;
             _pharmacyRepository = pharmacyRepository;
             _configuration = configuration;
+            _pharmacyUrlService = pharmacyUrlService;
         }
 
         #endregion
@@ -83,16 +86,18 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
             }
         }
 
-        public string GenerateQRCode()
+        public async ValueTask<string> GenerateQRCodeAsync()
         {
             string baseURL = _configuration.GetValue<string>("BaseURL");
-            Guid userId = _currentUserService.UserId;
+            var pharmacy = await _pharmacyRepository.GetPharmacyByUserIdAsync(_currentUserService.UserId);
 
-            string qrCodeImageString = null;
+            var pharmacyUrl = await _pharmacyUrlService.GetAsync(pharmacy.Id);
+
+            string qrCodeImageString = string.Empty;
 
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
-                using (QRCodeData qrCodeData = qrGenerator.CreateQrCode($"{baseURL}/scan?pharmacy={userId}", QRCodeGenerator.ECCLevel.H))
+                using (QRCodeData qrCodeData = qrGenerator.CreateQrCode($"{baseURL}/scan?pharmacy={pharmacyUrl.Url}", QRCodeGenerator.ECCLevel.H))
                 {
                     using (Base64QRCode qrCode = new Base64QRCode(qrCodeData))
                     {

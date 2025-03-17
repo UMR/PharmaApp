@@ -22,8 +22,6 @@ namespace Pharmacy.Application.Features.Authentication.Validators
                 .WithMessage("{PropertyName} must be between 3 to 30 characters");
 
             RuleFor(u => u.LastName)
-                .NotEmpty()
-                .WithMessage("{PropertyName} is required")
                 .Length(3, 30)
                 .WithMessage("{PropertyName} must be between 3 to 30 characters");
 
