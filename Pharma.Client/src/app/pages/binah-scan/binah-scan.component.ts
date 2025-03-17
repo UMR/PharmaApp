@@ -19,20 +19,13 @@ export class BinahScanComponent implements OnInit {
   processingTime: number | undefined;
   licenseKey: string | undefined;
   sessionState: any;
-  cameraId: string | undefined;
-  vitals: VitalSignsResults | null = null;
+  vitals: any;
 
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
 
   constructor(private monitorService: MonitorService, private authService: PharmacyMerchantService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getCameraDevices();
-
-    this.monitorService.vitalSigns$.subscribe((vitals) => {
-      this.vitals = vitals as VitalSignsResults;
-      console.log('Vitals:', vitals);
-    });
   }
 
   startScan() {
@@ -58,9 +51,9 @@ export class BinahScanComponent implements OnInit {
   }
 
   startCamera() {
-    if (this.licenseKey && this.videoElement && this.cameraId) {
+    if (this.licenseKey && this.videoElement) {
       navigator.mediaDevices
-        .getUserMedia({ video: { deviceId: { exact: this.cameraId } } })
+        .getUserMedia({ video: { width: 1280, height: 720 } })
         .then((stream) => {
           this.videoElement.nativeElement.srcObject = stream;
           this.videoElement.nativeElement.play();
@@ -71,26 +64,15 @@ export class BinahScanComponent implements OnInit {
     }
   }
 
-  getCameraDevices() {
-    navigator.mediaDevices.enumerateDevices()
-      .then(devices => {
-        const videoDevices = devices.filter(device => device.kind === 'videoinput');
-        if (videoDevices.length > 0) {
-          this.cameraId = videoDevices[0].deviceId;
-          console.log('Camera ID:', this.cameraId);
-        } else {
-          console.error('No camera devices found.');
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching devices:', err);
-      });
-  }
-
   async startMeasuring() {
-    if (this.cameraId && this.processingTime && this.videoElement) {
-      await this.monitorService.createSession(this.videoElement.nativeElement, this.cameraId, this.processingTime);
+    debugger;
+    console.log(this.processingTime, this.videoElement);
+    if (this.processingTime && this.videoElement) {
+      await this.monitorService.createSession(this.videoElement.nativeElement, this.processingTime);
       this.monitorService.startMeasuring();
+      this.monitorService.vitalSigns$.subscribe((vitals) => {
+        this.vitals = vitals;
+      });
     } else {
       console.error('Camera ID, processing time, or video element is not available.');
     }

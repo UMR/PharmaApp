@@ -13,6 +13,7 @@ import monitor, {
   VitalSigns,
   VitalSignsResults,
 } from '@binah/web-sdk';
+import { OnFaceDetected } from '@binah/web-sdk/dist/session/session.types';
 
 export enum InfoType {
   NONE = 'NONE',
@@ -48,16 +49,13 @@ export class MonitorService {
   warning$ = this.warning.asObservable();
   info$ = this.info.asObservable();
 
+
   constructor() { }
 
   async initializeMonitor(licenseKey: string, productId: string) {
     try {
       await monitor.initialize({
-        licenseKey,
-        licenseInfo: {
-          onEnabledVitalSigns: this.onEnabledVitalSigns.bind(this),
-          onOfflineMeasurement: this.onOfflineMeasurement.bind(this),
-        },
+        licenseKey
       });
       console.log('Initialized monitor');
       this.isMonitorReady.next(true);
@@ -77,8 +75,9 @@ export class MonitorService {
     return of('C5A15F-F168F2-4633BE-BFF65F-E238FB-43CD12');
   }
 
-  async createSession(video: HTMLVideoElement, cameraId: string, processingTime: number) {
+  async createSession(video: HTMLVideoElement, processingTime: number) {
     try {
+      debugger;
       if (!this.isMonitorReady.value || !processingTime || !video) {
         return;
       }
@@ -86,10 +85,9 @@ export class MonitorService {
       if (this.sessionState.value === SessionState.ACTIVE) {
         this.session!.terminate();
       }
-
       const options: FaceSessionOptions = {
         input: video,
-        cameraDeviceId: cameraId,
+        cameraDeviceId: "",
         processingTime,
         onVitalSign: this.onVitalSign.bind(this),
         onFinalResults: this.onFinalResults.bind(this),
@@ -98,6 +96,8 @@ export class MonitorService {
         onStateChange: this.onStateChange.bind(this),
         orientation: DeviceOrientation.PORTRAIT,
         onImageData: this.onImageData.bind(this),
+        onFaceDetected: this.onFaceDetected.bind(this),
+
       };
 
       const faceSession = await monitor.createFaceSession(options);
@@ -112,6 +112,7 @@ export class MonitorService {
   }
 
   startMeasuring() {
+    console.log(this.sessionState.value);
     if (this.sessionState.value === SessionState.ACTIVE) {
       this.session!.start();
       this.error.next({ code: -1 });
@@ -129,12 +130,18 @@ export class MonitorService {
     this.updateVitalSigns(vitalSign);
   }
 
+  private onFaceDetected(faceDetected: boolean) {
+    console.log('Face detected:', faceDetected);
+  }
+
   private onFinalResults(vitalSignsResults: VitalSignsResults) {
+    console.log('Final results:', vitalSignsResults);
     this.vitalSigns.next(null);
     this.updateVitalSigns(vitalSignsResults.results);
   }
 
   private onError(errorData: AlertData) {
+    console.log('Error:', errorData);
     this.error.next(errorData);
   }
 
@@ -145,14 +152,16 @@ export class MonitorService {
     ) {
       this.vitalSigns.next(null);
     }
+    console.log('Warning:', warningData);
     this.warning.next(warningData);
   }
 
   private onStateChange(state: SessionState) {
     this.sessionState.next(state);
-    if (state === SessionState.MEASURING) {
-      this.vitalSigns.next(null);
-    }
+    // if (state === SessionState.MEASURING) {
+    //   this.vitalSigns.next(null);
+    // }
+    console.log('State:', state);
   }
 
   private onEnabledVitalSigns(vitalSigns: EnabledVitalSigns) {
@@ -165,6 +174,7 @@ export class MonitorService {
 
 
   private onImageData(imageValidity: ImageValidity) {
+    console.log('Image validity:', imageValidity);
     let message: string;
     if (imageValidity != ImageValidity.VALID) {
       switch (imageValidity) {
@@ -188,6 +198,8 @@ export class MonitorService {
         type: InfoType.INSTRUCTION,
         message: message,
       });
+
+      console.log(this.info.value);
     } else {
       this.setInfoWithDismiss({ type: InfoType.NONE });
     }
@@ -211,6 +223,7 @@ export class MonitorService {
       ...this.vitalSigns.value,
       ...vitalSigns,
     });
+    console.log('Vital signs:', this.vitalSigns.value);
   }
 
   getVitalSigns() {

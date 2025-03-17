@@ -33,6 +33,13 @@ export class SidebarComponent {
       roles: [],
     },
     {
+      number: '2',
+      name: 'Pharmacy QR',
+      icon: 'fa fa-qrcode',
+      routerLink: '/pharmacy-qr',
+      roles: [],
+    },
+    {
       number: '20',
       name: 'Log Out',
       icon: 'fa fa-sign-out',

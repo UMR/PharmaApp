@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-pharmacy-qr',
@@ -6,6 +6,10 @@ import { Component } from '@angular/core';
   templateUrl: './pharmacy-qr.component.html',
   styleUrl: './pharmacy-qr.component.css'
 })
-export class PharmacyQrComponent {
+export class PharmacyQrComponent implements OnInit {
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }
