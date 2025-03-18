@@ -18,7 +18,7 @@ a:hover {
 .modernForm {
   max-width: 1200px;
   display: flex;
-  margin: 100px auto;
+  margin: 70px auto;
   background-color: #fff;
   border-radius: 10px;
 }
@@ -123,4 +123,3 @@ input[type="submit"]:hover {
 ::ng-deep .p-inputtext {
   padding: 10px;
 }
-

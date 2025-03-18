@@ -23,7 +23,7 @@ export class AuthenticationService {
   }
 
   getPharmacyUser() {
-    const URI = `${environment.apiUrl}/v1/Pharmacy/GetQRCode`;
+    const URI = `${environment.apiUrl}/v1/User/Get`;
     return this.http.get(URI, { observe: 'response' });
   }
 }
