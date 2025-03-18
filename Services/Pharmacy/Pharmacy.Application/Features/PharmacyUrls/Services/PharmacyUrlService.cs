@@ -53,26 +53,6 @@ public class PharmacyUrlService: IPharmacyUrlService
         return pharmacyUrl;
     }
 
-    public async Task<PharmacyUrl> GetTestAsync(Guid pharmacyId, Guid userId)
-    {
-        //var pharmacyUrl = await _pharmacyUrlRepository.GetAsync(pharmacyId);
-
-        //if (pharmacyUrl == null)
-        //{
-        long uniqueId = _uniqueIdService.GetNextID();
-
-        PharmacyUrl pharmacyUrl = new PharmacyUrl();
-        pharmacyUrl.PharmacyId = pharmacyId;
-        pharmacyUrl.Id = uniqueId;
-        pharmacyUrl.Url = GetBase62String(uniqueId);
-        pharmacyUrl.CreatedBy = userId;
-
-        await _pharmacyUrlRepository.AddAsync(pharmacyUrl);
-        //}
-
-        return pharmacyUrl;
-    }
-
     public async Task<PharmacyUrl?> GetAsync(string url)
     {
         var pharmacyUrl = await _pharmacyUrlRepository.GetAsync(url);
@@ -88,14 +68,20 @@ public class PharmacyUrlService: IPharmacyUrlService
     {
         StringBuilder sb = new StringBuilder();
 
-        while (id > 0)
+        try 
         {
-            int remender = (int) (id % baseValue);
-            id = id / baseValue;
+            while (id > 0)
+            {
+                int remender = (int)(id % baseValue);
+                id = id / baseValue;
+                sb.Append(base62String[remender]);
+            }
 
-            sb.Append(base62String[remender]);
         }
-
+        catch (Exception ex){
+            Console.WriteLine(ex);
+        }
+        
         return sb.ToString();
     }
 

@@ -1,4 +1,12 @@
-﻿namespace Pharmacy.Infrastructure.UniqueID;
+﻿/* This service is use to generate long type unique
+ * As per the DateTime tick precision, this service should generate 100 unique id per second
+ * To prevent the collution we have append the server version, thread id and sequence no
+ * server version is 8 bit, thread id is 8 bit and sequence id is 8 bit
+ * so the id is following
+ * ticks (40 bit) + serverVersion (8 bit) + threadId (8 bit) + sequenceNo (8 bit)
+ */
+
+namespace Pharmacy.Infrastructure.UniqueID;
 
 public class UniqueIdService: IUniqueIdService
 {
@@ -18,20 +26,20 @@ public class UniqueIdService: IUniqueIdService
     {
         sequenceNo++;
 
-        if(sequenceNo > maxSequenceNo)
+        if(sequenceNo >= maxSequenceNo)
         {
             sequenceNo = 1;
         }
 
         long ticks = DateTime.UtcNow.Ticks - startPeriod.Ticks;
+        int threadId = Thread.CurrentThread.ManagedThreadId & 0xFF;
 
-        long last48BitOfTicks = (ticks >> 16);              // Right shift to extract last 16 bits 
+        long mask40BitOfTicks = ticks & 0x000000FFFFFFFFFF;         // mask to lowest 40 bit  
 
-        long newId = last48BitOfTicks << 8;                 // Left shift 8 bit to append the server id
-        newId |= serverVersion;                                  // Append server version
-
-        newId = newId << 8;                                 // Left shift 8 bit to append sequence no
-        newId |= sequenceNo;                                  // Append sequence no
+        long newId = mask40BitOfTicks << 24;    // Shift the mask to 20 bit
+        newId |= (serverVersion & 0xFF) << 16;   // Convert the server version to 4-bit value and place into the position
+        newId |= (threadId & 0xFF) << 8;        // Convert the threadId to 8-bit value and place into the position
+        newId |= (sequenceNo & 0xFF);           // Convert the sequence number to 8-bit and place into the position
 
         return newId;
     }
