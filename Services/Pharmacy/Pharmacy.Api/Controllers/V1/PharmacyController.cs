@@ -30,7 +30,7 @@ namespace Pharmacy.Api.Controllers.V1
 
         [Authorize(Policy = RoleConstant.Pharmacist)]
         [HttpPost("Update")]
-        public async Task<IActionResult> UpdateAsync(PharmacyUpdateDto request)
+        public async Task<IActionResult> UpdateAsync([FromBody] PharmacyUpdateDto request)
         {
             await _pharmacyService.UpdateAsync(request);
 
@@ -45,18 +45,6 @@ namespace Pharmacy.Api.Controllers.V1
             string imageBase64String = await _pharmacyService.GenerateQRCodeAsync();
 
             return Ok(imageBase64String);
-        }
-
-        [HttpGet("GetPharmacyUrlTest")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GeneratePharmacyUrlTest(string pharmacyId, string userId)
-        {
-            Guid userGuid = Guid.Parse(userId);
-            Guid pharmacyGuid = Guid.Parse(pharmacyId);
-            
-            var result = await _pharmacyUrlService.GetTestAsync(pharmacyGuid, userGuid);
-
-            return Ok(result);
         }
 
         #endregion
