@@ -27,33 +27,17 @@ export class AppComponent {
 const MyPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '{rose.50}',
-      100: '{rose.100}',
-      200: '{rose.200}',
-      300: '{rose.300}',
-      400: '{rose.400}',
-      500: '{rose.500}',
-      600: '{rose.600}',
-      700: '{rose.700}',
-      800: '{rose.800}',
-      900: '{rose.900}',
-      950: '{rose.950}'
-    },
-    colorScheme: {
-      light: {
-        primary: {
-          color: '{rose.950}',
-          inverseColor: '#ffffff',
-          hoverColor: '{rose.900}',
-          activeColor: '{rose.800}'
-        },
-        highlight: {
-          background: '{rose.950}',
-          focusBackground: '{rose.700}',
-          color: '#ffffff',
-          focusColor: '#ffffff'
-        }
-      }
+      50: '{fuchsia.50}',
+      100: '{fuchsia.100}',
+      200: '{fuchsia.200}',
+      300: '{fuchsia.300}',
+      400: '{fuchsia.400}',
+      500: '{fuchsia.500}',
+      600: '{fuchsia.600}',
+      700: '{fuchsia.700}',
+      800: '{fuchsia.800}',
+      900: '{fuchsia.900}',
+      950: '{fuchsia.950}'
     }
   }
 });

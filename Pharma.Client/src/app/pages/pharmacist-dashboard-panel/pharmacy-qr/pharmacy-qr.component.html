@@ -1,7 +1,192 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <img [src]="qrCodeImage" height="300" width="300" />
-        </div>
+<div class="container-fluid">
+    <div class="row mt-2">
+        <p-card>
+            @if(user && user.status == 3){
+            <div class="col-12">
+                <p-message size="large" icon="pi pi-info-circle">
+                    User is required to fill the registration form to activate the account.
+                    <span>
+                        <p-button icon="pi pi-check" label="Register" styleClass="info-class"
+                            (onClick)="showPharmacyRegistrationDialogue()"></p-button>
+                    </span>
+                </p-message>
+            </div>
+            }
+            @if(displayModal){
+            <p-dialog [(visible)]="displayModal" modal="true" header="Register User" [closable]="true"
+                (onHide)="cancelRegistration()" [maximizable]="true" appendTo="body"
+                [style]="{ width: '70%', height: '100%' }">
+                <form [formGroup]="pharmacyRegistrationForm" (ngSubmit)="updatePharmacyUser()">
+                    <p-splitter [style]="{ height: 'auto' }" styleClass="mb-5" [layout]="splitterLayout">
+                        <ng-template pTemplate>
+
+                            <div class="modal-contents" style="margin-top: 55px; width: 90%;">
+                                <p style="font-weight: 600">
+                                    Store Information <strong style="color: red">*</strong>
+                                </p>
+                                <div class="name">
+                                    <div class="form-group">
+                                        <p-floatlabel variant="on">
+                                            <input pInputText id="storeName" formControlName="storeName"
+                                                autocomplete="off" class="form-control" />
+                                            <label for="storeName">Store Name</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </div>
+                                <div class="name">
+                                    <div class="form-group">
+                                        <p-floatlabel variant="on">
+                                            <input pInputText id="storeAddress" formControlName="storeAddress"
+                                                autocomplete="off" class="form-control" />
+                                            <label for="storeAddress">Store Address</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </div>
+                                <div class="name">
+                                    <div class="form-group">
+                                        <p-floatlabel variant="on">
+                                            <input pInputText id="storeAddress2" formControlName="storeAddress2"
+                                                autocomplete="off" class="form-control" />
+                                            <label for="storeAddress2">Store Address 2 (Optional)</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div style="margin-top: 60px">
+                                            <p style="font-weight: 600">
+                                                Store Logo <strong style="color: red">*</strong>
+                                            </p>
+                                            <div>
+                                                <div style="
+                            padding: 20px;
+                            height: 350px;
+                            width: auto;
+                            border-radius: 20px;
+                            border: 1px dashed #d200f8;
+                            text-align: center;
+                          ">
+                                                    <p-fileUpload #fileUpload name="file" [multiple]="false"
+                                                        accept="{{ fileType }}" maxFileSize="{{ maxFileSize }}"
+                                                        (onSelect)="onFileSelected($event)">
+                                                        <ng-template pTemplate="header" let-files
+                                                            let-chooseCallback="chooseCallback"
+                                                            let-clearCallback="clearCallback"
+                                                            let-uploadCallback="uploadCallback">
+                                                            <div style="margin-top: 20px">
+                                                                <div style="
+                                    padding: 10px;
+                                    display: flex;
+                                    gap: 10px;
+                                  ">
+                                                                    <p-button (onClick)="choose($event, chooseCallback)"
+                                                                        icon="pi pi-upload" label="Choose"
+                                                                        [rounded]="true" [outlined]="true">
+                                                                    </p-button>
+                                                                    <p-button (onClick)="
+                                      onClearTemplatingUpload(clearCallback)
+                                    " icon="pi pi-times" [rounded]="true" [outlined]="true" severity="danger"
+                                                                        [disabled]="!file">
+                                                                    </p-button>
+                                                                </div>
+                                                                <p-progressBar [value]="totalSizePercent"
+                                                                    [showValue]="false"
+                                                                    styleClass="md:w-20rem h-1rem w-full md:ml-auto"
+                                                                    [ngClass]="{
+                                    'exceeded-progress-bar':
+                                      totalSizePercent > 100
+                                  }">
+                                                                    <span class="white-space-nowrap">{{
+                                                                        formatSize(totalSize) }} / 1Mb</span>
+                                                                </p-progressBar>
+                                                            </div>
+                                                        </ng-template>
+
+                                                        <ng-template pTemplate="content" let-files
+                                                            let-uploadedFiles="uploadedFiles"
+                                                            let-removeFileCallback="removeFileCallback"
+                                                            let-removeUploadedFileCallback="removeUploadedFileCallback">
+                                                            <div *ngIf="file">
+                                                                <div style="
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 50px;
+                                  ">
+                                                                    <div>
+                                                                        <img role="presentation" [alt]="file.name"
+                                                                            [src]="getFileUrl(file)" width="100"
+                                                                            height="100" />
+                                                                    </div>
+
+                                                                    <span class="font-semibold">{{
+                                                                        file.name
+                                                                        }}</span>
+                                                                    <div>{{ formatSize(file.size) }}</div>
+                                                                    <p-badge value="Pending" severity="warn"></p-badge>
+                                                                    <p-button icon="pi pi-times" (onClick)="
+                                      onRemoveTemplatingFile(
+                                        $event,
+                                        file,
+                                        removeFileCallback,
+                                        0
+                                      )
+                                    " [outlined]="true" [rounded]="true" severity="danger">
+                                                                    </p-button>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+
+                                                        <ng-template pTemplate="empty">
+                                                            <div style="
+                                  display: flex;
+                                  justify-content: center;
+                                  align-items: center;
+                                  flex-direction: column;
+                                ">
+                                                                <img src="../../../../assets/images/icon-upload.svg"
+                                                                    alt="" srcset="" />
+                                                                <p style="
+                                    margin-top: 16px;
+                                    color: #b018ec;
+                                    font-weight: 600;
+                                  ">
+                                                                    Drag & Drop or Choose file to upload
+                                                                </p>
+                                                                <p>Supported formats: PNG, JPG,JPEG</p>
+                                                            </div>
+                                                        </ng-template>
+                                                    </p-fileUpload>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-splitter>
+
+                    <div class="my-5">
+                        <div class="ui-dialog-buttonpane p-clearfix">
+                            <button pButton type="submit" label="Save"
+                                [disabled]="pharmacyRegistrationForm.invalid"></button>
+                            <button pButton type="button" (click)="cancelRegistration()" label="Cancel"
+                                class="ui-button-secondary"></button>
+                        </div>
+                    </div>
+                </form>
+            </p-dialog>
+            }
+
+
+            <div class="col-md-12" style="display: block; text-align: center; margin-top: 20px;">
+                <img [src]="qrCodeImage" height="300" width="300" />
+            </div>
+        </p-card>
     </div>
 </div>

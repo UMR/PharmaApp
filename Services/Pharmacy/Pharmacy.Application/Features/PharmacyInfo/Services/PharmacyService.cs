@@ -18,16 +18,16 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
         private readonly IPharmacyRepository _pharmacyRepository;
         private readonly IConfiguration _configuration;
         private readonly IPharmacyUrlService _pharmacyUrlService;
-        
+
         #endregion
 
         #region Ctro
 
-        public PharmacyService(ICurrentUserService currentUserService, 
+        public PharmacyService(ICurrentUserService currentUserService,
             IPharmacyRepository pharmacyRepository,
             IConfiguration configuration,
-            IPharmacyUrlService pharmacyUrlService) 
-        { 
+            IPharmacyUrlService pharmacyUrlService)
+        {
             _currentUserService = currentUserService;
             _pharmacyRepository = pharmacyRepository;
             _configuration = configuration;
@@ -50,7 +50,7 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
 
             var pharmacy = await _pharmacyRepository.GetPharmacyByUserIdAsync(_currentUserService.UserId);
             string filename = "";
-            
+
             if (request.StoreLogo != null && request.StoreLogo.Length > 0)
             {
                 filename = await UploadStoreLogoAsync(request.StoreLogo);
@@ -59,7 +59,7 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
             if (pharmacy == null)
             {
                 pharmacy = new Pharmacy.Domain.Pharmacy();
-                pharmacy.OwnerId = _currentUserService.UserId;               
+                pharmacy.OwnerId = _currentUserService.UserId;
                 pharmacy.StoreName = request.StoreName;
                 pharmacy.AddressLine1 = request.AddressLine1;
                 pharmacy.AddressLine2 = request.AddressLine2;
@@ -71,7 +71,7 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
 
                 await _pharmacyRepository.AddAsync(pharmacy);
             }
-            else 
+            else
             {
                 pharmacy.StoreName = request.StoreName;
                 pharmacy.AddressLine1 = request.AddressLine1;

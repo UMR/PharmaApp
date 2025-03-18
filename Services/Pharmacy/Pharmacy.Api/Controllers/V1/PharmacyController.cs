@@ -53,7 +53,7 @@ namespace Pharmacy.Api.Controllers.V1
         {
             Guid userGuid = Guid.Parse(userId);
             Guid pharmacyGuid = Guid.Parse(pharmacyId);
-            
+
             var result = await _pharmacyUrlService.GetTestAsync(pharmacyGuid, userGuid);
 
             return Ok(result);

@@ -9,8 +9,13 @@ export class BinahScanService {
 
   constructor(private http: HttpClient) { }
   apiUrl: string = environment.apiUrl;
+
   getQrCode() {
     const URI = `${environment.apiUrl}/v1/Pharmacy/GetQRCode`;
     return this.http.get(URI, { observe: 'response' });
+  }
+  pharmacyRegistration(pharmacy: any) {
+    const URI = `${environment.apiUrl}/v1/Pharmacy/Update`;
+    return this.http.post(URI, pharmacy);
   }
 }

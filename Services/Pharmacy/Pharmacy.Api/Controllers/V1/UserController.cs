@@ -19,7 +19,7 @@ namespace Pharmacy.Api.Controllers.V1
         #region Ctor
 
         public UserController(IUserService userService, ICurrentUserService currentUserService)
-        { 
+        {
             _userService = userService;
             _currentUserService = currentUserService;
         }

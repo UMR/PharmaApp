@@ -1,12 +1,10 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { PharmacyMerchantService } from '../service/pharmacy-merchant.service';
 import { environment } from '../../environments/environment';
+import { authCookieKey } from '../common/constant/auth-key';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const accountService = inject(PharmacyMerchantService);
-  const user = accountService.userValue;
-  const isLoggedIn = user && user.accessToken;
+  const user = JSON.parse(localStorage.getItem(authCookieKey)!) || null;
+  const isLoggedIn = user && user.accessToken != null;
   const isApiUrl = req.url.startsWith(environment.apiUrl);
 
   if (isLoggedIn && isApiUrl) {

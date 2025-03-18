@@ -13,12 +13,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((err: any) => {
       console.log(err);
-      if ([401, 403].includes(err.status) && localStorage.getItem(authCookieKey)) {
+      if ([401].includes(err.status) && localStorage.getItem(authCookieKey)) {
         toastService.showError("Unauthorized", "Session Expired!");
         accountService.logOut();
         router.navigate(['/pharmacy-login']);
       }
-      const error = err.error.message || err.statusText;
+      const error = err.statusText;
       return throwError(() => error);
     })
   );

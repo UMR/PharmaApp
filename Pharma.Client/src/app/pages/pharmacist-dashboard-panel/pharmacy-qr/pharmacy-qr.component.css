@@ -1,0 +1,52 @@
+::ng-deep .p-message-text {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+::ng-deep
+  .p-splitter-horizontal
+  > .p-splitter-gutter
+  > .p-splitter-gutter-handle {
+  width: 2px;
+  height: calc(100vh - 400px);
+  color: #f19aec;
+}
+::ng-deep .ui-dialog-buttonpane {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-right: 20px;
+}
+::ng-deep .p-progressbar {
+  margin-top: 10px;
+}
+
+::ng-deep .p-fileupload .p-fileupload-buttonbar {
+  padding: 0px !important;
+}
+::ng-deep .p-fileupload .p-fileupload-buttonbar .p-button {
+  margin: 0px !important;
+}
+::ng-deep .p-fileupload-file {
+  display: none;
+}
+::ng-deep {
+  .p-fileupload-content {
+    border: none !important;
+  }
+  .p-fileupload-content .p-fileupload-files .p-fileupload-row \> div {
+    width: auto;
+  }
+  button.p-button.p-component.p-button-icon-only {
+    background-color: #cc35d1;
+    color: #fff;
+  }
+}
+::ng-deep .p-inputtext {
+  padding: 15px;
+}
+
+.name {
+  position: relative;
+  margin-bottom: 20px;
+}
