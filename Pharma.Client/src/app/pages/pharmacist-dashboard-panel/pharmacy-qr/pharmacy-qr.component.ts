@@ -14,7 +14,11 @@ export class PharmacyQrComponent implements OnInit {
   qrCodeImage: any;
 
   ngOnInit(): void {
+    this.getPharmacyUser();
     this.getQrCode();
+  }
+  getPharmacyUser() {
+
   }
   getQrCode() {
     this.binahScanService.getQrCode().subscribe({

@@ -12,7 +12,7 @@ import { PrimengModule } from './common/primeng/primeng.module';
 import { WasmService } from './service/wasm.service';
 import { LoginComponent } from './pages/pharmacist-registration-login-panel/login/login.component';
 import { RegistrationComponent } from './pages/pharmacist-registration-login-panel/registration/registration.component';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/otp.component';
 import { MessageService } from 'primeng/api';
 import { OtherModule } from './common/other/other.module';
@@ -21,6 +21,7 @@ import { HeaderComponent } from './common/component/header/header.component';
 import { SidebarComponent } from './common/component/sidebar/sidebar.component';
 import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy-qr/pharmacy-qr.component';
 import { jwtInterceptor } from './interceptor/jwt-interceptor.interceptor';
+import { errorInterceptor } from './interceptor/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,7 @@ import { jwtInterceptor } from './interceptor/jwt-interceptor.interceptor';
     MessageService,
     provideHttpClient(
       withInterceptorsFromDi(),
-      withInterceptors([jwtInterceptor])
+      withInterceptors([jwtInterceptor, errorInterceptor])
     ),
 
   ],

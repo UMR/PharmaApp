@@ -24,12 +24,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 
+app.UseCors(ApiConstant.CorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseIdentityServer();
-
-app.UseCors(ApiConstant.CorsPolicy);
-
 app.MapControllers();
 
 app.Run();

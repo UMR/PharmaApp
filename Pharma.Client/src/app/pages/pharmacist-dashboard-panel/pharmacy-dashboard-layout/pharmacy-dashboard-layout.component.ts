@@ -11,12 +11,6 @@ import { Router } from '@angular/router';
 export class PharmacyDashboardLayoutComponent {
   constructor(private router: Router) { }
   @Input() sideNavStatus: boolean = true;
-
-  user: any = {};
-  userName: string = '';
-  userPhoto: string = '';
-  userPhotoId: string = '';
-
   ngOnInit() {
     this.checkScreenSize();
     if (!localStorage.getItem(authCookieKey) || localStorage.getItem(authCookieKey) == null) {
