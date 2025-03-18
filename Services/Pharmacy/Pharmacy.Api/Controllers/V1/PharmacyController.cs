@@ -29,6 +29,16 @@ namespace Pharmacy.Api.Controllers.V1
         #region Methods
 
         [Authorize(Policy = RoleConstant.Pharmacist)]
+        [HttpGet("Get")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var result = await _pharmacyService.GetAsync();
+
+            return Ok(result);
+        }
+
+
+        [Authorize(Policy = RoleConstant.Pharmacist)]
         [HttpPost("Update")]
         public async Task<IActionResult> UpdateAsync([FromBody] PharmacyUpdateDto request)
         {

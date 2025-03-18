@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Pharmacy.Application.Contracts.Persistence;
 using Pharmacy.Application.Exceptions;
@@ -18,6 +19,7 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
         private readonly IPharmacyRepository _pharmacyRepository;
         private readonly IConfiguration _configuration;
         private readonly IPharmacyUrlService _pharmacyUrlService;
+        private readonly IMapper _mapper;
         
         #endregion
 
@@ -26,17 +28,28 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
         public PharmacyService(ICurrentUserService currentUserService, 
             IPharmacyRepository pharmacyRepository,
             IConfiguration configuration,
-            IPharmacyUrlService pharmacyUrlService) 
+            IPharmacyUrlService pharmacyUrlService,
+            IMapper mapper) 
         { 
             _currentUserService = currentUserService;
             _pharmacyRepository = pharmacyRepository;
             _configuration = configuration;
             _pharmacyUrlService = pharmacyUrlService;
+            _mapper = mapper;
         }
 
         #endregion
 
         #region Methods
+
+        public async Task<PharmacyDto> GetAsync()
+        {
+            var pharmacy = await _pharmacyRepository.GetPharmacyByUserIdAsync(_currentUserService.UserId);
+
+            var result = _mapper.Map<PharmacyDto>(pharmacy);
+            
+            return result;
+        }
 
         public async Task UpdateAsync(PharmacyUpdateDto request)
         {
