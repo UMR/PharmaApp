@@ -26,4 +26,8 @@ export class AuthenticationService {
     const URI = `${environment.apiUrl}/v1/User/Get`;
     return this.http.get(URI, { observe: 'response' });
   }
+  getPharmacy() {
+    const URI = `${environment.apiUrl}/v1/Pharmacy/Get`;
+    return this.http.get(URI, { observe: 'response' });
+  }
 }

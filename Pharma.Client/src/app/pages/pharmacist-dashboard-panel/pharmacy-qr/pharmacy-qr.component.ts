@@ -20,6 +20,7 @@ export class PharmacyQrComponent implements OnInit {
   qrCodeImage: any;
   user: any;
   displayModal: boolean = false;
+  pharmacy: any;
   pharmacyRegistrationForm: FormGroup | any;
   public previewUrl: any = null;
   public fileName: any = null;
@@ -41,7 +42,19 @@ export class PharmacyQrComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPharmacyUser();
+    this.getPharmacy();
     this.getQrCode();
+  }
+
+  getPharmacy() {
+    this.authService.getPharmacy().subscribe({
+      next: (res) => {
+        this.pharmacy = res.body;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
   getPharmacyUser() {
     this.authService.getPharmacyUser().subscribe({
@@ -56,8 +69,10 @@ export class PharmacyQrComponent implements OnInit {
   }
   getQrCode() {
     this.binahScanService.getQrCode().subscribe({
-      next: (res) => {
-        this.qrCodeImage = `data:image/png;base64,${res}`;
+      next: (res: any) => {
+        console.log(res.status);
+        this.qrCodeImage = `data:image/png;base64,${res.body?.base64String}`;
+        console.log(this.qrCodeImage);
       },
       error: (err) => {
         console.log(err);
