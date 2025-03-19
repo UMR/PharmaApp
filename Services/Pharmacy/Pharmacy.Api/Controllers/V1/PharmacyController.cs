@@ -54,7 +54,9 @@ namespace Pharmacy.Api.Controllers.V1
         {
             string imageBase64String = await _pharmacyService.GenerateQRCodeAsync();
 
-            return Ok(imageBase64String);
+            return Ok(new {
+                base64String = imageBase64String
+            });
         }
 
         #endregion
