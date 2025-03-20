@@ -11,6 +11,10 @@ public partial class PharmaAppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<CustomerPharmacy> CustomerPharmacies { get; set; }
+
     public virtual DbSet<Pharmacy> Pharmacies { get; set; }
 
     public virtual DbSet<PharmacyUrl> PharmacyUrls { get; set; }
@@ -25,6 +29,41 @@ public partial class PharmaAppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.ToTable("Customer");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.Property(e => e.Mobile).HasMaxLength(20);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<CustomerPharmacy>(entity =>
+        {
+            entity.ToTable("Customer_Pharmacy");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerPharmacies)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_Pharmacy_Customer");
+
+            entity.HasOne(d => d.Pharmacy).WithMany(p => p.CustomerPharmacies)
+                .HasForeignKey(d => d.PharmacyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_Pharmacy_Pharmacy");
+        });
+
         modelBuilder.Entity<Pharmacy>(entity =>
         {
             entity.ToTable("Pharmacy");

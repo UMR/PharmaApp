@@ -3,19 +3,21 @@ using System.Collections.Generic;
 
 namespace Pharmacy.Domain;
 
-public partial class Pharmacy
+public partial class Customer
 {
     public Guid Id { get; set; }
 
-    public Guid OwnerId { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string StoreName { get; set; } = null!;
+    public string? LastName { get; set; }
 
-    public string AddressLine1 { get; set; } = null!;
+    public string? Mobile { get; set; }
 
-    public string? AddressLine2 { get; set; }
+    public string? Email { get; set; }
 
-    public string? StoreLogo { get; set; }
+    public short Age { get; set; }
+
+    public float Weight { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -26,8 +28,4 @@ public partial class Pharmacy
     public DateTime? UpdatedDate { get; set; }
 
     public virtual ICollection<CustomerPharmacy> CustomerPharmacies { get; set; } = new List<CustomerPharmacy>();
-
-    public virtual User Owner { get; set; } = null!;
-
-    public virtual ICollection<PharmacyUrl> PharmacyUrls { get; set; } = new List<PharmacyUrl>();
 }
