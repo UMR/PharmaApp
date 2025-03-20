@@ -24,7 +24,6 @@ export class HeaderComponent {
   }
   sideNavToggle() {
     this.menuStatus = !this.menuStatus;
-    console.log(this.menuStatus);
     this.sideNavToggled.emit(this.menuStatus)
   }
   onLogoutClick() {

@@ -8,6 +8,7 @@ import { OtpComponent } from './pages/pharmacist-registration-login-panel/otp/ot
 import { PharmacyDashboardLayoutComponent } from './pages/pharmacist-dashboard-panel/pharmacy-dashboard-layout/pharmacy-dashboard-layout.component';
 import { AuthGuard } from './guards/auth.guard';
 import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy-qr/pharmacy-qr.component';
+import { pharmacyScanGuard } from './guards/pharmacy-scan.guard';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
       {
         path: '',
         component: BinahScanComponent,
-        // canActivate: [AuthGuard]
+        // canActivate: [pharmacyScanGuard]
       },
       {
         path: 'pharmacy-qr',
@@ -28,17 +29,13 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'patient-registration',
-    component: BasicInfoRegistrationPageComponent
-  },
-  {
     path: 'otp-verification',
     component: OtpComponent,
   },
   {
     path: 'vital-scan',
     component: BinahScanComponent,
-    canActivate: [AuthGuard]
+    canActivate: [pharmacyScanGuard]
   },
   {
     path: 'pharmacy-registration',
@@ -48,6 +45,12 @@ const routes: Routes = [
     path: 'pharmacy-login',
     component: LoginComponent
   },
+  {
+    path: 'scan',
+    component: BasicInfoRegistrationPageComponent,
+    canActivate: [pharmacyScanGuard]
+  },
+
   {
     path: "**",
     redirectTo: ""

@@ -19,7 +19,7 @@ a:hover {
   max-width: 1200px;
   display: flex;
   margin: 70px auto;
-  background-color: #fff;
+  background-color: #59b6d421;
   border-radius: 10px;
 }
 .imageSection {
@@ -122,4 +122,16 @@ input[type="submit"]:hover {
 }
 ::ng-deep .p-inputtext {
   padding: 10px;
+}
+
+::ng-deep .p-floatlabel-on:has(input:focus) label,
+.p-floatlabel-on:has(input.p-filled) label,
+.p-floatlabel-on:has(input:-webkit-autofill) label,
+.p-floatlabel-on:has(textarea:focus) label,
+.p-floatlabel-on:has(textarea.p-filled) label,
+.p-floatlabel-on:has(.p-inputwrapper-focus) label,
+.p-floatlabel-on:has(.p-inputwrapper-filled) label {
+  background: #ffd9ec;
+  padding: 2px 10px;
+  border-radius: 10px;
 }

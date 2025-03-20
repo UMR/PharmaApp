@@ -30,4 +30,8 @@ export class AuthenticationService {
     const URI = `${environment.apiUrl}/v1/Pharmacy/Get`;
     return this.http.get(URI, { observe: 'response' });
   }
+  getPharmacyByUniqueId(uniqueId: string) {
+    const URI = `${environment.apiUrl}/v1/Pharmacy/GetByUrl/${uniqueId}`;
+    return this.http.get(URI, { observe: 'response' });
+  }
 }
