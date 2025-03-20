@@ -5,5 +5,5 @@ namespace Pharmacy.Application.Features.Customer.Services;
 
 public interface ICustomerService
 {
-    Task<bool> RegisterAsync(CustomerRegDto customerInfo);
+    Task<CustomerResDto> RegisterAsync(CustomerRegDto customerInfo);
 }
