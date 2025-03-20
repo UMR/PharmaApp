@@ -22,6 +22,8 @@ namespace Pharmacy.Persistence.Extensions
             builder.Services.AddScoped<IUserLoginRepository, UserLoginRepository>();
             builder.Services.AddScoped<IPharmacyRepository, PharmacyRepository>();
             builder.Services.AddScoped<IPharmacyUrlRepository, PharmacyUrlRepository>();
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<ICustomerPharmacyRepository, CustomerPharmacyRepository>();
 
             return builder;
         }
