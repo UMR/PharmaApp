@@ -42,7 +42,8 @@ namespace Pharmacy.Api.Controllers.V1
         public async Task<IActionResult> GetAsync(string url)
         {
             var result = await _pharmacyUrlService.GetAsync(url);
-            return Ok(result);
+
+            return (result == null) ? NotFound() : Ok(result);
         }
 
         [Authorize(Policy = RoleConstant.Pharmacist)]
