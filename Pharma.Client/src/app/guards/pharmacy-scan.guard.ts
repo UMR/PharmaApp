@@ -10,13 +10,13 @@ export const pharmacyScanGuard: CanActivateFn = (route: ActivatedRouteSnapshot) 
 
   pharmacyService.getPharmacyByUniqueId(pharmacyId).subscribe({
     next: (res: any) => {
-      console.log(res);
-      if (res.body != null) {
+      if (res.body) {
         return true;
       }
       return false;
     },
-    error: () => {
+    error: (err) => {
+      router.navigate(['/pharmacy-login']);
       return false;
     }
   });

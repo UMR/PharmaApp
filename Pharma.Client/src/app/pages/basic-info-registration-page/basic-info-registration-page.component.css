@@ -18,8 +18,8 @@ a:hover {
 .modernForm {
   max-width: 1200px;
   display: flex;
-  margin: 100px auto;
-  background-color: #fff;
+  margin: 70px auto;
+  background-color: #59b6d421;
   border-radius: 10px;
 }
 .imageSection {
