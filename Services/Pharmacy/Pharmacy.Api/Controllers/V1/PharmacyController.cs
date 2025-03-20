@@ -37,6 +37,13 @@ namespace Pharmacy.Api.Controllers.V1
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetByUrl/{url}")]
+        public async Task<IActionResult> GetAsync(string url)
+        {
+            var result = await _pharmacyUrlService.GetAsync(url);
+            return Ok(result);
+        }
 
         [Authorize(Policy = RoleConstant.Pharmacist)]
         [HttpPost("Update")]
