@@ -1,6 +1,8 @@
-﻿using Pharmacy.Application.Contracts.Infrastructure;
+﻿using AutoMapper;
+using Pharmacy.Application.Contracts.Infrastructure;
 using Pharmacy.Application.Contracts.Persistence;
 using Pharmacy.Application.Features.CurrentUser.Services;
+using Pharmacy.Application.Features.PharmacyInfo.Dtos;
 using Pharmacy.Domain;
 using System.Text;
 
@@ -13,6 +15,7 @@ public class PharmacyUrlService: IPharmacyUrlService
     private readonly IPharmacyUrlRepository _pharmacyUrlRepository;
     private readonly IUniqueIdService _uniqueIdService;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IMapper _mapper;
     private const string base62String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private const int baseValue = 62;
 
@@ -22,11 +25,13 @@ public class PharmacyUrlService: IPharmacyUrlService
 
     public PharmacyUrlService(IPharmacyUrlRepository pharmacyUrlRepository, 
         IUniqueIdService uniqueIdService, 
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService, 
+        IMapper mapper)
     {
         _pharmacyUrlRepository = pharmacyUrlRepository;
         _uniqueIdService = uniqueIdService;
         _currentUserService = currentUserService;
+        _mapper = mapper;
     }
 
     #endregion
@@ -53,11 +58,12 @@ public class PharmacyUrlService: IPharmacyUrlService
         return pharmacyUrl;
     }
 
-    public async Task<PharmacyUrl?> GetAsync(string url)
+    public async Task<PharmacyDto?> GetAsync(string url)
     {
         var pharmacyUrl = await _pharmacyUrlRepository.GetAsync(url);
-  
-        return pharmacyUrl;
+        var result = _mapper.Map<PharmacyDto>(pharmacyUrl?.Pharmacy);
+
+        return result;
     }
 
     #endregion

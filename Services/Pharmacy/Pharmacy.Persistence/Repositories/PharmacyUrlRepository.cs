@@ -33,14 +33,14 @@ public class PharmacyUrlRepository : IPharmacyUrlRepository
 
     public async Task<PharmacyUrl?> GetAsync(Guid pharmacyId)
     {
-        var pharmacyUniqueUlr = await _context.PharmacyUrls.Where(pu => pu.PharmacyId == pharmacyId).FirstOrDefaultAsync();
+        var pharmacyUniqueUlr = await _context.PharmacyUrls.AsNoTracking().Where(pu => pu.PharmacyId == pharmacyId).Include(pu => pu.Pharmacy).FirstOrDefaultAsync();
 
         return pharmacyUniqueUlr;
     }
 
     public async Task<PharmacyUrl?> GetAsync(string url)
     {
-        var pharmacyUniqueUlr = await _context.PharmacyUrls.Where(pu => pu.Url == url).FirstOrDefaultAsync();
+        var pharmacyUniqueUlr = await _context.PharmacyUrls.AsNoTracking().Where(pu => pu.Url == url).Include(pu => pu.Pharmacy).FirstOrDefaultAsync();
 
         return pharmacyUniqueUlr;
     }
