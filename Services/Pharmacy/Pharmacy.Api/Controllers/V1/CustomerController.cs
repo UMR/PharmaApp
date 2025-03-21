@@ -28,9 +28,9 @@ public class CustomerController : ControllerBase
     [HttpPost("Register")]
     public async Task<IActionResult> RegisterAsync([FromBody] CustomerRegDto customerInfo)
     {
-        await _customerService.RegisterAsync(customerInfo);
+        var customer = await _customerService.RegisterAsync(customerInfo);
 
-        return Created();
+        return (customer == null) ? Problem() : Created("", customer);
     }
 
     #endregion

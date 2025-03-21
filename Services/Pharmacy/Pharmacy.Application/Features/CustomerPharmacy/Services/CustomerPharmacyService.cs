@@ -1,4 +1,6 @@
 ﻿using Pharmacy.Application.Contracts.Persistence;
+using Pharmacy.Application.Features.CustomerPharmacy.Dtos;
+using Pharmacy.Application.Wrapper;
 
 namespace Pharmacy.Application.Features.CustomerPharmacy.Services;
 
@@ -35,5 +37,16 @@ public class CustomerPharmacyService : ICustomerPharmacyService
         
         return (result) ? customerPharmacy : null;
     }
+
+    public async Task<PaginatedList<PharmacyUserScanHistoryDto>> GetScanHistoryByIdAsync(Guid pharmacyId, int pageIndex, int pageSize)
+    {
+        if(pageIndex < 1) pageIndex = 1;
+        if(pageSize < 1) pageSize = 10;
+
+        var result = await _customerPharmacyRepository.GetScanHistoryByIdAsync(pharmacyId, pageIndex, pageSize);
+
+        return result;
+    }
+
     #endregion
 }

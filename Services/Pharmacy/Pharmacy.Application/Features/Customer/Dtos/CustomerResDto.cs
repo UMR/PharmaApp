@@ -1,9 +1,8 @@
 ﻿namespace Pharmacy.Application.Features.Customer.Dtos;
 
-public class CustomerRegDto
+public class CustomerResDto
 {
-
-    public Guid PharmacyId { get; set; }
+    public Guid Id { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -16,4 +15,12 @@ public class CustomerRegDto
     public short Age { get; set; }
 
     public float Weight { get; set; }
+
+    public Guid CreatedBy { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedDate { get; set; }
 }

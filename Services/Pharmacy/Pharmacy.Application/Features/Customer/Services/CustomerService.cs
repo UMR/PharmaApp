@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Asn1.Ocsp;
+﻿using AutoMapper;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Pharmacy.Application.Common.Constants;
 using Pharmacy.Application.Contracts.Infrastructure;
 using Pharmacy.Application.Contracts.Persistence;
@@ -19,6 +20,7 @@ public class CustomerService : ICustomerService
     private readonly ICustomerPharmacyService _customerPharmacyService;
     private readonly IIdentityService _identityService;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IMapper _mapper;
     
     #endregion
 
@@ -27,19 +29,21 @@ public class CustomerService : ICustomerService
     public CustomerService(ICustomerRepository customerRepository,
                             ICustomerPharmacyService customerPharmacyService,
                             IIdentityService identityService,
-                            IServiceProvider serviceProvider)
+                            IServiceProvider serviceProvider,
+                            IMapper mapper)
     {
         _customerRepository = customerRepository;
         _customerPharmacyService = customerPharmacyService;
         _identityService = identityService;
         _serviceProvider = serviceProvider;
+        _mapper = mapper;
     }
 
     #endregion
 
     #region Public Methods
 
-    public async Task<bool> RegisterAsync(CustomerRegDto customerInfo)
+    public async Task<CustomerResDto> RegisterAsync(CustomerRegDto customerInfo)
     {
         var validator = new CustomerRegDtoValidator(_serviceProvider);
         var validationResult = await validator.ValidateAsync(customerInfo);
@@ -76,11 +80,11 @@ public class CustomerService : ICustomerService
             //    return response;
             //}
 
-            return true;
+            return _mapper.Map<CustomerResDto>(storedCustomer);
         }
 
         //return new TokenResponseDto();
-        return false;
+        return null;
     }
 
     #endregion

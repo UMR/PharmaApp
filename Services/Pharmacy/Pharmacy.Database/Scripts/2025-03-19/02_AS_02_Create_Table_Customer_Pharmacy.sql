@@ -4,7 +4,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[Customer_Pharmacy](
+CREATE TABLE [dbo].[CustomerPharmacy](
 	[Id] [uniqueidentifier] NOT NULL,
 	[CustomerId] [uniqueidentifier] NOT NULL,
 	[PharmacyId] [uniqueidentifier] NOT NULL,
@@ -18,13 +18,13 @@ CREATE TABLE [dbo].[Customer_Pharmacy](
 GO
 
 
-ALTER TABLE [dbo].[Customer_Pharmacy] ADD  CONSTRAINT [DF_Customer_Pharmacy_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+ALTER TABLE [dbo].[CustomerPharmacy] ADD  CONSTRAINT [DF_CustomerPharmacy_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 GO
 
-ALTER TABLE [dbo].[Customer_Pharmacy] WITH CHECK ADD CONSTRAINT [FK_Customer_Pharmacy_Customer] FOREIGN KEY([CustomerId])
+ALTER TABLE [dbo].[CustomerPharmacy] WITH CHECK ADD CONSTRAINT [FK_CustomerPharmacy_Customer] FOREIGN KEY([CustomerId])
 REFERENCES [dbo].[Customer] ([Id])
 GO
 
-ALTER TABLE [dbo].[Customer_Pharmacy] WITH CHECK ADD CONSTRAINT [FK_Customer_Pharmacy_Pharmacy] FOREIGN KEY([PharmacyId])
+ALTER TABLE [dbo].[CustomerPharmacy] WITH CHECK ADD CONSTRAINT [FK_CustomerPharmacy_Pharmacy] FOREIGN KEY([PharmacyId])
 REFERENCES [dbo].[Pharmacy] ([Id])
 GO
