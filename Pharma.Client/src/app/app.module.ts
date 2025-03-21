@@ -22,6 +22,7 @@ import { SidebarComponent } from './common/component/sidebar/sidebar.component';
 import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy-qr/pharmacy-qr.component';
 import { jwtInterceptor } from './interceptor/jwt-interceptor.interceptor';
 import { errorInterceptor } from './interceptor/error.interceptor';
+import { PayNowComponent } from './pages/customer-panel/pay-now/pay-now.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { errorInterceptor } from './interceptor/error.interceptor';
     HeaderComponent,
     SidebarComponent,
     PharmacyQrComponent,
+    PayNowComponent,
 
   ],
   imports: [

@@ -14,11 +14,20 @@
     </div>
     <div class="contactForm">
         <h3 class="pb-3">Pharmacy Patient Portal</h3>
-        <form [formGroup]="userRegistrationForm" (ngSubmit)="login()">
+        <form [formGroup]="userRegistrationForm" (ngSubmit)="customerLogin()">
+            <input type="hidden" formControlName="pharmacyId" value="patient" />
             <div class="name">
                 <p-floatlabel variant="on">
-                    <input pInputText id="name" formControlName="name" autocomplete="off" class="form-control" />
-                    <label for="name">Name</label>
+                    <input pInputText id="firstName" formControlName="firstName" autocomplete="off"
+                        class="form-control" />
+                    <label for="firstName">First Name</label>
+                </p-floatlabel>
+            </div>
+            <div class="name">
+                <p-floatlabel variant="on">
+                    <input pInputText id="lastName" formControlName="lastName" autocomplete="off"
+                        class="form-control" />
+                    <label for="lastName">Last Name</label>
                 </p-floatlabel>
             </div>
             <div class="name">
@@ -30,9 +39,10 @@
 
             <div class="name">
                 <p-floatlabel variant="on">
-                    <input pInputText id="phoneNumber" formControlName="phoneNumber" autocomplete="off"
-                        class="form-control" />
-                    <label for="phoneNumber">Phone Number</label>
+                    <angular-phone-number-input formControlName="mobile" [defaultCountry]="defaultCountry"
+                        [preferredCountries]="['US', 'IN', 'BD']"
+                        onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
+                    </angular-phone-number-input>
                 </p-floatlabel>
             </div>
             <div class="name">
@@ -43,8 +53,9 @@
             </div>
             <div class="name">
                 <p-floatlabel variant="on">
-                    <p-datePicker formControlName="dateOfBirth" [maxDate]="currentDate"></p-datePicker>
-                    <label for="phoneNumber">Date of Birth</label>
+                    <input pInputText type="number" min="1" id="age" formControlName="age" autocomplete="off"
+                        class="form-control" />
+                    <label for="age">Age</label>
                 </p-floatlabel>
             </div>
 

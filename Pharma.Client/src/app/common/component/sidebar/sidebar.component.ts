@@ -40,12 +40,20 @@ export class SidebarComponent {
       roles: [],
     },
     {
+      number: '3',
+      name: 'Binah Scan',
+      icon: 'fa fa-camera',
+      routerLink: '/pay-now',
+      roles: [],
+    },
+    {
       number: '20',
       name: 'Log Out',
       icon: 'fa fa-sign-out',
       routerLink: null,
       roles: [],
     },
+
   ];
 
   ngOnInit(): void {

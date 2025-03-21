@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { phoneNumberValidator } from '../../common/Validator/phonenumber.validator';
+import { CustomerService } from '../../service/customer.service';
 
 @Component({
   selector: 'app-basic-info-registration-page',
@@ -11,29 +13,45 @@ import { Router } from '@angular/router';
 export class BasicInfoRegistrationPageComponent implements OnInit {
   userRegistrationForm: FormGroup | any;
   currentDate: any;
+  pharmacy: any;
+  defaultCountry: string = 'IN'
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder) {
+  constructor(private router: Router, private fb: FormBuilder, private route: ActivatedRoute, private customerService: CustomerService) {
 
   }
   ngOnInit(): void {
     this.currentDate = new Date();
+    this.route.data.subscribe((data) => {
+      this.pharmacy = data['pharmacy'];
+
+    });
+
     this.initializeForm();
   }
 
 
-  login() {
-    this.router.navigate(['/vital-scan']);
+  customerLogin() {
+    this.customerService.registerCustomer(this.userRegistrationForm.value).subscribe({
+      next: (res) => {
+        this.router.navigate(['/pay-now']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   initializeForm() {
     this.userRegistrationForm = this.fb.group({
-      name: [null],
-      phoneNumber: [null],
+      pharmacyId: [this.pharmacy.body.id],
+      firstName: [null, Validators.required],
+      lastName: [null],
+      mobile: ["", [Validators.required, phoneNumberValidator(this.defaultCountry)]],
       email: [null],
-      weight: [null],
-      dateOfBirth: [null],
+      weight: [null, Validators.required],
+      age: [null, Validators.required],
     });
   }
 

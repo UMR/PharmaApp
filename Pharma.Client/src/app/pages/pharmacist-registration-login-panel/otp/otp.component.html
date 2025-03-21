@@ -30,6 +30,17 @@
                 </ng-template>
             </p-inputotp>
         </div>
+        @if(showResendBtn){
+        <div>
+            <a (click)="resendOtp()" style="cursor: pointer;">Resend OTP</a>
+        </div>
+        }
+        @if(otp && otp.length == 6){
         <p-button label="Submit Otp" type="submit" [rounded]="true" severity="success" (onClick)="verifyOtp()" />
+
+        }
+        @else {
+        <button class="btn btn-next disabled" disabled>Verify</button>
+        }
     </div>
 </div>

@@ -9,6 +9,10 @@ import { PharmacyDashboardLayoutComponent } from './pages/pharmacist-dashboard-p
 import { AuthGuard } from './guards/auth.guard';
 import { PharmacyQrComponent } from './pages/pharmacist-dashboard-panel/pharmacy-qr/pharmacy-qr.component';
 import { pharmacyScanGuard } from './guards/pharmacy-scan.guard';
+import { PharmacyResolver } from './resolver/pharmacy.resolver';
+import { PayNowComponent } from './pages/customer-panel/pay-now/pay-now.component';
+import { RoleType } from './common/model/role.model';
+import { roleGuard } from './guards/role.guard';
 
 const routes: Routes = [
   {
@@ -23,7 +27,10 @@ const routes: Routes = [
       {
         path: 'pharmacy-qr',
         component: PharmacyQrComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, roleGuard],
+        data: {
+          roles: [RoleType.PHARMACIST]
+        }
 
       }
     ]
@@ -35,7 +42,10 @@ const routes: Routes = [
   {
     path: 'vital-scan',
     component: BinahScanComponent,
-    canActivate: [pharmacyScanGuard]
+    canActivate: [AuthGuard, roleGuard],
+    data: {
+      roles: [RoleType.PHARMACIST]
+    }
   },
   {
     path: 'pharmacy-registration',
@@ -48,7 +58,15 @@ const routes: Routes = [
   {
     path: 'scan',
     component: BasicInfoRegistrationPageComponent,
-    canActivate: [pharmacyScanGuard]
+    canActivate: [pharmacyScanGuard],
+    resolve: {
+      pharmacy: PharmacyResolver
+    }
+  },
+  {
+    path: 'pay-now',
+    component: PayNowComponent,
+
   },
 
   {
@@ -59,6 +77,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [PharmacyResolver]
 })
 export class AppRoutingModule { }

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { authCookieKey } from '../common/constant/auth-key';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthenticationService {
   private otpTimer = new BehaviorSubject<any>('');
   otpTimer$ = this.otpTimer.asObservable();
   apiUrl: string = environment.apiUrl;
+  private pharmacyData = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) { }
 
@@ -20,6 +22,31 @@ export class AuthenticationService {
   }
   setOtpTimer(timer: any) {
     this.otpTimer.next(timer);
+  }
+  setPharmacyData(data: any) {
+    this.pharmacyData.next(data);
+  }
+
+  getPharmacyData(): Observable<any> {
+    return this.pharmacyData.asObservable();
+  }
+
+  hasRole(requiredRole: string): boolean {
+    const user = JSON.parse(localStorage.getItem(authCookieKey)!) || null;
+    const token = user ? user.accessToken : null;
+    if (token) {
+      let decryptedToken = this.decryptJwtToken(token);
+      console.log(decryptedToken);
+      const roles = decryptedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return roles.includes(requiredRole);
+    }
+    return false;
+  }
+
+  decryptJwtToken(token: any) {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
   }
 
   getPharmacyUser() {

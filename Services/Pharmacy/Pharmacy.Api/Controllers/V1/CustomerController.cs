@@ -3,7 +3,7 @@ using Pharmacy.Application.Features.Customer.Services;
 
 namespace Pharmacy.Api.Controllers.V1;
 
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 [ApiController]
 public class CustomerController : ControllerBase
 {
