@@ -36,10 +36,8 @@ export class BasicInfoRegistrationPageComponent implements OnInit {
   customerLogin() {
     this.customerService.registerCustomer(this.userRegistrationForm.value).subscribe({
       next: (res: any) => {
-        if (res.body != null) {
-          localStorage.setItem(customerInfo, JSON.stringify(res.body));
-          this.router.navigate(['/pay-now']);
-        }
+        localStorage.setItem(customerInfo, JSON.stringify(res));
+        this.router.navigate(['/pay-now']);
       },
       error: (err) => {
         console.log(err);

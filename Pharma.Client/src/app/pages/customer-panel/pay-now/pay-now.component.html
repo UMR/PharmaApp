@@ -38,11 +38,12 @@
         </div>
     </div>
     <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()">Next</button>
-    <p-dialog header="Pay Now" [(visible)]="displayModal" [modal]="true" [closable]="false" [resizable]="false"
+    <p-dialog header="Pay Now" [(visible)]="displayModal" [modal]="true" [closable]="true" [resizable]="false"
         [baseZIndex]="10000" [style]="{width: '450px'}">
         <div class="p-fluid">
             <div class="p-field">
-                <p>User Name : {{user}}</p>
+                <p>User Name : {{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName :
+                    user.firstName}}</p>
             </div>
             <div class="p-field">
                 <p>Amount : {{amount}}</p>

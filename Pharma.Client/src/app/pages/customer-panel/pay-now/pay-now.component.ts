@@ -19,8 +19,8 @@ export class PayNowComponent implements OnInit {
   }
   user: any;
   displayModal: boolean = false;
-  scanCount: number = 0;
-  amount: number = 0;
+  scanCount: number = 1;
+  amount: number = 100;
 
   payNowmodal() {
     this.displayModal = true;
