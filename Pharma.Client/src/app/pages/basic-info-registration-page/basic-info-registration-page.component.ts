@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { phoneNumberValidator } from '../../common/Validator/phonenumber.validator';
 import { CustomerService } from '../../service/customer.service';
+import { customerInfo } from '../../common/constant/auth-key';
 
 @Component({
   selector: 'app-basic-info-registration-page',
@@ -34,8 +35,11 @@ export class BasicInfoRegistrationPageComponent implements OnInit {
 
   customerLogin() {
     this.customerService.registerCustomer(this.userRegistrationForm.value).subscribe({
-      next: (res) => {
-        this.router.navigate(['/pay-now']);
+      next: (res: any) => {
+        if (res.body != null) {
+          localStorage.setItem(customerInfo, JSON.stringify(res.body));
+          this.router.navigate(['/pay-now']);
+        }
       },
       error: (err) => {
         console.log(err);

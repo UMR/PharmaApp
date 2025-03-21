@@ -8,7 +8,6 @@ export class AuthGuard implements CanActivate {
     private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    debugger;
     const user = localStorage.getItem(authCookieKey) ? JSON.parse(localStorage.getItem(authCookieKey)!) : null;
     if (user && user.accessToken != null) {
       return true;

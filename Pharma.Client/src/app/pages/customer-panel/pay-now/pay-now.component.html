@@ -37,5 +37,24 @@
             <p>Keep your phone still and at eye level during the scan</p>
         </div>
     </div>
-    <button class="btn btn-primary rounded-pill mt-4 px-5 py-2">Next</button>
+    <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()">Next</button>
+    <p-dialog header="Pay Now" [(visible)]="displayModal" [modal]="true" [closable]="false" [resizable]="false"
+        [baseZIndex]="10000" [style]="{width: '450px'}">
+        <div class="p-fluid">
+            <div class="p-field">
+                <p>User Name : {{user}}</p>
+            </div>
+            <div class="p-field">
+                <p>Amount : {{amount}}</p>
+            </div>
+            <div class="p-field">
+                <p>Scan Count : {{scanCount}}</p>
+            </div>
+
+
+        </div>
+        <div class="p-d-flex p-jc-end">
+            <button type="button" pButton label="Pay" class="p-button-success" (click)="payNow()"></button>
+        </div>
+    </p-dialog>
 </div>

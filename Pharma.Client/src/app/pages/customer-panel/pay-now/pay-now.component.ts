@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { customerInfo } from '../../../common/constant/auth-key';
 
 @Component({
   selector: 'app-pay-now',
@@ -6,6 +7,26 @@ import { Component } from '@angular/core';
   templateUrl: './pay-now.component.html',
   styleUrl: './pay-now.component.css'
 })
-export class PayNowComponent {
+export class PayNowComponent implements OnInit {
+
+  ngOnInit(): void {
+    this.getUser();
+  }
+
+  getUser() {
+    this.user = JSON.parse(localStorage.getItem(customerInfo)!);
+
+  }
+  user: any;
+  displayModal: boolean = false;
+  scanCount: number = 0;
+  amount: number = 0;
+
+  payNowmodal() {
+    this.displayModal = true;
+  }
+  payNow() {
+
+  }
 
 }
