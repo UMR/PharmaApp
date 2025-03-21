@@ -46,7 +46,9 @@ public partial class PharmaAppDbContext : DbContext
 
         modelBuilder.Entity<CustomerPharmacy>(entity =>
         {
-            entity.ToTable("Customer_Pharmacy");
+            entity.HasKey(e => e.Id).HasName("PK_Customer_Pharmacy");
+
+            entity.ToTable("CustomerPharmacy");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate)
@@ -56,12 +58,12 @@ public partial class PharmaAppDbContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.CustomerPharmacies)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Customer_Pharmacy_Customer");
+                .HasConstraintName("FK_CustomerPharmacy_Customer");
 
             entity.HasOne(d => d.Pharmacy).WithMany(p => p.CustomerPharmacies)
                 .HasForeignKey(d => d.PharmacyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Customer_Pharmacy_Pharmacy");
+                .HasConstraintName("FK_CustomerPharmacy_Pharmacy");
         });
 
         modelBuilder.Entity<Pharmacy>(entity =>
@@ -86,7 +88,7 @@ public partial class PharmaAppDbContext : DbContext
 
         modelBuilder.Entity<PharmacyUrl>(entity =>
         {
-            entity.ToTable("Pharmacy_Url");
+            entity.ToTable("PharmacyUrl");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate)
@@ -98,7 +100,7 @@ public partial class PharmaAppDbContext : DbContext
             entity.HasOne(d => d.Pharmacy).WithMany(p => p.PharmacyUrls)
                 .HasForeignKey(d => d.PharmacyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Pharmacy_Url_Pharmacy");
+                .HasConstraintName("FK_PharmacyUrl_Pharmacy");
         });
 
         modelBuilder.Entity<Role>(entity =>
