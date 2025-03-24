@@ -49,16 +49,13 @@ export class PharmacyService {
     return JSON.parse(decodedPayload);
   }
 
-  getPharmacyUser() {
-    const URI = `${environment.apiUrl}/v1/User/Get`;
-    return this.http.get(URI, { observe: 'response' });
-  }
+
   getPharmacy() {
-    const URI = `${environment.apiUrl}/v1/Pharmacy/Get`;
+    const URI = `${environment.apiUrl}/v1/Pharmacy`;
     return this.http.get(URI, { observe: 'response' });
   }
   getPharmacyByUniqueId(uniqueId: string) {
-    const URI = `${environment.apiUrl}/v1/Pharmacy/GetByUrl/${uniqueId}`;
+    const URI = `${environment.apiUrl}/v1/Pharmacy/Url/${uniqueId}`;
     return this.http.get(URI, { observe: 'response' });
   }
   getCurrentUser() {

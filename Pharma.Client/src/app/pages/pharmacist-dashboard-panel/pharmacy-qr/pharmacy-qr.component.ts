@@ -61,7 +61,7 @@ export class PharmacyQrComponent implements OnInit {
     })
   }
   getPharmacyUser() {
-    this.pharmaService.getPharmacyUser().subscribe({
+    this.pharmaService.getPharmacy().subscribe({
       next: (res) => {
         this.user = res.body;
         console.log(this.user);
