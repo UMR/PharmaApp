@@ -54,7 +54,7 @@ namespace Pharmacy.Api.Controllers.V1
 
         [Authorize(Policy = RoleConstant.Pharmacist)]
         [HttpPost("Update")]
-        public async Task<IActionResult> UpdateAsync([FromBody] PharmacyUpdateDto request)
+        public async Task<IActionResult> UpdateAsync([FromForm] PharmacyUpdateDto request)
         {
             await _pharmacyService.UpdateAsync(request);
 
