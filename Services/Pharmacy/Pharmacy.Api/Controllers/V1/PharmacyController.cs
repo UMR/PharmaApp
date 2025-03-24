@@ -1,11 +1,4 @@
-﻿using IdentityServer4.Extensions;
-using Pharmacy.Application.Common.Constants;
-using Pharmacy.Application.Features.CustomerPharmacy.Services;
-using Pharmacy.Application.Features.PharmacyInfo.Dtos;
-using Pharmacy.Application.Features.PharmacyInfo.Services;
-using Pharmacy.Application.Features.PharmacyUrls.Services;
-
-namespace Pharmacy.Api.Controllers.V1;
+﻿namespace Pharmacy.Api.Controllers.V1;
 
 [Route("api/v1/[controller]")]
 [ApiController]

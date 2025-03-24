@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Pharmacy.Persistence\Pharmacy.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Images\Logo\" />
-  </ItemGroup>
-
 </Project>

@@ -1,5 +1,12 @@
-﻿global using Newtonsoft.Json;
+﻿global using AutoMapper;
+global using Microsoft.Extensions.Configuration;
+global using Pharmacy.Application.Exceptions;
+global using Newtonsoft.Json;
 global using System.ComponentModel.DataAnnotations;
 global using FluentValidation;
 global using FluentValidation.Results;
 global using Pharmacy.Application.Features.Authentication.Dtos;
+global using Pharmacy.Application.Features.PharmacyInfo.Services;
+global using Pharmacy.Application.Contracts.Persistence;
+global using Microsoft.AspNetCore.Http;
+global using Pharmacy.Application.Features.CurrentUser.Services;
