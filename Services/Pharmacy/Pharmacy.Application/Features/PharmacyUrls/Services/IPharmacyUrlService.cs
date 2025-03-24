@@ -6,5 +6,5 @@ namespace Pharmacy.Application.Features.PharmacyUrls.Services;
 public interface IPharmacyUrlService
 {
     Task<PharmacyUrl> GetAsync(Guid pharmacyId);
-    Task<PharmacyDto?> GetAsync(string url);
+    Task<PharmacyDetailsDto?> GetAsync(string url);
 }

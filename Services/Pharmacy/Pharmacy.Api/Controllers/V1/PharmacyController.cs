@@ -1,87 +1,138 @@
-﻿using Pharmacy.Application.Common.Constants;
-using Pharmacy.Application.Contracts.Persistence;
+﻿using IdentityServer4.Extensions;
+using Pharmacy.Application.Common.Constants;
 using Pharmacy.Application.Features.CustomerPharmacy.Services;
 using Pharmacy.Application.Features.PharmacyInfo.Dtos;
 using Pharmacy.Application.Features.PharmacyInfo.Services;
 using Pharmacy.Application.Features.PharmacyUrls.Services;
 
-namespace Pharmacy.Api.Controllers.V1
+namespace Pharmacy.Api.Controllers.V1;
+
+[Route("api/v1/[controller]")]
+[ApiController]
+public class PharmacyController : ControllerBase
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class PharmacyController : ControllerBase
+    #region Fields
+
+    private readonly IHttpContextAccessor _contextAccessor;
+    private readonly IPharmacyService _pharmacyService;
+    private readonly IPharmacyUrlService _pharmacyUrlService;
+    private readonly ICustomerPharmacyService _customerPharmacyService;
+
+    #endregion
+
+    #region Ctor
+
+    public PharmacyController(IHttpContextAccessor httpContextAccessor,
+                            IPharmacyService pharmacyService, 
+                            IPharmacyUrlService pharmacyUrlService,
+                            ICustomerPharmacyService customerPharmacyService)
     {
-        #region Fields
-
-        private readonly IPharmacyService _pharmacyService;
-        private readonly IPharmacyUrlService _pharmacyUrlService;
-        private readonly ICustomerPharmacyService _customerPharmacyService;
-
-        #endregion
-
-        #region Ctor
-
-        public PharmacyController(IPharmacyService pharmacyService, 
-                                IPharmacyUrlService pharmacyUrlService,
-                                ICustomerPharmacyService customerPharmacyService)
-        {
-            _pharmacyService = pharmacyService;
-            _pharmacyUrlService = pharmacyUrlService;
-            _customerPharmacyService = customerPharmacyService;
-        }
-
-        #endregion
-
-        #region Methods
-
-        [Authorize(Policy = RoleConstant.Pharmacist)]
-        [HttpGet("Get")]
-        public async Task<IActionResult> GetAsync()
-        {
-            var result = await _pharmacyService.GetAsync();
-
-            return Ok(result);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("GetByUrl/{url}")]
-        public async Task<IActionResult> GetAsync(string url)
-        {
-            var result = await _pharmacyUrlService.GetAsync(url);
-
-            return (result == null) ? NotFound() : Ok(result);
-        }
-
-        [Authorize(Policy = RoleConstant.Pharmacist)]
-        [HttpPost("Update")]
-        public async Task<IActionResult> UpdateAsync([FromForm] PharmacyUpdateDto request)
-        {
-            await _pharmacyService.UpdateAsync(request);
-
-            // we will pass the url and object in the created method
-            return Created();
-        }
-
-        [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
-        [HttpGet("GetQRCode")]
-        public async Task<IActionResult> GenerateQRCode()
-        {
-            string imageBase64String = await _pharmacyService.GenerateQRCodeAsync();
-
-            return Ok(new {
-                base64String = imageBase64String
-            });
-        }
-
-        [HttpGet("GetScanHistory/{pharmacyId}")]
-        [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
-        public async Task<IActionResult> GetScanHistory(Guid pharmacyId, int pageIndex, int pageSize)
-        {
-            var result = await _customerPharmacyService.GetScanHistoryByIdAsync(pharmacyId, pageIndex, pageSize);
-            
-            return Ok(result);
-        }
-
-        #endregion
+        _contextAccessor = httpContextAccessor;
+        _pharmacyService = pharmacyService;
+        _pharmacyUrlService = pharmacyUrlService;
+        _customerPharmacyService = customerPharmacyService;
     }
+
+    #endregion
+
+    #region Methods
+
+    [Authorize(Policy = RoleConstant.Pharmacist)]
+    [HttpGet("/")]
+    public async Task<IActionResult> GetAsync()
+    {
+        var result = await _pharmacyService.GetAsync();
+
+        if(result == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(result);
+    }
+
+    [Authorize(Policy = RoleConstant.Admin)]
+    [HttpGet("/{id}")]
+    public async Task<IActionResult> GetAsync([FromRoute] Guid id)
+    {
+        var result = await _pharmacyService.GetAsync(id);
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("Url/{url}")]
+    public async Task<IActionResult> GetAsync([FromRoute] string url)
+    {
+        var result = await _pharmacyUrlService.GetAsync(url);
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [Authorize(Policy = RoleConstant.Pharmacist)]
+    [HttpPost("Create")]
+    public async Task<IActionResult> CreateAsync([FromForm] PharmacyDto request)
+    {
+        var pharmacy = await _pharmacyService.CreateAsync(request);
+
+        if(pharmacy == null)
+        {
+            return StatusCode(500, new { message = "Unable to create pharmacy. Please try later." });
+        }
+
+        string url = $"{_contextAccessor?.HttpContext?.Request.Scheme}://{_contextAccessor?.HttpContext?.Request.Host}api/v1/pharmacy/{pharmacy.Id}";
+
+        return Created(url, pharmacy);
+    }
+
+    [Authorize(Policy = RoleConstant.Pharmacist)]
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateAsync([FromForm] PharmacyDto request)
+    {
+        var pharmacy = await _pharmacyService.UpdateAsync(request);
+        
+        if(pharmacy == null)
+        {
+            return StatusCode(500, new { message = "Unable to update pharmacy. Please try later." });
+        }
+
+        return Ok(pharmacy);
+    }
+
+    [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
+    [HttpGet("QRCode")]
+    public async Task<IActionResult> GenerateQRCode()
+    {
+        string imageBase64String = await _pharmacyService.GenerateQRCodeAsync();
+
+        if (imageBase64String.IsNullOrEmpty())
+        {
+            return StatusCode(500, new { message = "Unable to generate QR code. Please try later." });
+        }
+
+        return Ok(new {
+            base64String = imageBase64String
+        });
+    }
+
+    [HttpGet("ScanHistory/{pharmacyId}")]
+    [Authorize(Policy = $"Active{RoleConstant.Pharmacist}")]
+    public async Task<IActionResult> GetScanHistory(Guid pharmacyId, int pageIndex, int pageSize)
+    {
+        var result = await _customerPharmacyService.GetScanHistoryByIdAsync(pharmacyId, pageIndex, pageSize);
+        
+        return Ok(result);
+    }
+
+    #endregion
 }

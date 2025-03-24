@@ -20,7 +20,8 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
         private readonly IConfiguration _configuration;
         private readonly IPharmacyUrlService _pharmacyUrlService;
         private readonly IMapper _mapper;
-        
+        private readonly IServiceProvider _serviceProvider;
+
         #endregion
 
         #region Ctro
@@ -29,31 +30,87 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
             IPharmacyRepository pharmacyRepository,
             IConfiguration configuration,
             IPharmacyUrlService pharmacyUrlService,
-            IMapper mapper) 
+            IMapper mapper,
+            IServiceProvider serviceProvider) 
         { 
             _currentUserService = currentUserService;
             _pharmacyRepository = pharmacyRepository;
             _configuration = configuration;
             _pharmacyUrlService = pharmacyUrlService;
             _mapper = mapper;
+            _serviceProvider = serviceProvider;
         }
 
         #endregion
 
         #region Methods
 
-        public async Task<PharmacyDto> GetAsync()
+        public async Task<PharmacyDetailsDto> GetAsync()
         {
             var pharmacy = await _pharmacyRepository.GetPharmacyByUserIdAsync(_currentUserService.UserId);
 
-            var result = _mapper.Map<PharmacyDto>(pharmacy);
+            var result = _mapper.Map<PharmacyDetailsDto>(pharmacy);
             
             return result;
         }
 
-        public async Task UpdateAsync(PharmacyUpdateDto request)
+        public async Task<PharmacyDetailsDto> GetAsync(Guid pharmacyId)
         {
-            var validator = new PharmacyUpdateDtoValidator();
+            var pharmacy = await _pharmacyRepository.GetByIdAsync(pharmacyId);
+
+            var result = _mapper.Map<PharmacyDetailsDto>(pharmacy);
+
+            return result;
+        }
+
+        public async Task<PharmacyDetailsDto?> CreateAsync(PharmacyDto request)
+        {
+            var validator = new PharmacyDtoValidator(_serviceProvider);
+            var validationResult = await validator.ValidateAsync(request);
+
+            if (validationResult.IsValid == false)
+            {
+                throw new ValidationRequestException(validationResult.Errors);
+            }
+
+            var storedPharmacy = await _pharmacyRepository.GetPharmacyByUserIdAsync(_currentUserService.UserId);
+
+            if(storedPharmacy != null)
+            {
+                throw new Exception("A pharmacy is available under the current user. Please update exist pharmacy insted.");
+            }
+
+            string filename = "";
+
+            if (request.StoreLogo != null && request.StoreLogo.Length > 0)
+            {
+                filename = await UploadStoreLogoAsync(request.StoreLogo);
+            }
+
+            var pharmacy = new Domain.Pharmacy();
+            pharmacy.OwnerId = _currentUserService.UserId;
+            pharmacy.StoreName = request.StoreName;
+            pharmacy.AddressLine1 = request.AddressLine1;
+            pharmacy.AddressLine2 = request.AddressLine2;
+
+            pharmacy.CreatedBy = _currentUserService.UserId;
+            pharmacy.CreatedDate = DateTime.UtcNow;
+
+            pharmacy.StoreLogo = string.IsNullOrEmpty(filename) ? pharmacy.StoreLogo : filename;
+
+            var response = await _pharmacyRepository.AddAsync(pharmacy);
+
+            if(response)
+            {
+                return _mapper.Map<PharmacyDetailsDto>(pharmacy);
+            }
+
+            return null;          
+        }
+
+        public async Task<PharmacyDetailsDto?> UpdateAsync(PharmacyDto request)
+        {
+            var validator = new PharmacyDtoValidator(_serviceProvider);
             var validationResult = await validator.ValidateAsync(request);
 
             if (validationResult.IsValid == false)
@@ -69,34 +126,23 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
                 filename = await UploadStoreLogoAsync(request.StoreLogo);
             }
 
-            if (pharmacy == null)
+            pharmacy.StoreName = request.StoreName;
+            pharmacy.AddressLine1 = request.AddressLine1;
+            pharmacy.AddressLine2 = request.AddressLine2;
+
+            pharmacy.UpdatedDate = DateTime.UtcNow;
+            pharmacy.UpdatedBy = _currentUserService.UserId;
+
+            pharmacy.StoreLogo = string.IsNullOrEmpty(filename) ? pharmacy.StoreLogo : filename;
+
+            var response = await _pharmacyRepository.UpdateAsync(pharmacy);
+
+            if (response)
             {
-                pharmacy = new Pharmacy.Domain.Pharmacy();
-                pharmacy.OwnerId = _currentUserService.UserId;
-                pharmacy.StoreName = request.StoreName;
-                pharmacy.AddressLine1 = request.AddressLine1;
-                pharmacy.AddressLine2 = request.AddressLine2;
-
-                pharmacy.CreatedBy = _currentUserService.UserId;
-                pharmacy.CreatedDate = DateTime.UtcNow;
-
-                pharmacy.StoreLogo = string.IsNullOrEmpty(filename) ? pharmacy.StoreLogo : filename;
-
-                await _pharmacyRepository.AddAsync(pharmacy);
+                return _mapper.Map<PharmacyDetailsDto>(pharmacy);
             }
-            else
-            {
-                pharmacy.StoreName = request.StoreName;
-                pharmacy.AddressLine1 = request.AddressLine1;
-                pharmacy.AddressLine2 = request.AddressLine2;
 
-                pharmacy.UpdatedDate = DateTime.UtcNow;
-                pharmacy.UpdatedBy = _currentUserService.UserId;
-
-                pharmacy.StoreLogo = string.IsNullOrEmpty(filename) ? pharmacy.StoreLogo : filename;
-
-                await _pharmacyRepository.UpdateAsync(pharmacy);
-            }
+            return null;
         }
 
         public async ValueTask<string> GenerateQRCodeAsync()
@@ -128,8 +174,15 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
 
         private async ValueTask<string> UploadStoreLogoAsync(IFormFile storeLogo)
         {
+            string directory = Path.Combine(Directory.GetCurrentDirectory(), "Images/Logo");
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             string filename = $"{DateTime.Now.Ticks.ToString()}_{storeLogo.FileName}";
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Images/Logo", filename);
+            var filePath = Path.Combine(directory, filename);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {

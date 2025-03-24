@@ -23,6 +23,16 @@ namespace Pharmacy.Persistence.Repositories
 
         #region Methods
 
+        public async ValueTask<bool> IsPharmacyExistAsync(Guid pharmacyId)
+        {
+            return await _context.Pharmacies.AnyAsync(p => p.Id == pharmacyId);
+        }
+
+        public async Task<Domain.Pharmacy?> GetByIdAsync(Guid pharmacyId)
+        {
+            return await _context.Pharmacies.Where(p => p.Id == pharmacyId).FirstOrDefaultAsync();
+        }
+
         public async Task<Domain.Pharmacy> GetPharmacyByUserIdAsync(Guid userId)
         {
             var result = await _context.Pharmacies.Where(p => p.OwnerId == userId).FirstOrDefaultAsync();

@@ -58,10 +58,10 @@ public class PharmacyUrlService: IPharmacyUrlService
         return pharmacyUrl;
     }
 
-    public async Task<PharmacyDto?> GetAsync(string url)
+    public async Task<PharmacyDetailsDto?> GetAsync(string url)
     {
         var pharmacyUrl = await _pharmacyUrlRepository.GetAsync(url);
-        var result = _mapper.Map<PharmacyDto>(pharmacyUrl?.Pharmacy);
+        var result = _mapper.Map<PharmacyDetailsDto>(pharmacyUrl?.Pharmacy);
 
         return result;
     }

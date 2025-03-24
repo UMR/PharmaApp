@@ -10,7 +10,7 @@ namespace Pharmacy.Application.Mappings
         public MappingProfile()
         {
             CreateMap<Domain.User, UserInfoDto>().ReverseMap();
-            CreateMap<Domain.Pharmacy, PharmacyDto>().ReverseMap();
+            CreateMap<Domain.Pharmacy, PharmacyDetailsDto>().ReverseMap();
             CreateMap<Domain.Customer, CustomerResDto>().ReverseMap();
         }
     }
