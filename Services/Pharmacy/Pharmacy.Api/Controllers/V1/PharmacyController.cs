@@ -31,7 +31,7 @@ public class PharmacyController : ControllerBase
     #region Methods
 
     [Authorize(Policy = RoleConstant.Pharmacist)]
-    [HttpGet("/")]
+    [HttpGet]
     public async Task<IActionResult> GetAsync()
     {
         var result = await _pharmacyService.GetAsync();
@@ -45,7 +45,7 @@ public class PharmacyController : ControllerBase
     }
 
     [Authorize(Policy = RoleConstant.Admin)]
-    [HttpGet("/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id)
     {
         var result = await _pharmacyService.GetAsync(id);
