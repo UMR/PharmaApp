@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>E:\UMR Projects\PharmaApp\Services\Pharmacy\Pharmacy.Api\bin\Release\net8.0\publish\</_PublishTargetUrl>
-    <History>True|2025-03-21T09:57:30.3290490Z||;True|2025-03-18T17:08:45.6423597+06:00||;True|2025-03-17T19:29:56.9755554+06:00||;</History>
+    <History>True|2025-03-24T11:30:00.1339353Z||;True|2025-03-21T15:57:30.3290490+06:00||;True|2025-03-18T17:08:45.6423597+06:00||;True|2025-03-17T19:29:56.9755554+06:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

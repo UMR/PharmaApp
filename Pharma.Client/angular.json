@@ -61,7 +61,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "10mb",
-                  "maximumError": "5mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -70,7 +70,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/scohn/",
+              "baseHref": "/pharmacyportal/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -83,7 +83,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "10mb",
-                  "maximumError": "5mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -92,7 +92,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/scohn/",
+              "baseHref": "/pharmacyportal/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
