@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../../service/authentication.service';
-import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
+import { AuthService } from '../../../service/auth.service';
 import { first } from 'rxjs';
 import { ToastMessageService } from '../../../service/toast-message.service';
 
@@ -19,7 +18,7 @@ export class LoginComponent {
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder, private merchantService: PharmacyMerchantService, private route: ActivatedRoute, private toastService: ToastMessageService) {
+  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService, private route: ActivatedRoute, private toastService: ToastMessageService) {
 
   }
   ngOnInit(): void {
@@ -29,7 +28,7 @@ export class LoginComponent {
   get f() { return this.userloginForm.controls; }
 
   login() {
-    this.merchantService.login(this.userloginForm.value).pipe(
+    this.authService.login(this.userloginForm.value).pipe(
       first()
     ).subscribe({
       next: (res) => {

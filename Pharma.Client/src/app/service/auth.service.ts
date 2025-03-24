@@ -6,7 +6,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PharmacyMerchantService {
+export class AuthService {
   http: HttpClient;
   apiUrl: string = environment.apiUrl;
 

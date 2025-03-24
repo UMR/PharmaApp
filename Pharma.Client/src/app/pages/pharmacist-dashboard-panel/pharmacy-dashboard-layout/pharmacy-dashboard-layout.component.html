@@ -1,5 +1,5 @@
 <div class="container-fluid g-0">
-    <app-header (sideNavToggled)="sideNavStatus = $event"></app-header>
+    <app-header (sideNavToggled)="sideNavStatus = $event" [user]="user"></app-header>
     <div class="main-layout">
         <app-sidebar class="gradient-bg" [sideNavStatus]="sideNavStatus"
             [ngClass]="{ 'app-side-nav-open': sideNavStatus }"></app-sidebar>

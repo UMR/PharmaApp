@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
 import { BinahScanService } from '../../../service/binah-scan-service.service';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { PharmacyService } from '../../../service/pharmacy.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FileUpload } from 'primeng/fileupload';
 import { Observable, Subscription } from 'rxjs';
@@ -15,7 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class PharmacyQrComponent implements OnInit {
 
-  constructor(private binahScanService: BinahScanService, private authService: AuthenticationService, private fb: FormBuilder, private sanitizer: DomSanitizer) { }
+  constructor(private binahScanService: BinahScanService, private pharmaService: PharmacyService, private fb: FormBuilder, private sanitizer: DomSanitizer) { }
 
   qrCodeImage: any;
   user: any;
@@ -47,7 +46,7 @@ export class PharmacyQrComponent implements OnInit {
   }
 
   getPharmacy() {
-    this.authService.getPharmacy().subscribe({
+    this.pharmaService.getPharmacy().subscribe({
       next: (res) => {
         this.pharmacy = res.body;
       },
@@ -57,7 +56,7 @@ export class PharmacyQrComponent implements OnInit {
     })
   }
   getPharmacyUser() {
-    this.authService.getPharmacyUser().subscribe({
+    this.pharmaService.getPharmacyUser().subscribe({
       next: (res) => {
         this.user = res.body;
         console.log(this.user);
@@ -112,7 +111,8 @@ export class PharmacyQrComponent implements OnInit {
   updatePharmacyUser() {
     const requestModel = {
       storeName: this.pharmacyRegistrationForm.value.storeName,
-      storeLogo: this.previewUrl ? this.previewUrl.split(',')[1] : null,
+      // storeLogo: this.previewUrl ? this.previewUrl.split(',')[1] : null,
+      storeLogo: this.file,
       addressLine1: this.pharmacyRegistrationForm.value.storeAddress,
       addressLine2: this.pharmacyRegistrationForm.value.storeAddress2
     }

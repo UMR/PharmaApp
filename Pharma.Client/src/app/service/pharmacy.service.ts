@@ -7,7 +7,7 @@ import { authCookieKey } from '../common/constant/auth-key';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class PharmacyService {
   private registeredUser = new BehaviorSubject<any>(null);
   registeredUser$ = this.registeredUser.asObservable();
   private otpTimer = new BehaviorSubject<any>('');
@@ -61,4 +61,9 @@ export class AuthenticationService {
     const URI = `${environment.apiUrl}/v1/Pharmacy/GetByUrl/${uniqueId}`;
     return this.http.get(URI, { observe: 'response' });
   }
+  getCurrentUser() {
+    const URI = `${environment.apiUrl}/v1/User/Get`;
+    return this.http.get(URI, { observe: 'response' });
+  }
+
 }

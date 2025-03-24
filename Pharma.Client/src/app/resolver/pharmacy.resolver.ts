@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
-import { AuthenticationService } from '../service/authentication.service';
+import { PharmacyService } from '../service/pharmacy.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PharmacyResolver implements Resolve<any> {
-  constructor(private pharmacyService: AuthenticationService, private router: Router) { }
+  constructor(private pharmacyService: PharmacyService, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     const pharmacyId = route.queryParams['pharmacy'];

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
+import { AuthService } from '../../../service/auth.service';
 import { first } from 'rxjs';
-import { AuthenticationService } from '../../../service/authentication.service';
+import { PharmacyService } from '../../../service/pharmacy.service';
 import { phoneNumberValidator } from '../../../common/Validator/phonenumber.validator';
 
 @Component({
@@ -23,7 +23,7 @@ export class RegistrationComponent {
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder, private pharmacyMerchantService: PharmacyMerchantService, private route: ActivatedRoute, private authService: AuthenticationService) {
+  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService, private route: ActivatedRoute, private pharmacyService: PharmacyService) {
 
   }
   ngOnInit(): void {
@@ -41,19 +41,19 @@ export class RegistrationComponent {
 
     this.loading = true;
     this.generateOtp('1');
-    this.authService.setUser(this.userRegistrationForm.value);
+    this.pharmacyService.setUser(this.userRegistrationForm.value);
   }
 
 
   generateOtp(arg0: string) {
     let loginId = this.userRegistrationForm.value.mobile;
     if (loginId != null) {
-      this.pharmacyMerchantService.generateOtp(loginId, arg0)
+      this.authService.generateOtp(loginId, arg0)
         .pipe(first())
         .subscribe({
           next: (res) => {
             this.otpTimer = (res as any).data.expireTimeInSecond;
-            this.authService.setOtpTimer(this.otpTimer);
+            this.pharmacyService.setOtpTimer(this.otpTimer);
             this.router.navigate(['/otp-verification']);
           },
           error: () => {

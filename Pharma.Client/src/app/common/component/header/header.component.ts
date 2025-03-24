@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { authCookieKey } from '../../constant/auth-key';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
@@ -12,6 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 export class HeaderComponent {
   @Output() sideNavToggled = new EventEmitter<boolean>();
   menuStatus: boolean = true;
+  @Input() user: any;
 
   constructor(
     private router: Router, private confirmationService: ConfirmationService) {
@@ -19,7 +20,6 @@ export class HeaderComponent {
 
   }
   ngOnInit() {
-
 
   }
   sideNavToggle() {
