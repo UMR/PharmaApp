@@ -108,14 +108,14 @@ export class PharmacyQrComponent implements OnInit {
     this.displayModal = false;
     this.previewUrl = null;
   }
+
   updatePharmacyUser() {
-    const requestModel = {
-      storeName: this.pharmacyRegistrationForm.value.storeName,
-      // storeLogo: this.previewUrl ? this.previewUrl.split(',')[1] : null,
-      storeLogo: this.file,
-      addressLine1: this.pharmacyRegistrationForm.value.storeAddress,
-      addressLine2: this.pharmacyRegistrationForm.value.storeAddress2
-    }
+    const requestModel = new FormData();
+    requestModel.append('storeName', this.pharmacyRegistrationForm.value.storeName);
+    requestModel.append('storeLogo', this.file ? this.file.name : '');
+    requestModel.append('addressLine1', this.pharmacyRegistrationForm.value.storeAddress);
+    requestModel.append('addressLine2', this.pharmacyRegistrationForm.value.storeAddress2);
+
     this.binahScanService.pharmacyRegistration(requestModel).subscribe({
       next: (res) => {
         this.displayModal = false;
