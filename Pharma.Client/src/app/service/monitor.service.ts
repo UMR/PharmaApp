@@ -77,7 +77,6 @@ export class MonitorService {
 
   async createSession(video: HTMLVideoElement, processingTime: number) {
     try {
-      debugger;
       if (!this.isMonitorReady.value || !processingTime || !video) {
         return;
       }

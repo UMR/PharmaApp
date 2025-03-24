@@ -45,7 +45,7 @@ export class PharmacyQrComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getPharmacyUser();
+    this.getCurrentUser();
     this.getPharmacy();
     this.getQrCode();
   }
@@ -60,8 +60,8 @@ export class PharmacyQrComponent implements OnInit {
       }
     })
   }
-  getPharmacyUser() {
-    this.pharmaService.getPharmacy().subscribe({
+  getCurrentUser() {
+    this.pharmaService.getCurrentUser().subscribe({
       next: (res) => {
         this.user = res.body;
         console.log(this.user);
@@ -125,7 +125,7 @@ export class PharmacyQrComponent implements OnInit {
       next: (res) => {
         this.displayModal = false;
         this.toastService.showSuccess('Success', 'Pharmacy registration successful');
-        this.getPharmacyUser();
+        this.getCurrentUser();
         this.getQrCode();
         this.getPharmacy();
       },
