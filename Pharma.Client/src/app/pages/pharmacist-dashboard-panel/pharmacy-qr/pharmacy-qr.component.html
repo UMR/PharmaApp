@@ -9,12 +9,11 @@
                 </p-message>
             </div>
             }
-
             }
-            @else if(user){
+            @else if(user && !pharmacy && !qrCodeImage){
             <div class="col-12">
                 <p-message size="large" icon="pi pi-info-circle">
-                    User is required to update basic informations for further procedure.
+                    User is required to update basic information for further procedure.
                     <span>
                         <p-button icon="pi pi-check" label="Register" styleClass="info-class"
                             (onClick)="showPharmacyRegistrationDialogue()"></p-button>
@@ -22,6 +21,7 @@
                 </p-message>
             </div>
             }
+
             @if(displayModal){
             <p-dialog [(visible)]="displayModal" modal="true" header="Register User" [closable]="true"
                 (onHide)="cancelRegistration()" [maximizable]="true" appendTo="body"

@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticationService } from '../../../service/authentication.service';
-import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
+import { PharmacyService } from '../../../service/pharmacy.service';
+import { AuthService } from '../../../service/auth.service';
 import { first, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastMessageService } from '../../../service/toast-message.service';
@@ -16,7 +16,7 @@ export class OtpComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  constructor(private authService: AuthenticationService, private pharmacyMerchantService: PharmacyMerchantService, private router: Router, private toastService: ToastMessageService) {
+  constructor(private pharmacyService: PharmacyService, private authService: AuthService, private router: Router, private toastService: ToastMessageService) {
 
   }
 
@@ -31,7 +31,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getUser();
-    this._otpTimer = this.authService.otpTimer$.subscribe((timer) => this.otpTimer = this.getTimer(timer));
+    this._otpTimer = this.pharmacyService.otpTimer$.subscribe((timer) => this.otpTimer = this.getTimer(timer));
   }
 
 
@@ -54,7 +54,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 
   getUser() {
-    this.authService.registeredUser$.subscribe((user) => {
+    this.pharmacyService.registeredUser$.subscribe((user) => {
       this.user = user;
     });
   }
@@ -66,7 +66,7 @@ export class OtpComponent implements OnInit, OnDestroy {
         otp: this.otp,
         otpType: '1'
       }
-      this.pharmacyMerchantService.verifyOtp(model)
+      this.authService.verifyOtp(model)
         .pipe(first())
         .subscribe({
           next: (res) => {
@@ -96,7 +96,7 @@ export class OtpComponent implements OnInit, OnDestroy {
         mobile: this.user.mobile,
         pin: this.user.pin,
       }
-      this.pharmacyMerchantService.registerUser(requestModel)
+      this.authService.registerUser(requestModel)
         .pipe(first())
         .subscribe({
           next: () => {
@@ -115,7 +115,7 @@ export class OtpComponent implements OnInit, OnDestroy {
     if (forgotPinValue) {
       otpType = "2";
     }
-    this.pharmacyMerchantService.generateOtp(this.user.mobile, otpType).subscribe({
+    this.authService.generateOtp(this.user.mobile, otpType).subscribe({
       next: (res) => {
         if ((res as any).isSuccessful) {
           this.toastService.showSuccess("Success", "OTP Resent successfully!");

@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { ToastMessageService } from '../../../service/toast-message.service';
-import { authCookieKey } from '../../constant/auth-key';
-import { PharmacyMerchantService } from '../../../service/pharmacy-merchant.service';
+import { AuthService } from '../../../service/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +16,7 @@ export class SidebarComponent {
     private router: Router,
     private confirmationService: ConfirmationService,
     private toastService: ToastMessageService,
-    private pharmacyMerchantService: PharmacyMerchantService,
+    private authService: AuthService,
   ) { }
 
   @Input() sideNavStatus: boolean = true;
@@ -102,7 +101,7 @@ export class SidebarComponent {
   }
 
   onSignOut(): void {
-    this.pharmacyMerchantService.logOut();
+    this.authService.logOut();
     this.router.navigate(['/pharmacy-login']);
     this.toastService.showSuccess(
       'Success',

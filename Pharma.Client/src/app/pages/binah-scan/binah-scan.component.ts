@@ -3,9 +3,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MonitorService } from '../../service/monitor.service';
 import { SessionState } from '@binah/web-sdk';
 import { VitalSign, VitalSignsResults } from '@binah/web-sdk/dist/common/types';
-import { AuthenticationService } from '../../service/authentication.service';
-import { PharmacyMerchantService } from '../../service/pharmacy-merchant.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-binah-scan',
@@ -23,7 +22,7 @@ export class BinahScanComponent implements OnInit {
 
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
 
-  constructor(private monitorService: MonitorService, private authService: PharmacyMerchantService, private router: Router) { }
+  constructor(private monitorService: MonitorService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }

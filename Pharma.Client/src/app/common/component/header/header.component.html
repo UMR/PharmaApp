@@ -5,15 +5,26 @@
     <a class="navbar-brand" href="#">
         <img src="./assets/images/SCOHN.png" height="60" width="180" alt="" srcset="">
     </a>
+
     <div class="navbar-collapse">
     </div>
     <div class="profile-logo text-center">
+
         <ul class="navbar-nav d-flex align-items-center justify-content-center">
             <li class="mx-5 mt-2" style="cursor: pointer;" (click)="onNotificationClick()">
                 <p-overlaybadge value="2">
                     <i class="pi pi-bell" style="font-size: 1.3rem"></i>
                 </p-overlaybadge>
             </li>
+            <li class="mx-2 mt-2" style="cursor: pointer;">
+                <div style="display: block;">
+                    @if(user){
+                    <p>{{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}</p>
+                    }
+                </div>
+            </li>
+
+
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
