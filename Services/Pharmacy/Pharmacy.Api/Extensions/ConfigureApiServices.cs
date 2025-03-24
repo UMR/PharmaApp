@@ -12,7 +12,7 @@ namespace Pharmacy.Api.Extensions
         public static WebApplicationBuilder AddApiServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddSingleton<IAuthorizationHandler, ActivePharmacyHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, ActivePharmacyHandler>();
 
             builder.Services.AddControllers(config =>
             {

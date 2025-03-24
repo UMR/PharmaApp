@@ -1,5 +1,8 @@
 ﻿
 using Newtonsoft.Json.Linq;
+using Pharmacy.Application.Contracts.Persistence;
+using Pharmacy.Application.Features.CurrentUser.Services;
+using Pharmacy.Application.Features.User.Services;
 using Pharmacy.Domain.Enums;
 using System.Security.Claims;
 
@@ -7,6 +10,13 @@ namespace Pharmacy.Api.Policy
 {
     public class ActivePharmacyHandler : AuthorizationHandler<ActivePharmacyRequirement>
     {
+        private readonly IUserService _userService;
+
+        public ActivePharmacyHandler(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ActivePharmacyRequirement requirement)
         {
             var user = context.User.FindFirst(c => c.Type == "user");
@@ -20,6 +30,17 @@ namespace Pharmacy.Api.Policy
                 if (status == UserStatusEnum.Active)
                 {
                     context.Succeed(requirement);
+                }
+                else
+                {
+                    Guid.TryParse(userObject.GetValue("id").ToString(), out Guid userId);
+
+                    var userInfo = _userService.GetByIdAsync(userId);
+
+                    if(userInfo != null && userInfo.Status.Equals(1))
+                    {
+                        context.Succeed(requirement);
+                    }
                 }
             }
 
