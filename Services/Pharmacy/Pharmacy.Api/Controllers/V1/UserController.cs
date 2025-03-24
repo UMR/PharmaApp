@@ -38,7 +38,7 @@ namespace Pharmacy.Api.Controllers.V1
 
         [Authorize(Policy = RoleConstant.Pharmacist)]
         [HttpGet("Get")]
-        public async Task<IActionResult> GetAsync()
+        public IActionResult Get()
         {
             var userInfo = _currentUserService.User;
             return Ok(userInfo);

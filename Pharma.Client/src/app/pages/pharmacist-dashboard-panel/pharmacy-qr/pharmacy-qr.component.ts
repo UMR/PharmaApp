@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { FileUpload } from 'primeng/fileupload';
 import { Observable, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ToastMessageService } from '../../../service/toast-message.service';
 
 @Component({
   selector: 'app-pharmacy-qr',
@@ -14,7 +15,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class PharmacyQrComponent implements OnInit {
 
-  constructor(private binahScanService: BinahScanService, private pharmaService: PharmacyService, private fb: FormBuilder, private sanitizer: DomSanitizer) { }
+  constructor(private binahScanService: BinahScanService,
+    private pharmaService: PharmacyService,
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer,
+    private toastService: ToastMessageService) { }
 
   qrCodeImage: any;
   user: any;
@@ -29,7 +34,7 @@ export class PharmacyQrComponent implements OnInit {
   public userDocument: any = [];
   public imageData: any = '';
   isFileSelected: boolean = false;
-  file: File | null = null;
+  file: File | any;
   fileTypeOptions: any[] = [];
   splitterLayout: string = 'horizontal';
   @ViewChild('fileUpload')
@@ -112,20 +117,24 @@ export class PharmacyQrComponent implements OnInit {
   updatePharmacyUser() {
     const requestModel = new FormData();
     requestModel.append('storeName', this.pharmacyRegistrationForm.value.storeName);
-    requestModel.append('storeLogo', this.file ? this.file.name : '');
+    requestModel.append('storeLogo', this.file);
     requestModel.append('addressLine1', this.pharmacyRegistrationForm.value.storeAddress);
     requestModel.append('addressLine2', this.pharmacyRegistrationForm.value.storeAddress2);
 
     this.binahScanService.pharmacyRegistration(requestModel).subscribe({
       next: (res) => {
         this.displayModal = false;
+        this.toastService.showSuccess('Success', 'Pharmacy registration successful');
         this.getPharmacyUser();
+        this.getQrCode();
+        this.getPharmacy();
       },
       error: (err) => {
         console.log(err);
       }
-    })
+    });
   }
+
   onFileSelected(event: any) {
     const file = event.currentFiles[0];
     this.totalSize = file.size;

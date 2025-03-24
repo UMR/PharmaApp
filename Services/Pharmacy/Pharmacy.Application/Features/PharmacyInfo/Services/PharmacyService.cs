@@ -20,7 +20,7 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
         private readonly IConfiguration _configuration;
         private readonly IPharmacyUrlService _pharmacyUrlService;
         private readonly IMapper _mapper;
-        
+
         #endregion
 
         #region Ctro
@@ -29,8 +29,8 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
             IPharmacyRepository pharmacyRepository,
             IConfiguration configuration,
             IPharmacyUrlService pharmacyUrlService,
-            IMapper mapper) 
-        { 
+            IMapper mapper)
+        {
             _currentUserService = currentUserService;
             _pharmacyRepository = pharmacyRepository;
             _configuration = configuration;
@@ -47,7 +47,7 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Services
             var pharmacy = await _pharmacyRepository.GetPharmacyByUserIdAsync(_currentUserService.UserId);
 
             var result = _mapper.Map<PharmacyDto>(pharmacy);
-            
+
             return result;
         }
 
