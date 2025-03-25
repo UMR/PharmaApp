@@ -18,11 +18,11 @@
             <div class="name">
                 <p-floatlabel variant="on">
                     <input pInputText id="loginId" formControlName="loginId" autocomplete="off" class="form-control" />
-                    <label for="loginId">Phone Number</label>
+                    <label for="loginId">Login Id (Email/Phone)</label>
                 </p-floatlabel>
                 @if(f.loginId.errors && f.loginId.touched){
                 @if(f.loginId.errors.required ){
-                <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
+                <p-message severity="error" variant="simple" size="small">Email/Phone number is required!</p-message>
                 }
                 }
             </div>

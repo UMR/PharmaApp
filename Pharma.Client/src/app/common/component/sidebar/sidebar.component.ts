@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { ToastMessageService } from '../../../service/toast-message.service';
 import { AuthService } from '../../../service/auth.service';
+import { RoleType } from '../../model/role.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -36,7 +37,7 @@ export class SidebarComponent {
       name: 'Pharmacy QR',
       icon: 'fa fa-qrcode',
       routerLink: '/pharmacy-qr',
-      roles: [],
+      roles: [RoleType.PHARMACIST],
     },
     {
       number: '3',
@@ -44,6 +45,13 @@ export class SidebarComponent {
       icon: 'fa fa-camera',
       routerLink: '/pay-now',
       roles: [],
+    },
+    {
+      number: '4',
+      name: 'Scan Log',
+      icon: 'fa fa-history',
+      routerLink: '/scan-log',
+      roles: [RoleType.PHARMACIST],
     },
     {
       number: '20',

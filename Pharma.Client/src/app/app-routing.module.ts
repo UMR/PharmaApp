@@ -13,6 +13,7 @@ import { PharmacyResolver } from './resolver/pharmacy.resolver';
 import { PayNowComponent } from './pages/customer-panel/pay-now/pay-now.component';
 import { RoleType } from './common/model/role.model';
 import { roleGuard } from './guards/role.guard';
+import { ScanLogComponent } from './pages/pharmacist-dashboard-panel/scan-log/scan-log.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,14 @@ const routes: Routes = [
           roles: [RoleType.PHARMACIST]
         }
 
+      },
+      {
+        path: 'scan-log',
+        component: ScanLogComponent,
+        canActivate: [AuthGuard, roleGuard],
+        data: {
+          roles: [RoleType.PHARMACIST]
+        }
       }
     ]
   },
