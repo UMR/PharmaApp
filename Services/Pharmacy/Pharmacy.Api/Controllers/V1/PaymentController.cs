@@ -39,6 +39,7 @@ public class PaymentController : ControllerBase
     }
 
     [HttpGet("getkey")]
+    [AllowAnonymous]
     public IActionResult GetKeyAsync()
     {
         return Ok(_razorpayGatewayService.GetKey());
