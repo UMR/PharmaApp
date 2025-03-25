@@ -36,7 +36,7 @@ public class UniqueIdService: IUniqueIdService
 
         long mask40BitOfTicks = ticks & 0x000000FFFFFFFFFF;         // mask to lowest 40 bit  
 
-        long newId = mask40BitOfTicks << 24;    // Shift the mask to 20 bit
+        long newId = mask40BitOfTicks << 23;    // Shift the mask to 23 bit -> we are keeping LSB = 0 as reserve bit
         newId |= (serverVersion & 0xFF) << 16;   // Convert the server version to 4-bit value and place into the position
         newId |= (threadId & 0xFF) << 8;        // Convert the threadId to 8-bit value and place into the position
         newId |= (sequenceNo & 0xFF);           // Convert the sequence number to 8-bit and place into the position
