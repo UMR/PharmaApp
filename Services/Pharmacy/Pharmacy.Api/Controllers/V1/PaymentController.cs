@@ -1,4 +1,5 @@
-﻿using Pharmacy.Application.Features.Payment.Services;
+﻿using Pharmacy.Application.Contracts.Infrastructure;
+using Pharmacy.Application.Features.Payment.Services;
 
 namespace Pharmacy.Api.Controllers.V1;
 
@@ -9,14 +10,16 @@ public class PaymentController : ControllerBase
     #region Fields
 
     private readonly IPaymentService _paymentService;
+    private readonly IRazorpayGatewayService _razorpayGatewayService;
 
     #endregion
 
     #region Ctor
 
-    public PaymentController(IPaymentService paymentService)
+    public PaymentController(IPaymentService paymentService, IRazorpayGatewayService razorpayGatewayService)
     {
         _paymentService = paymentService;
+        _razorpayGatewayService = razorpayGatewayService;
     }
 
     #endregion
@@ -35,6 +38,11 @@ public class PaymentController : ControllerBase
         });
     }
 
+    [HttpGet("getkey")]
+    public IActionResult GetKeyAsync()
+    {
+        return Ok(_razorpayGatewayService.GetKey());
+    }
 
     #endregion
 }

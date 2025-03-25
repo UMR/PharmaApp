@@ -54,7 +54,10 @@ public class RazorpayGatewayService : IRazorpayGatewayService
 
     public object GetKey()
     {
-        throw new NotImplementedException();
+        return new
+        {
+            key = _key
+        };
     }
 
     public object GetPaymentDetails(string paymentId)
