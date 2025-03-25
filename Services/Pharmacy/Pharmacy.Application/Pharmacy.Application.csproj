@@ -34,7 +34,6 @@
   <ItemGroup>
     <Folder Include="Features\PackageFeature\Validators\" />
     <Folder Include="Features\PackageFeature\Services\" />
-    <Folder Include="Features\Payment\Dtos\" />
   </ItemGroup>
 
 </Project>

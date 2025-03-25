@@ -7,7 +7,7 @@ public class PackageDto
     public string Description { get; set; }
     public decimal Price { get; set; }
     public string CurrencyCode { get; set; }
-    public double CommissionInPercent { get; set; }
+    public decimal CommissionInPercent { get; set; }
     public DateTime CreatedDate { get; set; }
     public Guid CreatedBy { get; set; }
 }

@@ -28,4 +28,6 @@ public partial class Customer
     public DateTime? UpdatedDate { get; set; }
 
     public virtual ICollection<CustomerPharmacy> CustomerPharmacies { get; set; } = new List<CustomerPharmacy>();
+
+    public virtual ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
 }

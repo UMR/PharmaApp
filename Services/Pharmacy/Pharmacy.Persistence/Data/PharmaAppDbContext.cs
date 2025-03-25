@@ -15,6 +15,10 @@ public partial class PharmaAppDbContext : DbContext
 
     public virtual DbSet<CustomerPharmacy> CustomerPharmacies { get; set; }
 
+    public virtual DbSet<Package> Packages { get; set; }
+
+    public virtual DbSet<PaymentDetail> PaymentDetails { get; set; }
+
     public virtual DbSet<Pharmacy> Pharmacies { get; set; }
 
     public virtual DbSet<PharmacyUrl> PharmacyUrls { get; set; }
@@ -46,9 +50,7 @@ public partial class PharmaAppDbContext : DbContext
 
         modelBuilder.Entity<CustomerPharmacy>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_Customer_Pharmacy");
-
-            entity.ToTable("CustomerPharmacy");
+            entity.ToTable("Customer_Pharmacy");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate)
@@ -58,12 +60,53 @@ public partial class PharmaAppDbContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.CustomerPharmacies)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerPharmacy_Customer");
+                .HasConstraintName("FK_Customer_Pharmacy_Customer");
 
             entity.HasOne(d => d.Pharmacy).WithMany(p => p.CustomerPharmacies)
                 .HasForeignKey(d => d.PharmacyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerPharmacy_Pharmacy");
+                .HasConstraintName("FK_Customer_Pharmacy_Pharmacy");
+        });
+
+        modelBuilder.Entity<Package>(entity =>
+        {
+            entity.ToTable("Package");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CommissionInPercent).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.CurrencyCode).HasMaxLength(5);
+            entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Price).HasColumnType("money");
+        });
+
+        modelBuilder.Entity<PaymentDetail>(entity =>
+        {
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.Discount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.OrderId).HasMaxLength(50);
+            entity.Property(e => e.PackageCommissionInPercent).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.PackagePrice).HasColumnType("money");
+            entity.Property(e => e.PaidAmount).HasColumnType("money");
+            entity.Property(e => e.PaymentId).HasMaxLength(50);
+            entity.Property(e => e.Signature).HasMaxLength(50);
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.PaymentDetails)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PaymentDetails_Customer");
+
+            entity.HasOne(d => d.Package).WithMany(p => p.PaymentDetails)
+                .HasForeignKey(d => d.PackageId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PaymentDetails_Package");
+
+            entity.HasOne(d => d.Pharmacy).WithMany(p => p.PaymentDetails)
+                .HasForeignKey(d => d.PharmacyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PaymentDetails_Pharmacy");
         });
 
         modelBuilder.Entity<Pharmacy>(entity =>
@@ -88,7 +131,7 @@ public partial class PharmaAppDbContext : DbContext
 
         modelBuilder.Entity<PharmacyUrl>(entity =>
         {
-            entity.ToTable("PharmacyUrl");
+            entity.ToTable("Pharmacy_Url");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate)
@@ -100,7 +143,7 @@ public partial class PharmaAppDbContext : DbContext
             entity.HasOne(d => d.Pharmacy).WithMany(p => p.PharmacyUrls)
                 .HasForeignKey(d => d.PharmacyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PharmacyUrl_Pharmacy");
+                .HasConstraintName("FK_Pharmacy_Url_Pharmacy");
         });
 
         modelBuilder.Entity<Role>(entity =>

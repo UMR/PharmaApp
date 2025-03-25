@@ -1,4 +1,5 @@
 ﻿using Pharmacy.Application.Contracts.Infrastructure;
+using Pharmacy.Application.Features.Payment.Dtos;
 using Pharmacy.Application.Features.Payment.Services;
 
 namespace Pharmacy.Api.Controllers.V1;
@@ -28,14 +29,32 @@ public class PaymentController : ControllerBase
 
     [HttpGet("Create/Order")]
     [AllowAnonymous]
-    public async Task<IActionResult> CreateOrderAsync(Guid packageId, string currencyCode)
+    public IActionResult CreateOrder(Guid packageId, string currencyCode)
     {
-        var orderId = _paymentService.CreateOrderAsync(packageId, currencyCode);
+        var orderId = _paymentService.CreateOrder(packageId, currencyCode);
 
-        return Ok(new
+        return Ok(orderId);
+    }
+
+    [HttpGet("Create")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CreateAsync(CreatePaymentDto paymentInfoDto)
+    {
+        var isVerified = _razorpayGatewayService.VerifyPayment(paymentInfoDto.OrderId, paymentInfoDto.PaymentId, paymentInfoDto.Signature);
+
+        if (isVerified)
         {
-            orderId = orderId
-        });
+            return BadRequest("Payment verification failed.");
+        }
+
+        var result = await _paymentService.CreatePaymentAsync(paymentInfoDto);
+
+        if (result)
+        {
+            return StatusCode(500, "Unable to create payment.");
+        }
+
+        return Ok();
     }
 
     [HttpGet("getkey")]
