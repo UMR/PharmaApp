@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Infrastructure.EmailClient;
 using Pharmacy.Infrastructure.Identity;
 using Pharmacy.Infrastructure.Otp;
+using Pharmacy.Infrastructure.Payment.Razorpay;
 using Pharmacy.Infrastructure.SMSClient;
 using Pharmacy.Infrastructure.UniqueID;
 using System.Security.Cryptography.X509Certificates;
@@ -22,6 +23,7 @@ public static class ConfigureInfrastructureServices
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<ISMSService, SMSService>();
         builder.Services.AddSingleton<IUniqueIdService, UniqueIdService>();
+        builder.Services.AddScoped<IRazorpayGatewayService, RazorpayGatewayService>();
 
         return builder;
     }

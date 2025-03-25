@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Pharmacy.Application.Features.Authentication.Services;
 using Pharmacy.Application.Features.Customer.Services;
 using Pharmacy.Application.Features.CustomerPharmacy.Services;
+using Pharmacy.Application.Features.Payment.Services;
 using Pharmacy.Application.Features.PharmacyInfo.Services;
 using Pharmacy.Application.Features.PharmacyUrls.Services;
 using Pharmacy.Application.Features.User.Services;
@@ -26,6 +27,7 @@ namespace Pharmacy.Application.Extensions
             builder.Services.AddScoped<IPharmacyUrlService, PharmacyUrlService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICustomerPharmacyService, CustomerPharmacyService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             
             return builder;
         }
