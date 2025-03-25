@@ -32,10 +32,7 @@ public class PaymentController : ControllerBase
     {
         var orderId = _paymentService.CreateOrderAsync(packageId, currencyCode);
 
-        return Ok(new
-        {
-            orderId = orderId
-        });
+        return Ok(orderId);
     }
 
     [HttpGet("getkey")]
