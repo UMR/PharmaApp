@@ -27,9 +27,9 @@ public class PaymentController : ControllerBase
 
     #region Methods
 
-    [HttpGet("Create/Order")]
+    [HttpGet("Create/Order/{packageId}/{currencyCode}")]
     [AllowAnonymous]
-    public IActionResult CreateOrder(Guid packageId, string currencyCode)
+    public IActionResult CreateOrder([FromRoute] Guid packageId, [FromRoute] string currencyCode)
     {
         var orderId = _paymentService.CreateOrder(packageId, currencyCode);
 
@@ -38,7 +38,7 @@ public class PaymentController : ControllerBase
 
     [HttpGet("Create")]
     [AllowAnonymous]
-    public async Task<IActionResult> CreateAsync(CreatePaymentDto paymentInfoDto)
+    public async Task<IActionResult> CreateAsync([FromBody] CreatePaymentDto paymentInfoDto)
     {
         var isVerified = _razorpayGatewayService.VerifyPayment(paymentInfoDto.OrderId, paymentInfoDto.PaymentId, paymentInfoDto.Signature);
 
