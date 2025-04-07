@@ -2,7 +2,7 @@
     <div class="container-fluid">
         @if (!isStarted) {
         <div class="scan-button">
-            <button pButton label="Start Scan" (click)="startScan()"></button>
+            <button pButton label="Start Camera" (click)="startScan()"></button>
         </div>
         }
         @if (isStarted) {
@@ -15,5 +15,7 @@
         <p>Vitals : {{vitals}}</p>
 
         }
+
+        <button (click)="startMeasuring()">Start Scan</button>
     </div>
 </section>
