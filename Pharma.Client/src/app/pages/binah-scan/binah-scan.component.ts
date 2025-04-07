@@ -1,10 +1,30 @@
-// binah-scan.component.ts
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { MonitorService } from '../../service/monitor.service';
-import { SessionState } from '@binah/web-sdk';
-import { VitalSign, VitalSignsResults } from '@binah/web-sdk/dist/common/types';
 import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
+import monitor, {
+  AlertData,
+  DeviceOrientation,
+  EnabledVitalSigns,
+  FaceSessionOptions,
+  HealthMonitorCodes,
+  HealthMonitorSession,
+  ImageValidity,
+  OfflineMeasurements,
+  SessionState,
+  VitalSigns,
+  VitalSignsResults,
+} from '@binah/web-sdk';
+export enum InfoType {
+  NONE = 'NONE',
+  INSTRUCTION = 'INSTRUCTION',
+}
+
+export interface InfoData {
+  type: InfoType;
+  message?: string;
+}
 
 @Component({
   selector: 'app-binah-scan',
@@ -13,88 +33,226 @@ import { AuthService } from '../../service/auth.service';
   styleUrls: ['./binah-scan.component.css'],
 })
 export class BinahScanComponent implements OnInit {
-
-  isStarted: boolean = false;
-  processingTime: number | undefined;
-  licenseKey: string | undefined;
-  sessionState: any;
+  isStarted = false;
+  processingTime?: number;
+  licenseKey?: string;
+  session: HealthMonitorSession | null = null;
   vitals: any;
 
-  @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
+  sessionState = new BehaviorSubject<SessionState | null>(null);
+  vitalSigns = new BehaviorSubject<any>(null);
+  info = new BehaviorSubject<InfoData>({ type: InfoType.NONE });
+  warning = new BehaviorSubject<AlertData | null>(null);
+  error = new BehaviorSubject<AlertData | null>(null);
+  enabledVitalSigns = new BehaviorSubject<EnabledVitalSigns | null>(null);
+  offlineMeasurements = new BehaviorSubject<OfflineMeasurements | null>(null);
 
-  constructor(private monitorService: MonitorService, private authService: AuthService, private router: Router) { }
+  isDismissing = false;
 
-  ngOnInit(): void {
-  }
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
 
-  startScan() {
-    console.log('Starting scan');
+  constructor(
+    private monitorService: MonitorService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void { }
+
+  async startScan() {
     this.isStarted = true;
-    this.startMonitorInitiation();
+    await this.startMonitorInitiation();
   }
 
   async startMonitorInitiation() {
-    this.monitorService.getProcessingTime().subscribe((time: number | undefined) => this.processingTime = time);
-    this.monitorService.getLicenseKey().subscribe((key: string | undefined) => this.licenseKey = key);
-
     try {
-      await this.monitorService.initializeMonitor(this.licenseKey as string, "");
-      this.monitorService.isMonitorReady$.subscribe((isReady: boolean) => {
-        if (isReady) {
-          this.startCamera();
-        }
-      });
+      this.monitorService.getProcessingTime().subscribe((time: number | undefined) => this.processingTime = time);
+      this.monitorService.getLicenseKey().subscribe((key: string | undefined) => this.licenseKey = key);
+
+      if (!this.licenseKey || !this.processingTime) {
+        console.error('License key or processing time not received.');
+        return;
+      }
+
+      await this.initializeMonitor(this.licenseKey, '');
     } catch (e) {
       console.error('Error initializing monitor:', e);
     }
   }
 
-  startCamera() {
-    if (this.licenseKey && this.videoElement) {
-      navigator.mediaDevices
-        .getUserMedia({ video: { width: 600, height: 400 } })
-        .then((stream) => {
-          this.videoElement.nativeElement.srcObject = stream;
-          this.videoElement.nativeElement.play();
-        })
-        .catch((err) => console.error('Error accessing camera:', err));
-    } else {
-      console.error('Camera ID or video element is not available.');
+  async initializeMonitor(licenseKey: string, productId: string) {
+    try {
+      console.log('Initializing monitor...');
+      await monitor.initialize({ licenseKey });
+
+      if (this.session && this.session.getState() === SessionState.ACTIVE) {
+        this.session.terminate();
+      }
+
+      const options: FaceSessionOptions = {
+        input: this.videoElement.nativeElement,
+        cameraDeviceId: '',
+        processingTime: this.processingTime ?? 60,
+        onVitalSign: this.VitalSign.bind(this),
+        onFinalResults: this.FinalResults.bind(this),
+        onError: this.Error.bind(this),
+        onWarning: this.Warning.bind(this),
+        onStateChange: this.StateChange.bind(this),
+        orientation: DeviceOrientation.PORTRAIT,
+        onImageData: this.ImageData.bind(this),
+      };
+
+      this.session = await monitor.createFaceSession(options);
+      console.log('Session created:', this.session);
+
+      this.startMeasuring();
+    } catch (e) {
+      console.error('Error initializing monitor session:', e);
     }
   }
 
-  async startMeasuring() {
-    if (this.processingTime && this.videoElement) {
-      await this.monitorService.createSession(this.videoElement.nativeElement, this.processingTime);
-      this.monitorService.startMeasuring();
-      this.monitorService.vitalSigns$.subscribe((vitals) => {
-        this.vitals = vitals;
-      });
+
+  startMeasuring() {
+    if (this.session && this.sessionState.value === SessionState.ACTIVE) {
+      this.session.start();
+      console.log('Session started:', this.session);
     } else {
-      console.error('Camera ID, processing time, or video element is not available.');
+      console.error('already started.');
     }
+  }
+
+  stopMeasuring() {
+    if (this.session && this.session.getState() === SessionState.MEASURING) {
+      this.session.stop();
+    }
+  }
+
+  VitalSign(vitalSign: VitalSigns) {
+    console.log('Vital sign:', vitalSign);
+    this.updateVitalSigns(vitalSign);
+  }
+
+  FinalResults(vitalSignsResults: VitalSignsResults) {
+    console.log('Final results:', vitalSignsResults);
+    this.vitalSigns.next(null);
+    this.updateVitalSigns(vitalSignsResults.results);
+  }
+
+  Error(errorData: AlertData) {
+    console.log('Error:', errorData);
+    this.error.next(errorData);
+  }
+
+  Warning(warningData: AlertData) {
+    if (
+      warningData.code ===
+      HealthMonitorCodes.MEASUREMENT_CODE_MISDETECTION_DURATION_EXCEEDS_LIMIT_WARNING
+    ) {
+      console.log('Warning: Measurement duration exceeds limit');
+      this.vitalSigns.next(null);
+    }
+    console.log('Warning:', warningData);
+    this.warning.next(warningData);
+  }
+
+  StateChange(state: SessionState) {
+    console.log('State:', state);
+    this.sessionState.next(state);
+  }
+
+  FaceDetected(faceDetected: boolean) {
+    console.log('Face detected:', faceDetected);
+  }
+
+  ImageData(imageValidity: ImageValidity) {
+    console.log('Image validity:', imageValidity);
+    let message: string;
+    if (imageValidity !== ImageValidity.VALID) {
+      switch (imageValidity) {
+        case ImageValidity.INVALID_DEVICE_ORIENTATION:
+          message = 'Unsupported Orientation';
+          break;
+        case ImageValidity.TILTED_HEAD:
+          message = 'Head Tilted';
+          break;
+        case ImageValidity.FACE_TOO_FAR:
+          message = 'You Are Too Far';
+          break;
+        case ImageValidity.UNEVEN_LIGHT:
+          message = 'Uneven Lighting';
+          break;
+        default:
+          message = 'Face Not Detected';
+      }
+      this.info.next({ type: InfoType.INSTRUCTION, message });
+      console.log(this.info.value);
+    } else {
+      this.setInfoWithDismiss({ type: InfoType.NONE });
+    }
+  }
+
+  onEnabledVitalSigns(vitalSigns: EnabledVitalSigns) {
+    this.enabledVitalSigns.next(vitalSigns);
+  }
+
+  onOfflineMeasurement(offlineMeasurements: OfflineMeasurements) {
+    this.offlineMeasurements.next(offlineMeasurements);
+  }
+
+  setInfoWithDismiss(info: InfoData, seconds?: number) {
+    if (!this.isDismissing) {
+      this.info.next(info);
+      if (seconds) {
+        this.isDismissing = true;
+        setTimeout(() => {
+          this.info.next({ type: InfoType.NONE });
+          this.isDismissing = false;
+        }, seconds * 1000);
+      }
+    }
+  }
+
+  updateVitalSigns(vitalSigns: VitalSigns) {
+    this.vitalSigns.next({
+      ...this.vitalSigns.value,
+      ...vitalSigns,
+    });
+    console.log('Vital signs:', this.vitalSigns.value);
+  }
+
+  getVitalSigns() {
+    return {
+      pulseRate: {
+        value: this.vitalSigns.value?.pulseRate?.value,
+        isEnabled: this.enabledVitalSigns.value?.isEnabledPulseRate,
+      },
+      respirationRate: {
+        value: this.vitalSigns.value?.respirationRate?.value,
+        isEnabled: this.enabledVitalSigns.value?.isEnabledRespirationRate,
+      },
+      stress: {
+        value: this.vitalSigns.value?.stressLevel?.value,
+        isEnabled: this.enabledVitalSigns.value?.isEnabledStressLevel,
+      },
+      hrvSdnn: {
+        value: this.vitalSigns.value?.sdnn?.value,
+        isEnabled: this.enabledVitalSigns.value?.isEnabledSdnn,
+      },
+      spo2: {
+        value: null,
+        isEnabled: false,
+      },
+      bloodPressure: {
+        value: this.vitalSigns.value?.bloodPressure?.value,
+        isEnabled: this.enabledVitalSigns.value?.isEnabledBloodPressure,
+      },
+    };
   }
 
   onLogoutClick() {
-    this.stopCamera();
-    this.monitorService.stopMeasuring();
+    this.stopMeasuring();
+    this.session?.terminate();
     this.authService.logOut();
     this.router.navigate(['/pharmacy-login']);
   }
-
-
-  stopCamera() {
-    if (this.videoElement && this.videoElement.nativeElement.srcObject) {
-      let stream = this.videoElement.nativeElement.srcObject as MediaStream;
-      let tracks = stream.getTracks();
-
-      tracks.forEach(track => {
-        track.stop()
-      });
-
-      this.videoElement.nativeElement.srcObject = null;
-    }
-  }
-
-
 }

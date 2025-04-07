@@ -23,11 +23,11 @@ const routes: Routes = [
       {
         path: '',
         component: BinahScanComponent,
-        canActivate: [AuthGuard, roleGuard],
-        data: {
-          roles: [RoleType.PHARMACIST
-          ]
-        }
+        // canActivate: [AuthGuard, roleGuard],
+        // data: {
+        //   roles: [RoleType.PHARMACIST
+        //   ]
+        // }
       },
       {
         path: 'pharmacy-qr',

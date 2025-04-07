@@ -6,11 +6,11 @@
         </div>
         }
         @if (isStarted) {
-        <div style="height: 500px; width: 300px; display: block; margin: 0 auto;">
+        <div>
             <div class="monitor-wrapper">
-                <video #videoElement autoplay playsinline></video>
+                <video #videoElement id="video" muted playsinline></video>
+
             </div>
-            <button pButton (click)="startMeasuring()" label="Start Measuring"></button>
         </div>
         <p>Vitals : {{vitals}}</p>
 

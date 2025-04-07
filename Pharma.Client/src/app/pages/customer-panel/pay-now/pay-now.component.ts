@@ -92,9 +92,9 @@ export class PayNowComponent implements OnInit {
       description: this.packageInfo.name,
       order_id: body.orderId,
       prefill: {
-        name: this.user.firstName + ' ' + this.user.lastName,
-        contact: this.user.mobile,
-        email: this.user.email
+        // name: this.user.firstName + ' ' + this.user.lastName,
+        // contact: this.user.mobile,
+        // email: this.user.email
       },
       theme: {
         color: '#660033'
