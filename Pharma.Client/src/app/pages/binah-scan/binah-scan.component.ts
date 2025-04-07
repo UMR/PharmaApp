@@ -105,7 +105,6 @@ export class BinahScanComponent implements OnInit {
       this.session = await monitor.createFaceSession(options);
       console.log('Session created:', this.session);
 
-      this.startMeasuring();
     } catch (e) {
       console.error('Error initializing monitor session:', e);
     }
