@@ -50,7 +50,7 @@ public partial class PharmaAppDbContext : DbContext
 
         modelBuilder.Entity<CustomerPharmacy>(entity =>
         {
-            entity.ToTable("Customer_Pharmacy");
+            entity.ToTable("CustomerPharmacy");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate)
@@ -131,7 +131,7 @@ public partial class PharmaAppDbContext : DbContext
 
         modelBuilder.Entity<PharmacyUrl>(entity =>
         {
-            entity.ToTable("Pharmacy_Url");
+            entity.ToTable("PharmacyUrl");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedDate)

@@ -92,15 +92,31 @@ export class PayNowComponent implements OnInit {
       description: this.packageInfo.name,
       order_id: body.orderId,
       prefill: {
-        // name: this.user.firstName + ' ' + this.user.lastName,
-        // contact: this.user.mobile,
-        // email: this.user.email
+        name: this.user.firstName + ' ' + this.user.lastName,
+        contact: this.user.mobile,
+        email: this.user.email
       },
       theme: {
         color: '#660033'
       },
       handler: (response: any) => {
-        console.log(response);
+        var request = {
+          orderId: response.razorpay_order_id,
+          paymentId: response.razorpay_payment_id,
+          signature: response.razorpay_signature,
+          customerId: this.user.id,
+          pharmacyId: this.user.pharmacyId,
+          packageId: this.packageInfo.id,
+        }
+        this.paymentService.createPayment(request).subscribe({
+          next: (res) => {
+            this.toastService.showSuccess("success", 'Payment successful');
+            this.displayModal = false;
+          },
+          error: (err) => {
+            this.toastService.showError("failed", 'Payment failed');
+          }
+        });
 
       },
       modal: {

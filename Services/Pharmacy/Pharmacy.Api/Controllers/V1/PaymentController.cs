@@ -36,13 +36,13 @@ public class PaymentController : ControllerBase
         return Ok(orderId);
     }
 
-    [HttpGet("Create")]
+    [HttpPost("Create")]
     [AllowAnonymous]
     public async Task<IActionResult> CreateAsync([FromBody] CreatePaymentDto paymentInfoDto)
     {
         var isVerified = _razorpayGatewayService.VerifyPayment(paymentInfoDto.OrderId, paymentInfoDto.PaymentId, paymentInfoDto.Signature);
 
-        if (isVerified)
+        if (!isVerified)
         {
             return BadRequest("Payment verification failed.");
         }

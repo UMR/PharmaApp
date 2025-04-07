@@ -27,7 +27,7 @@ public class PaymentService : IPaymentService
     #region Methods
 
     public object CreateOrder(Guid packageId, string currencyCode)
-    {        
+    {
         var orderId = _razorpayGatewayService.CreateOrder(99, currencyCode);
 
         return (new
@@ -40,7 +40,7 @@ public class PaymentService : IPaymentService
     {
         // we will fetch this information from database.
         var package = new PackageDto();
-        package.Id = Guid.Parse("91dd28d1-980c-4031-897d-9215c7954eed");
+        // package.Id = Guid.Parse("91dd28d1-980c-4031-897d-9215c7954eed");
         package.Name = "Single scan package";
         package.Description = "There will be only 1 scan under this package.";
         package.Price = 99.00M;
@@ -56,7 +56,7 @@ public class PaymentService : IPaymentService
             Id = Guid.NewGuid(),
             PharmacyId = paymentInfoDto.PharmacyId,
             CustomerId = paymentInfoDto.CustomerId,
-            PackageId = package.Id,
+            PackageId = paymentInfoDto.PackageId,
             PackagePrice = package.Price,
             PackageCommissionInPercent = package.CommissionInPercent,
             PackageLastUpdatedOn = DateTime.UtcNow,

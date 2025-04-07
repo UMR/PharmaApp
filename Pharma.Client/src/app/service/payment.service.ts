@@ -22,8 +22,12 @@ export class PaymentService {
   }
 
   createOrder(packageId: any, currency: any): Observable<any> {
-    var getCurrentUserURI = `${environment.apiUrl}/v1/payment/create/order?packageId=${packageId}&currencyCode=${currency}`;
+    var getCurrentUserURI = `${environment.apiUrl}/v1/payment/create/order/${packageId}/${currency}`;
     return this.http.get(getCurrentUserURI, { observe: 'response' });
+  }
+  createPayment(req: any) {
+    var getCurrentUserURI = `${environment.apiUrl}/v1/payment/create`;
+    return this.http.post(getCurrentUserURI, req, { observe: 'response' });
   }
 
 }
