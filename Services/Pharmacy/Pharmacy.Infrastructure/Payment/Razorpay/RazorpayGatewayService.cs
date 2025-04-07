@@ -1,6 +1,5 @@
-﻿using IdentityServer4.Models;
-using Microsoft.Extensions.Configuration;
-using Razorpay.Api;
+﻿using Razorpay.Api;
+using Api = Razorpay.Api;
 
 namespace Pharmacy.Infrastructure.Payment.Razorpay;
 public class RazorpayGatewayService : IRazorpayGatewayService
@@ -62,12 +61,48 @@ public class RazorpayGatewayService : IRazorpayGatewayService
 
     public object GetPaymentDetails(string paymentId)
     {
-        throw new NotImplementedException();
+        var payment = _client.Payment.Fetch(paymentId);
+        var paymentJson = JsonConvert.DeserializeObject(payment.Attributes.ToString());
+        return paymentJson;
     }
 
     public bool VerifyPayment(string orderId, string paymentId, string signature)
     {
-        throw new NotImplementedException();
+        bool result = false;
+        var attributes = new Dictionary<string, string>
+        {
+            { "razorpay_order_id", orderId },
+            { "razorpay_payment_id", paymentId },
+            { "razorpay_signature", signature }
+        };
+
+        try
+        {
+            var isValid = Utils.ValidatePaymentSignature(attributes);
+
+            if (isValid)
+            {
+                Api.Payment payment = _client.Payment.Fetch(paymentId);
+
+                var captureData = new Dictionary<string, object>
+                {
+                    { "amount", payment["amount"] }
+                };
+
+                Api.Payment capturedPayment = payment.Capture(captureData);
+                if (capturedPayment["status"] == "captured")
+                {
+                    result = true;
+                }
+            }
+        }
+        catch
+        {
+            result = false;
+            throw;
+        }
+
+        return result;
     }
 
     #endregion

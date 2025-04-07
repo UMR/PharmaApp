@@ -1,6 +1,9 @@
-﻿namespace Pharmacy.Application.Features.Payment.Services;
+﻿using Pharmacy.Application.Features.Payment.Dtos;
+
+namespace Pharmacy.Application.Features.Payment.Services;
 
 public interface IPaymentService
 {
-    object CreateOrderAsync(Guid packageId, string currencyCode);
+    object CreateOrder(Guid packageId, string currencyCode);
+    ValueTask<bool> CreatePaymentAsync(CreatePaymentDto paymentInfoDto);
 }

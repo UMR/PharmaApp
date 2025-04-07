@@ -29,5 +29,7 @@ public partial class Pharmacy
 
     public virtual User Owner { get; set; } = null!;
 
+    public virtual ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
+
     public virtual ICollection<PharmacyUrl> PharmacyUrls { get; set; } = new List<PharmacyUrl>();
 }
