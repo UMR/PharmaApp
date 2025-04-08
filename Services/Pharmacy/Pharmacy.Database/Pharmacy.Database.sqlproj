@@ -62,6 +62,7 @@
     <Folder Include="Scripts\2025-03-17" />
     <Folder Include="Scripts\2025-03-19" />
     <Folder Include="Scripts\2025-03-25" />
+    <Folder Include="Scripts\2025-04-08" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\2025-03-10\01_AS_01_DataBase_Create.sql" />
@@ -76,5 +77,6 @@
     <None Include="Scripts\2025-03-19\02_AS_02_Create_Table_Customer_Pharmacy.sql" />
     <None Include="Scripts\2025-03-25\02_AS_02_Create_Table_PaymentDetails.sql" />
     <None Include="Scripts\2025-03-25\01_AS_01_Create_Table_Package.sql" />
+    <None Include="Scripts\2025-04-08\01_AS_01_INSERT_INTO_PACKAGE_InsertDefaultPackage.sql" />
   </ItemGroup>
 </Project>

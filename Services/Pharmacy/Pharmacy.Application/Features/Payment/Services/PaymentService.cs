@@ -1,5 +1,6 @@
 ﻿using Pharmacy.Application.Contracts.Infrastructure;
 using Pharmacy.Application.Features.PackageFeature.Dtos;
+using Pharmacy.Application.Features.PackageFeature.Services;
 using Pharmacy.Application.Features.Payment.Dtos;
 using Pharmacy.Domain;
 
@@ -11,15 +12,20 @@ public class PaymentService : IPaymentService
 
     private readonly IRazorpayGatewayService _razorpayGatewayService;
     private readonly IPaymentRepository _paymentRepository;
+    private readonly IPackageService _packageService;
 
     #endregion
 
     #region Ctro
 
-    public PaymentService(IRazorpayGatewayService razorpayGatewayService, IPaymentRepository paymentRepository)
+    public PaymentService(IRazorpayGatewayService razorpayGatewayService,
+        IPaymentRepository paymentRepository, 
+        IPackageService packageService)
     {
         _razorpayGatewayService = razorpayGatewayService;
         _paymentRepository = paymentRepository;
+        _packageService = packageService;
+
     }
 
     #endregion
@@ -38,16 +44,7 @@ public class PaymentService : IPaymentService
 
     public async ValueTask<bool> CreatePaymentAsync(CreatePaymentDto paymentInfoDto)
     {
-        // we will fetch this information from database.
-        var package = new PackageDto();
-        // package.Id = Guid.Parse("91dd28d1-980c-4031-897d-9215c7954eed");
-        package.Name = "Single scan package";
-        package.Description = "There will be only 1 scan under this package.";
-        package.Price = 99.00M;
-        package.CurrencyCode = "INR";
-        package.CommissionInPercent = 15.34M;
-        package.CreatedDate = DateTime.Parse("3/25/2025 6:10:40 AM");
-        package.CreatedBy = Guid.Parse("b6970dae-1d97-4884-be10-56a0c5088f0b");
+        var package = await _packageService.GetAsync(paymentInfoDto.PackageId);
 
         var paymentLog = _razorpayGatewayService.GetPaymentDetails(paymentInfoDto.PaymentId);
 

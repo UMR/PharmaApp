@@ -12,6 +12,7 @@ namespace Pharmacy.Application.Mappings
             CreateMap<Domain.User, UserInfoDto>().ReverseMap();
             CreateMap<Domain.Pharmacy, PharmacyDetailsDto>().ReverseMap();
             CreateMap<Domain.Customer, CustomerResDto>().ReverseMap();
+            CreateMap<Domain.Pharmacy, PharmacyDto>().ReverseMap();
         }
     }
 }
