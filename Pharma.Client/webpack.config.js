@@ -31,7 +31,7 @@ module.exports = {
 
       devServer.app.use((req, res, next) => {
         console.log("Request URL:", req.url);
-        if (req.url === "/" || req.url === "/a.worker.js") {
+        if (req.url === "/vital-scan" || req.url === "/a.worker.js") {
           console.log("Setting CORS headers for WASM request");
           res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
           res.setHeader("Cross-Origin-Opener-Policy", "same-origin");

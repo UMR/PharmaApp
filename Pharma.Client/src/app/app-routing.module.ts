@@ -14,6 +14,7 @@ import { PayNowComponent } from './pages/customer-panel/pay-now/pay-now.componen
 import { RoleType } from './common/model/role.model';
 import { roleGuard } from './guards/role.guard';
 import { ScanLogComponent } from './pages/pharmacist-dashboard-panel/scan-log/scan-log.component';
+import { DashboardComponent } from './pages/pharmacist-dashboard-panel/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -22,12 +23,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: BinahScanComponent,
-        // canActivate: [AuthGuard, roleGuard],
-        // data: {
-        //   roles: [RoleType.PHARMACIST
-        //   ]
-        // }
+        component: DashboardComponent,
+        canActivate: [AuthGuard, roleGuard],
+        data: {
+          roles: [RoleType.PHARMACIST
+          ]
+        }
       },
       {
         path: 'pharmacy-qr',
@@ -55,10 +56,6 @@ const routes: Routes = [
   {
     path: 'vital-scan',
     component: BinahScanComponent,
-    canActivate: [AuthGuard, roleGuard],
-    data: {
-      roles: [RoleType.PHARMACIST]
-    }
   },
   {
     path: 'pharmacy-registration',
