@@ -112,11 +112,11 @@ export class PayNowComponent implements OnInit {
           next: (res) => {
             this.toastService.showSuccess("success", 'Payment successful');
             this.displayModal = false;
-            window.location.href = '/vital-scan';
+            window.location.href = 'pharmacyportal/vital-scan';
           },
           error: (err) => {
             this.toastService.showError("failed", 'Payment failed');
-            window.location.href = '/vital-scan';
+            window.location.href = 'pharmacyportal/vital-scan';
           }
         });
 
