@@ -8,6 +8,6 @@ public class PackageDto
     public decimal Price { get; set; }
     public string CurrencyCode { get; set; }
     public decimal CommissionInPercent { get; set; }
-    public DateTime CreatedDate { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
     public Guid CreatedBy { get; set; }
 }

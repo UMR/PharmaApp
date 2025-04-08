@@ -11,7 +11,7 @@ public class PackageController : ControllerBase
     private readonly IPackageService _packageService;
 
     #endregion
-    
+
     #region Ctro
 
     public PackageController(IPackageService packageService)
@@ -27,7 +27,7 @@ public class PackageController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetLatestPackage()
     {
-        var result = _packageService.GetLatestAsync();
+        var result = await _packageService.GetLatestAsync();
 
         return Ok(result);
     }

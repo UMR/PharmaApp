@@ -1,20 +1,25 @@
 <section>
-    <div class="container-fluid">
+    <div class="container">
         @if (!isStarted) {
         <div class="scan-button">
             <button pButton label="Start Camera" (click)="startScan()"></button>
         </div>
         }
         @if (isStarted) {
-        <div>
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
             <div class="monitor-wrapper">
                 <video #videoElement id="video" muted playsinline></video>
 
             </div>
-        </div>
-        <p>Vitals : {{vitals}}</p>
 
-        <button (click)="startMeasuring()">Start Scan</button>
+
+        </div>
+        <div style="text-align: center;">
+            <p>Vitals : {{vitals}} Time : {{time}}</p>
+
+            <button pButton (click)="startMeasuring()">Start Scan</button>
+        </div>
+
 
         }
 

@@ -46,6 +46,7 @@ export class BinahScanComponent implements OnInit {
   error = new BehaviorSubject<AlertData | null>(null);
   enabledVitalSigns = new BehaviorSubject<EnabledVitalSigns | null>(null);
   offlineMeasurements = new BehaviorSubject<OfflineMeasurements | null>(null);
+  time: any;
 
   isDismissing = false;
 
@@ -114,6 +115,7 @@ export class BinahScanComponent implements OnInit {
   startMeasuring() {
     if (this.session && this.sessionState.value === SessionState.ACTIVE) {
       this.session.start();
+      this.time = 
       console.log('Session started:', this.session);
     } else {
       console.error('already started.');
