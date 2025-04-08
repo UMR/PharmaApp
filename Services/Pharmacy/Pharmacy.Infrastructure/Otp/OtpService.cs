@@ -101,12 +101,12 @@ public class OtpService : IOtpService
             </body>
             </html>";
 
-                //await _emailService.SendEmailAsync(new Email
-                //{
-                //    EmailAddress = [loginId],
-                //    EmailSubject = "Verify Your SCOHN Account with this OTP",
-                //    EmailBody = emailBody
-                //});
+                await _emailService.SendEmailAsync(new Email
+                {
+                    EmailAddress = [loginId],
+                    EmailSubject = "Verify Your Account with this OTP",
+                    EmailBody = emailBody
+                });
             }
 
             else
