@@ -25,7 +25,12 @@
                 @if(f.firstName.errors.required){
                 <p-message severity="error" variant="simple" size="small">First Name is required!</p-message>
                 }
+                @if(f.firstName.errors.minlength){
+                <p-message severity="error" variant="simple" size="small">First Name must be at least 3 characters
+                    long!</p-message>
                 }
+                }
+
             </div>
             <div class="name">
                 <p-floatlabel variant="on">
@@ -57,10 +62,8 @@
                 @if(f.mobile.errors.required){
                 <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
                 }
-                }
-                @if(submitted && f.mobile.errors){
-                @if(f.mobile.errors.required){
-                <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
+                @if(submitted && f.mobile.errors?.invalidPhoneNumber){
+                <p-message severity="error" variant="simple" size="small">Phone number is Invalid!</p-message>
                 }
                 }
             </div>
@@ -69,7 +72,12 @@
                     <p-password formControlName="pin" [toggleMask]="true" fluid="true" />
                     <label for="pin">Pin</label>
                 </p-floatlabel>
+                <div *ngIf="f.pin.errors && (f.pin.errors['minlength'] || f.pin.errors['maxlength'])">
+                    <p-message severity="error" variant="simple" size="small">Pin must be exactly 6 characters
+                        long!</p-message>
+                </div>
             </div>
+
             <div class="name">
                 <p-floatlabel variant="on">
                     <p-password formControlName="confirmPin" [feedback]="false" [toggleMask]="true" fluid="true" />

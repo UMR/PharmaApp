@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MonitorService } from '../../service/monitor.service';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ import monitor, {
   VitalSigns,
   VitalSignsResults,
 } from '@binah/web-sdk';
+import { ToastMessageService } from '../../service/toast-message.service';
 export enum InfoType {
   NONE = 'NONE',
   INSTRUCTION = 'INSTRUCTION',
@@ -37,16 +38,15 @@ export class BinahScanComponent implements OnInit {
   processingTime?: number;
   licenseKey?: string;
   session: HealthMonitorSession | null = null;
-  vitals: any;
-
   sessionState = new BehaviorSubject<SessionState | null>(null);
-  vitalSigns = new BehaviorSubject<any>(null);
+  vitalSigns = new BehaviorSubject<any>({});
   info = new BehaviorSubject<InfoData>({ type: InfoType.NONE });
   warning = new BehaviorSubject<AlertData | null>(null);
   error = new BehaviorSubject<AlertData | null>(null);
   enabledVitalSigns = new BehaviorSubject<EnabledVitalSigns | null>(null);
   offlineMeasurements = new BehaviorSubject<OfflineMeasurements | null>(null);
   time: any;
+  measurementStarted = false;
 
   isDismissing = false;
 
@@ -55,8 +55,7 @@ export class BinahScanComponent implements OnInit {
   constructor(
     private monitorService: MonitorService,
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router, private toastService: ToastMessageService) { }
 
   ngOnInit(): void { }
 
@@ -113,15 +112,32 @@ export class BinahScanComponent implements OnInit {
 
 
   startMeasuring() {
-    if (this.session && this.sessionState.value === SessionState.ACTIVE) {
-      this.session.start();
-      this.time = 
-      console.log('Session started:', this.session);
-    } else {
-      console.error('already started.');
-    }
-  }
+    try {
+      if (this.session && this.sessionState.value === SessionState.ACTIVE) {
+        this.session.start();
+        this.measurementStarted = true;
+        if (this.time) {
+          clearInterval(this.time);
+        }
 
+        this.time = setInterval(() => {
+          if (this.processingTime! > 0) {
+            this.processingTime!--;
+          } else {
+            clearInterval(this.time);
+            console.log('Timer ended.');
+          }
+        }, 1000);
+      } else {
+        console.error('already started.');
+      }
+    }
+    catch {
+      this.measurementStarted = false;
+      this.toastService.showError('Error', 'Error starting measurement:');
+    }
+
+  }
   stopMeasuring() {
     if (this.session && this.session.getState() === SessionState.MEASURING) {
       this.session.stop();
@@ -214,46 +230,23 @@ export class BinahScanComponent implements OnInit {
   }
 
   updateVitalSigns(vitalSigns: VitalSigns) {
-    this.vitalSigns.next({
+    const updated = {
       ...this.vitalSigns.value,
       ...vitalSigns,
-    });
-    console.log('Vital signs:', this.vitalSigns.value);
+    };
+    this.vitalSigns.next(updated);
   }
 
-  getVitalSigns() {
-    return {
-      pulseRate: {
-        value: this.vitalSigns.value?.pulseRate?.value,
-        isEnabled: this.enabledVitalSigns.value?.isEnabledPulseRate,
-      },
-      respirationRate: {
-        value: this.vitalSigns.value?.respirationRate?.value,
-        isEnabled: this.enabledVitalSigns.value?.isEnabledRespirationRate,
-      },
-      stress: {
-        value: this.vitalSigns.value?.stressLevel?.value,
-        isEnabled: this.enabledVitalSigns.value?.isEnabledStressLevel,
-      },
-      hrvSdnn: {
-        value: this.vitalSigns.value?.sdnn?.value,
-        isEnabled: this.enabledVitalSigns.value?.isEnabledSdnn,
-      },
-      spo2: {
-        value: null,
-        isEnabled: false,
-      },
-      bloodPressure: {
-        value: this.vitalSigns.value?.bloodPressure?.value,
-        isEnabled: this.enabledVitalSigns.value?.isEnabledBloodPressure,
-      },
-    };
-  }
+
 
   onLogoutClick() {
     this.stopMeasuring();
     this.session?.terminate();
     this.authService.logOut();
     this.router.navigate(['/pharmacy-login']);
+  }
+
+  getSessionState() {
+    return this.sessionState.value
   }
 }

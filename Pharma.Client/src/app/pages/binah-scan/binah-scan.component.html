@@ -1,27 +1,65 @@
 <section>
     <div class="container">
-        @if (!isStarted) {
-        <div class="scan-button">
-            <button pButton label="Start Camera" (click)="startScan()"></button>
-        </div>
-        }
-        @if (isStarted) {
-        <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
-            <div class="monitor-wrapper">
-                <video #videoElement id="video" muted playsinline></video>
-
+        <div class="row">
+            @if (!isStarted) {
+            <div class="scan-button">
+                <button pButton label="Start Camera" (click)="startScan()"></button>
             </div>
-
-
+            }
+            @if (isStarted) {
+            <div class="col-md-12" style=" text-align: center; margin-top: 10px;">
+                <div class="monitor-wrapper" style="position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px;">
+                        @if(getSessionState() === 1){
+                        <button type="button" pButton>
+                            <i class="pi pi-circle-fill"
+                                style="color: green; font-size: 0.6rem; margin-right: 5px;"></i>
+                            Active
+                        </button>
+                        }
+                        @if (getSessionState() === 2) {
+                        <button type="button" pButton>Measuring</button>
+                        }
+                    </div>
+                    <video #videoElement id="video" width="640" height="480" muted autoplay playsinline></video>
+                    <img src="./assets/images/mask.svg" width="640" height="480"
+                        style="position: absolute; top: 0; left: 0;">
+                </div>
+                <div style="text-align: center;">
+                    <button pButton (click)="startMeasuring()" [disabled]="measurementStarted">Start Scan</button>
+                    <div *ngIf="processingTime && processingTime > 0">
+                        Time remaining: {{ processingTime }} seconds
+                    </div>
+                </div>
+                <p>Scanned Vital Chart</p>
+                <div class="vital-bar" *ngIf="vitalSigns | async as vitals">
+                    <div class="vital-box">
+                        <p>Blood Pressure :{{ vitals?.bloodPressure?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p> Respiratory Rate :{{ vitals?.respirationRate?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p> Diabets Risk :{{ vitals?.diabetesRisk?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p>Hemoglobin :{{ vitals.hemoglobin?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p>Hypertension Risk :{{ vitals.hypertensionRisk?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p>Pulse Rate :{{ vitals.pulseRate?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p>Oxygen Saturation :{{ vitals.oxygenSaturation?.value }}</p>
+                    </div>
+                    <div class="vital-box">
+                        <p>Stress Level :{{ vitals.stressLevel?.value }}</p>
+                    </div>
+                </div>
+            </div>
+            }
         </div>
-        <div style="text-align: center;">
-            <p>Vitals : {{vitals}} Time : {{time}}</p>
-
-            <button pButton (click)="startMeasuring()">Start Scan</button>
-        </div>
-
-
-        }
-
     </div>
 </section>

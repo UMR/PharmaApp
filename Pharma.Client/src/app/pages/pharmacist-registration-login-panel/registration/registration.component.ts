@@ -83,15 +83,15 @@ export class RegistrationComponent {
   initializeForm() {
     this.userRegistrationForm = this.fb.group(
       {
-        firstName: [null, Validators.required],
+        firstName: [null, [Validators.required, Validators.minLength(3)]],
         lastName: [null],
-        email: [null, Validators.email],
+        email: [null, [Validators.email, Validators.email]],
         mobile: ['', [
           Validators.required,
           phoneNumberValidator(this.defaultCountry)
         ]],
-        pin: [null, Validators.required],
-        confirmPin: [null, Validators.required],
+        pin: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+        confirmPin: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
         termsAccepted: [false, Validators.requiredTrue],
       },
       { validators: this.passwordMatchValidator }
