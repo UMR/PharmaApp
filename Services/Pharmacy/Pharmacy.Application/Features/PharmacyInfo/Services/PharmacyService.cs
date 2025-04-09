@@ -71,7 +71,7 @@ public class PharmacyService : IPharmacyService
 
         if(storedPharmacy != null)
         {
-            throw new Exception("A pharmacy is available under the current user. Please update exist pharmacy insted.");
+            throw new Exception("A pharmacy is available under the current user. Please update exist pharmacy instead.");
         }
 
         string filename = "";

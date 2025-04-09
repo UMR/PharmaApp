@@ -13,21 +13,25 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Validators
         {
             _pharmacyRepository = serviceProvider.GetService<IPharmacyRepository>();
 
-            RuleFor(p => p.StoreName)
+            RuleFor(p => p.StoreName.Trim())
             .NotEmpty()
             .WithMessage("{PropertyName} is required")
             .Length(3, 120)
             .WithMessage("{PropertyName} must be between 3 to 120 characters");
 
-            RuleFor(p => p.AddressLine1)
+            RuleFor(p => p.AddressLine1.Trim())
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required")
                 .Length(3, 120)
                 .WithMessage("{PropertyName} must be between 3 to 120 characters");
 
-            RuleFor(p => p.AddressLine2)
+            When(p => !string.IsNullOrEmpty(p.AddressLine2.Trim()), () =>
+            {
+                RuleFor(p => p.AddressLine2.Trim())
                 .MaximumLength(120)
                 .WithMessage("{PropertyName} can not be more than 120 characters");
+            });
+            
 
             RuleFor(p => p.StoreLogo)
                 .SetValidator(new PharmacyLogoValidator())
