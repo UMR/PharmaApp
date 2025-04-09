@@ -1,77 +1,90 @@
 <div class="container text-center mt-5"
-    style="max-width: 500px; background-color: rgb(240, 240, 240); padding: 20px; border-radius: 20px; min-height: 800px;">
-    <h5 class="fw-bold text-primary">Get Ready for Vital Scan</h5>
-    <div class="scan-image mx-auto mt-3">
-        <img src="./assets/images/icon-scan.png" class="img-fluid" alt="Scan Icon" />
+     style="max-width: 500px; background-color: rgb(240, 240, 240); padding: 20px; border-radius: 20px; min-height: 800px;">
+  <h5 class="fw-bold text-primary">Get Ready for Vital Scan</h5>
+  <div class="scan-image mx-auto mt-3">
+    <img src="./assets/images/icon-scan.png" class="img-fluid" alt="Scan Icon" />
+  </div>
+  <div class="instructions mt-4 text-start mx-auto">
+
+
+    <div class="instruction-item d-flex align-items-start mt-3">
+      <div class="icon bg-light p-2 rounded-circle me-3">
+        <img src="./assets/images/bi_eyeglasses.png" alt="">
+      </div>
+      <p>Take off your glasses to ensure a clear scan</p>
     </div>
-    <div class="instructions mt-4 text-start mx-auto">
 
-
-        <div class="instruction-item d-flex align-items-start mt-3">
-            <div class="icon bg-light p-2 rounded-circle me-3">
-                <img src="./assets/images/bi_eyeglasses.png" alt="">
-            </div>
-            <p>Take off your glasses to ensure a clear scan</p>
-        </div>
-
-        <div class="instruction-item d-flex align-items-start mt-3">
-            <div class="icon bg-light p-2 rounded-circle me-3">
-                <img src="./assets/images/entypo_light-up.png" alt="">
-            </div>
-            <p>Make sure your face is clearly visible in bright light</p>
-        </div>
-
-        <div class="instruction-item d-flex align-items-start mt-3">
-            <div class="icon bg-light p-2 rounded-circle me-3">
-                <img src="./assets/images/hugeicons_hold-phone.png" alt="">
-            </div>
-            <p>Keep your phone still and at eye level during the scan</p>
-        </div>
-        <div class="instruction-item d-flex align-items-start">
-            <div class="icon bg-light p-2 rounded-circle me-3">
-                <i class="pi pi-exclamation-triangle text-danger fs-5"></i>
-            </div>
-            <p class="text-danger">
-                The vital signs collected through this app may vary in accuracy.
-                Please consult your physician before making any medical decisions or
-                taking medication.
-            </p>
-        </div>
+    <div class="instruction-item d-flex align-items-start mt-3">
+      <div class="icon bg-light p-2 rounded-circle me-3">
+        <img src="./assets/images/entypo_light-up.png" alt="">
+      </div>
+      <p>Make sure your face is clearly visible in bright light</p>
     </div>
-    <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()">Next</button>
-    <p-dialog header="Pay Now" [(visible)]="displayModal" [modal]="true" [closable]="true" [resizable]="false"
-        [baseZIndex]="10000">
-        <h3>User Name : {{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}
-        </h3>
-        <h5>Package Name : {{packageInfo.name}}</h5>
-        <h5>Package Description : {{packageInfo.description}}</h5>
-        <h5>Price : {{ packageInfo?.price }} {{ packageInfo?.currencyCode }}</h5>
-        <button type="button" pButton label="Pay" class="p-button-success p-button-sm" (click)="payNow()"></button>
-        <!--<p-table [value]="[packageInfo]" class="p-mb-3">
-      <ng-template pTemplate="header">
-          <tr>
-              <th>User Name</th>
-              <th>Package Name</th>
-              <th>Package Description</th>
-              <th>Price</th>
-              <th>Action</th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-item>
-          <tr>
-              <td>
-                  {{ user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}
-              </td>
-              <td>{{ item?.name }}</td>
-              <td>{{ item?.description }}</td>
-              <td>{{ item?.price }} {{ item?.currencyCode }}</td>
-              <td class="text-center">
-                  <button type="button" pButton label="Pay" class="p-button-success p-button-sm"
-                      (click)="payNow()"></button>
-              </td>
-          </tr>
-      </ng-template>
-  </p-table>-->
 
+    <div class="instruction-item d-flex align-items-start mt-3">
+      <div class="icon bg-light p-2 rounded-circle me-3">
+        <img src="./assets/images/hugeicons_hold-phone.png" alt="">
+      </div>
+      <p>Keep your phone still and at eye level during the scan</p>
+    </div>
+    <div class="instruction-item d-flex align-items-start">
+      <div class="icon bg-light p-2 rounded-circle me-3">
+        <i class="pi pi-exclamation-triangle text-danger fs-5"></i>
+      </div>
+      <p class="text-danger">
+        The vital signs collected through this app may vary in accuracy.
+        Please consult your physician before making any medical decisions or
+        taking medication.
+      </p>
+    </div>
+  </div>
+  <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()">Next</button>
+  <div class="container">
+    <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="true" [resizable]="false"
+              [baseZIndex]="10000">
+
+      <div class="plan">
+        <div class="plan-header">{{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}</div>
+        <div class="plan-price">
+          <span style="font-size:36px">{{ packageInfo?.price }} {{ packageInfo?.currencyCode }}</span>
+        </div>
+        <div class="plan-details">
+          <ul>
+            <li>{{packageInfo.name}}</li>
+            <li>{{packageInfo.description}}</li>
+          </ul>
+        </div>
+        <div class="plan-footer">
+          <button id="rzp-button1" (click)="payNow()">Pay Now</button>
+        </div>
+      </div>
+
+
+      <!--<p-table [value]="[packageInfo]" class="p-mb-3">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>User Name</th>
+                <th>Package Name</th>
+                <th>Package Description</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td>
+                    {{ user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}
+                </td>
+                <td>{{ item?.name }}</td>
+                <td>{{ item?.description }}</td>
+                <td>{{ item?.price }} {{ item?.currencyCode }}</td>
+                <td class="text-center">
+                    <button type="button" pButton label="Pay" class="p-button-success p-button-sm"
+                        (click)="payNow()"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>-->
     </p-dialog>
+  </div>
 </div>

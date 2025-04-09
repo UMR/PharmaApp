@@ -14,3 +14,121 @@
   width: 40px;
   height: 40px;
 }
+
+header {
+  text-align: center;
+  padding: 20px;
+  background-color: #660033;
+  color: white;
+}
+
+
+.plan {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+  .plan:hover {
+    transform: scale(1.05);
+  }
+
+.plan-header {
+  background-color: #660033;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.plan-price {
+  text-align: center;
+  font-size: 36px !important;
+  color: #333 !important;
+  margin: 20px 0 !important;
+}
+
+.plan-details {
+  padding: 20px;
+  text-align: left;
+}
+
+  .plan-details ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+    .plan-details ul li {
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+.plan-footer {
+  text-align: center;
+  padding: 20px;
+}
+
+  .plan-footer button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #660033;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+    .plan-footer button:hover {
+      background-color: #67f55f;
+    }
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #660033;
+  color: white;
+}
+
+.scohn-highlight {
+  color: #a3084e;
+}
+
+.payment-container {
+  padding: 1rem;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+  .quantity-control input {
+    width: 50px;
+    text-align: center;
+  }
+
+.pay-button {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+::ng-deep .p-dialog-header {
+  padding: 0px !important;
+}
