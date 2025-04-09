@@ -16,6 +16,7 @@ export class BasicInfoRegistrationPageComponent implements OnInit {
   currentDate: any;
   pharmacy: any;
   defaultCountry: string = 'IN'
+  submitted = false;
   /**
    *
    */
@@ -32,8 +33,14 @@ export class BasicInfoRegistrationPageComponent implements OnInit {
     this.initializeForm();
   }
 
+  get f() { return this.userRegistrationForm.controls; }
 
   customerLogin() {
+    this.submitted = true;
+
+    if (this.userRegistrationForm.invalid) {
+      return;
+    }
     this.customerService.registerCustomer(this.userRegistrationForm.value).subscribe({
       next: (res: any) => {
         localStorage.setItem(customerInfo, JSON.stringify({ ...res, pharmacyId: this.pharmacy.body.id }));
@@ -48,10 +55,10 @@ export class BasicInfoRegistrationPageComponent implements OnInit {
   initializeForm() {
     this.userRegistrationForm = this.fb.group({
       pharmacyId: [this.pharmacy.body.id],
-      firstName: [null, Validators.required],
+      firstName: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       lastName: [null],
       mobile: ["", [Validators.required, phoneNumberValidator(this.defaultCountry)]],
-      email: [null],
+      email: [null, Validators.email],
       weight: [null, Validators.required],
       age: [null, Validators.required],
     });

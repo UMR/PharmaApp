@@ -129,6 +129,6 @@ input[type="submit"]:hover {
     border-top-right-radius: 10px;
   }
   .contactForm {
-    padding-right: 30px;
+    padding: 20px;
   }
 }

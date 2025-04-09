@@ -69,11 +69,15 @@ export class OtpComponent implements OnInit, OnDestroy {
       this.authService.verifyOtp(model)
         .pipe(first())
         .subscribe({
-          next: (res) => {
+          next: (res: any) => {
             if (res.status == 200) {
-              this.registerUser();
+              if (res.body.isSuccessful) {
+                this.registerUser();
+              }
+              else {
+                this.toastService.showError('Error', 'Invalid OTP!');
+              }
             }
-            this.toastService.showSuccess('Success', 'OTP verified successfully');
 
           },
           error: () => {

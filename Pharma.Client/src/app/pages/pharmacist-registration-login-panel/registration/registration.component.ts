@@ -85,7 +85,7 @@ export class RegistrationComponent {
       {
         firstName: [null, [Validators.required, Validators.minLength(3)]],
         lastName: [null],
-        email: [null, [Validators.email, Validators.email]],
+        email: [null, Validators.email],
         mobile: ['', [
           Validators.required,
           phoneNumberValidator(this.defaultCountry)

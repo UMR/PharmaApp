@@ -114,6 +114,7 @@ input[type="submit"]:hover {
   }
   .contactForm {
     padding-right: 30px;
+    padding: 20px;
   }
 }
 

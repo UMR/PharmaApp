@@ -139,7 +139,8 @@ export class BinahScanComponent implements OnInit {
             this.processingTime!--;
           } else {
             clearInterval(this.time);
-            console.log('Timer ended.');
+            this.measurementStarted = false;
+            this.session?.stop();
           }
         }, 1000);
       } else {

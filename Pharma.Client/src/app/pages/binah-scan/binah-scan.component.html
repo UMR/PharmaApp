@@ -22,6 +22,29 @@
                         <button type="button" pButton>Measuring</button>
                         }
                     </div>
+                    <div *ngIf="processingTime && processingTime > 0">
+                        <div style="position: absolute; top: 10px; right: 10px;">
+                            <i class="fa fa-clock-o" style="font-size: 25px;"></i> <span class="text-light px-1"
+                                style="font-weight: bold; font-size: 24px;">{{ processingTime
+                                }}</span> sec
+                        </div>
+                    </div>
+
+                    <div style="position: absolute; top: 430px;
+    right: 306px;">
+                        @if (error | async) {
+                        @let errorStatus = error | async;
+                        <p style="color: white;">{{ errorStatus?.code }}</p>
+                        }
+                        @if(warning | async) {
+                        @let warningStatus = warning | async;
+                        <p style="color: white;">{{ warningStatus?.code }}</p>
+                        }
+                        @if(info | async) {
+                        @let infoStatus = info | async;
+                        <p style="color: white;">{{ infoStatus?.message }}</p>
+                        }
+                    </div>
                     <video #videoElement id="video" width="640" height="480" style="border-radius: 10px;" muted autoplay
                         playsinline></video>
                     <img src="./assets/images/mask.svg" width="640" height="480"
@@ -31,11 +54,6 @@
             <div class="col-md-12">
                 <div style="text-align: center;">
                     <button pButton (click)="startMeasuring()" [disabled]="measurementStarted">Start Scan</button>
-                    <div *ngIf="processingTime && processingTime > 0">
-                        <div style="position: absolute; top: 10px; left: 10px; font-size: 0.8rem;">
-                            <i class="fa fa-clock-o"></i> <span class="text-danger px-1">{{ processingTime }}</span> sec
-                        </div>
-                    </div>
                 </div>
                 <div style="text-align: center;">
                     <p style="font-weight: bold; color: red; padding: 10px;">Scanned Vital Chart</p>

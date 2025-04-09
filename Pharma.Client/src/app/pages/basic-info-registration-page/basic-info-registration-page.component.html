@@ -22,6 +22,15 @@
                         class="form-control" />
                     <label for="firstName">First Name</label>
                 </p-floatlabel>
+                @if(submitted && f.firstName.errors){
+                @if(f.firstName.errors.required){
+                <p-message severity="error" variant="simple" size="small">First Name is required!</p-message>
+                }
+                @if(f.firstName.errors.minlength){
+                <p-message severity="error" variant="simple" size="small">First Name must be at least 3 characters
+                    long!</p-message>
+                }
+                }
             </div>
             <div class="name">
                 <p-floatlabel variant="on">
@@ -35,6 +44,11 @@
                     <input pInputText id="email" formControlName="email" autocomplete="off" class="form-control" />
                     <label for="email">Email</label>
                 </p-floatlabel>
+                @if(submitted && f.email.errors){
+                @if(f.email.errors.email){
+                <p-message severity="error" variant="simple" size="small">Email is Invalid!</p-message>
+                }
+                }
             </div>
 
             <div class="name">
@@ -44,12 +58,25 @@
                         onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
                     </angular-phone-number-input>
                 </p-floatlabel>
+                @if(submitted && f.mobile.errors){
+                @if(f.mobile.errors.required){
+                <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
+                }
+                @if(submitted && f.mobile.errors?.invalidPhoneNumber){
+                <p-message severity="error" variant="simple" size="small">Phone number is Invalid!</p-message>
+                }
+                }
             </div>
             <div class="name">
                 <p-floatlabel variant="on">
                     <input pInputText id="weight" formControlName="weight" autocomplete="off" class="form-control" />
                     <label for="weight">Weight</label>
                 </p-floatlabel>
+                @if(submitted && f.weight.errors){
+                @if(f.weight.errors.required){
+                <p-message severity="error" variant="simple" size="small">Weight is required!</p-message>
+                }
+                }
             </div>
             <div class="name">
                 <p-floatlabel variant="on">
@@ -57,14 +84,11 @@
                         class="form-control" />
                     <label for="age">Age</label>
                 </p-floatlabel>
-            </div>
-
-
-            <div class="checkbox">
-                <input type="checkbox" id="checkbox" name="checkbox">
-                <label for="checkbox">By signing up, you agree to the
-                    <p><a href="#">Play Term of Service</a></p>
-                </label>
+                @if(submitted && f.age.errors){
+                @if(f.age.errors.required){
+                <p-message severity="error" variant="simple" size="small">Age is required!</p-message>
+                }
+                }
             </div>
             <p-button label="Register Now" type="submit" [rounded]="true" severity="success" />
         </form>
