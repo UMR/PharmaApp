@@ -62,7 +62,7 @@ export class OtpComponent implements OnInit, OnDestroy {
   verifyOtp() {
     if (this.otp) {
       const model = {
-        loginId: this.user.mobile,
+        loginId: this.user.email,
         otp: this.otp,
         otpType: '1'
       }
