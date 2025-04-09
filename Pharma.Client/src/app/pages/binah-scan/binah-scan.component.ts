@@ -63,6 +63,20 @@ export class BinahScanComponent implements OnInit {
     this.isStarted = true;
     await this.startMonitorInitiation();
   }
+  vitalCardsTop = [
+    { label: 'Heart Rate', value: this.vitalSigns?.value.pulseRate?.value, unit: 'BPM', icon: 'fa fa-heart' },
+    { label: 'Oxygen Saturation', value: this.vitalSigns?.value.oxygenSaturation?.value, unit: 'SpO2%', icon: 'fa fa-tint' },
+    { label: 'Respiration', value: this.vitalSigns?.value.respirationRate?.value, unit: 'RPM', icon: 'fa fa-stethoscope' },
+  ];
+
+  vitalCardsBottom = [
+    { label: 'HRV-SDNN', value: this.vitalSigns?.value.hrvSdnn?.value, unit: 'High/Low', icon: 'fa fa-area-chart' },
+    { label: 'Stress Level', value: this.vitalSigns?.value.stressLevel?.value, unit: 'High/Low', icon: 'fa fa-deafness' },
+    { label: 'Blood Pressure', value: this.vitalSigns?.value.bloodPressure?.value, unit: 'mmHg', icon: 'fa fa-heartbeat' },
+  ];
+
+
+
 
   async startMonitorInitiation() {
     try {

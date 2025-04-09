@@ -7,7 +7,8 @@
             </div>
             }
             @if (isStarted) {
-            <div class="col-md-12" style=" text-align: center; margin-top: 10px;">
+            <div class="col-md-12"
+                style="display: flex; justify-content: center; text-align: center; margin-top: 10px;">
                 <div class="monitor-wrapper" style="position: relative;">
                     <div style="position: absolute; top: 10px; left: 10px;">
                         @if(getSessionState() === 1){
@@ -21,41 +22,41 @@
                         <button type="button" pButton>Measuring</button>
                         }
                     </div>
-                    <video #videoElement id="video" width="640" height="480" muted autoplay playsinline></video>
+                    <video #videoElement id="video" width="640" height="480" style="border-radius: 10px;" muted autoplay
+                        playsinline></video>
                     <img src="./assets/images/mask.svg" width="640" height="480"
-                        style="position: absolute; top: 0; left: 0;">
+                        style="position: absolute; top: 0; left: 0;border-radius: 10px;">
                 </div>
+            </div>
+            <div class="col-md-12">
                 <div style="text-align: center;">
                     <button pButton (click)="startMeasuring()" [disabled]="measurementStarted">Start Scan</button>
                     <div *ngIf="processingTime && processingTime > 0">
-                        Time remaining: {{ processingTime }} seconds
+                        <div style="position: absolute; top: 10px; left: 10px; font-size: 0.8rem;">
+                            <i class="fa fa-clock-o"></i> <span class="text-danger px-1">{{ processingTime }}</span> sec
+                        </div>
                     </div>
                 </div>
-                <p>Scanned Vital Chart</p>
+                <div style="text-align: center;">
+                    <p style="font-weight: bold; color: red; padding: 10px;">Scanned Vital Chart</p>
+                </div>
+
                 <div class="vital-bar" *ngIf="vitalSigns | async as vitals">
-                    <div class="vital-box">
-                        <p>Blood Pressure :{{ vitals?.bloodPressure?.value }}</p>
+                    <div class="vital-row">
+                        <div class="vital-box" *ngFor="let card of vitalCardsTop">
+                            <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
+                            <div class="vital-title">{{ card.label }}</div>
+                            <div class="vital-value">{{ card.value }}</div>
+                            <div class="vital-unit">{{ card.unit }}</div>
+                        </div>
                     </div>
-                    <div class="vital-box">
-                        <p> Respiratory Rate :{{ vitals?.respirationRate?.value }}</p>
-                    </div>
-                    <div class="vital-box">
-                        <p> Diabets Risk :{{ vitals?.diabetesRisk?.value }}</p>
-                    </div>
-                    <div class="vital-box">
-                        <p>Hemoglobin :{{ vitals.hemoglobin?.value }}</p>
-                    </div>
-                    <div class="vital-box">
-                        <p>Hypertension Risk :{{ vitals.hypertensionRisk?.value }}</p>
-                    </div>
-                    <div class="vital-box">
-                        <p>Pulse Rate :{{ vitals.pulseRate?.value }}</p>
-                    </div>
-                    <div class="vital-box">
-                        <p>Oxygen Saturation :{{ vitals.oxygenSaturation?.value }}</p>
-                    </div>
-                    <div class="vital-box">
-                        <p>Stress Level :{{ vitals.stressLevel?.value }}</p>
+                    <div class="vital-row mt-3">
+                        <div class="vital-box" *ngFor="let card of vitalCardsBottom">
+                            <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
+                            <div class="vital-title">{{ card.label }}</div>
+                            <div class="vital-value">{{ card.value }}</div>
+                            <div class="vital-unit">{{ card.unit }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
