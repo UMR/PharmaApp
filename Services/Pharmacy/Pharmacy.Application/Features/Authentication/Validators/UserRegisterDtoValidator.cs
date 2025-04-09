@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using IdentityServer4.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Application.Constants;
-using Pharmacy.Application.Contracts.Persistence;
 using System.Text.RegularExpressions;
 
 namespace Pharmacy.Application.Features.Authentication.Validators
@@ -23,14 +21,18 @@ namespace Pharmacy.Application.Features.Authentication.Validators
 
             RuleFor(u => u.LastName)
                 .Length(3, 30)
-                .WithMessage("{PropertyName} must be between 3 to 30 characters");
+                .WithMessage("{PropertyName} must be between 3 to 30 characters")
+                .When(u => !u.LastName.IsNullOrEmpty());
 
-            RuleFor(u => u.Email)
+            When(u => !u.Email.IsNullOrEmpty(), () =>
+            {
+                RuleFor(u => u.Email)
                 .MustAsync(BeUniqueLoginId)
                 .WithMessage("{PropertyName} already exists")
                 .MustAsync(IsValidEmail)
                 .WithMessage("{PropertyName} must be a valid email address");
-
+            });
+            
             RuleFor(u => u.Mobile)
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required")
