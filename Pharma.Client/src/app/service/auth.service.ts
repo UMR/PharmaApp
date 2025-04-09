@@ -29,10 +29,13 @@ export class AuthService {
   login(user: any) {
     return this.http.post<any>(`${environment.apiUrl}/v1/Auth/Login`, user)
       .pipe(map(user => {
-        localStorage.setItem('pharmaKey', JSON.stringify(user));
+        if (user && user.accessToken) {
+          localStorage.setItem('pharmaKey', JSON.stringify(user));
+        }
         return user;
       }));
   }
+
   verifyOtp(model: any) {
     const URI = `${environment.apiUrl}/v1/otp/verify`;
     return this.http.post(URI, model, { observe: 'response' });

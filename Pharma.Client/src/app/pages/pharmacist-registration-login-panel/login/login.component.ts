@@ -28,13 +28,19 @@ export class LoginComponent {
   get f() { return this.userloginForm.controls; }
 
   login() {
-    this.authService.login(this.userloginForm.value).pipe(
-      first()
-    ).subscribe({
-      next: (res) => {
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.toastService.showSuccess('Success', 'Login Successful');
-        this.router.navigateByUrl(returnUrl);
+    this.authService.login(this.userloginForm.value).subscribe({
+      next: (res: any) => {
+        if (res && res.accessToken) {
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.toastService.showSuccess('Success', 'Login Successful');
+          this.router.navigateByUrl(returnUrl);
+        }
+        else if (res && res.error) {
+          this.toastService.showError('Error', res.error);
+        } else {
+          this.toastService.showError('Error', 'Login Failed');
+        }
+
       },
       error: () => {
         console.log("error");
