@@ -40,32 +40,39 @@
     </div>
     <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()">Next</button>
     <p-dialog header="Pay Now" [(visible)]="displayModal" [modal]="true" [closable]="true" [resizable]="false"
-        [baseZIndex]="10000">
-        <p-table [value]="[packageInfo]" class="p-mb-3">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>User Name</th>
-                    <th>Package Name</th>
-                    <th>Package Description</th>
-                    <th>Price</th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-item>
-                <tr>
-                    <td>
-                        {{ user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}
-                    </td>
-                    <td>{{ item?.name }}</td>
-                    <td>{{ item?.description }}</td>
-                    <td>{{ item?.price }} {{ item?.currencyCode }}</td>
-                    <td class="text-center">
-                        <button type="button" pButton label="Pay" class="p-button-success p-button-sm"
-                            (click)="payNow()"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
+              [baseZIndex]="10000">
+      <h1>Pay Now</h1>
+      <h3>User Name : {{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}</h3>
+      <h5>Package Name : {{packageInfo[0].name}}</h5>
+      <h5>Package Description : {{packageInfo[0].description}}</h5>
+      <h5>Price : {{ packageInfo[0]?.price }} {{ packageInfo[0]?.currencyCode }}</h5>
+      <button type="button" pButton label="Pay" class="p-button-success p-button-sm"
+              (click)="payNow()"></button>
+      <!--<p-table [value]="[packageInfo]" class="p-mb-3">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>User Name</th>
+              <th>Package Name</th>
+              <th>Package Description</th>
+              <th>Price</th>
+              <th>Action</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+          <tr>
+              <td>
+                  {{ user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : user.firstName }}
+              </td>
+              <td>{{ item?.name }}</td>
+              <td>{{ item?.description }}</td>
+              <td>{{ item?.price }} {{ item?.currencyCode }}</td>
+              <td class="text-center">
+                  <button type="button" pButton label="Pay" class="p-button-success p-button-sm"
+                      (click)="payNow()"></button>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>-->
 
     </p-dialog>
 </div>
