@@ -46,7 +46,7 @@ export class RegistrationComponent {
 
 
   generateOtp(arg0: string) {
-    let loginId = this.userRegistrationForm.value.mobile;
+    let loginId = this.userRegistrationForm.value.email;
     if (loginId != null) {
       this.authService.generateOtp(loginId, arg0)
         .pipe(first())
