@@ -51,7 +51,8 @@ export class PayNowComponent implements OnInit {
   loadRazorpayScript(): void {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.crossOrigin = 'anonymous';
+    script.setAttribute('crossorigin', 'anonymous');
+    //script.crossOrigin = 'anonymous';
     script.defer = true;
     document.body.appendChild(script);
   }

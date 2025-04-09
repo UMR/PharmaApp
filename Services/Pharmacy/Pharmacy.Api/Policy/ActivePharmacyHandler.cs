@@ -35,9 +35,16 @@ namespace Pharmacy.Api.Policy
                 {
                     Guid.TryParse(userObject.GetValue("id").ToString(), out Guid userId);
 
-                    var userInfo = _userService.GetByIdAsync(userId);
+                    var task = Task.Run(async () =>
+                    {
+                        return await _userService.GetByIdAsync(userId);
+                    }, CancellationToken.None);
 
-                    if(userInfo != null && userInfo.Status.Equals(1))
+                    task.Wait();
+
+                    var userInfo = task.Result;
+
+                    if(userInfo != null && userInfo.Status.Equals((byte)1))
                     {
                         context.Succeed(requirement);
                     }
