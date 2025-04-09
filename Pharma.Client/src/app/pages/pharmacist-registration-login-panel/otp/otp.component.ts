@@ -108,6 +108,7 @@ export class OtpComponent implements OnInit, OnDestroy {
             this.router.navigate(['/']);
           },
           error: error => {
+            this.toastService.showError('Error', error.error.error)
           }
         });
     }
