@@ -99,5 +99,10 @@ namespace Pharmacy.Application.Features.User.Services
 
             await _userRepository.UpdateAsync(user);
         }
+
+        public async ValueTask<bool> IsExistAsync(string loginId)
+        {
+            return await _userRepository.IsExistAsync(loginId);
+        }
     }
 }
