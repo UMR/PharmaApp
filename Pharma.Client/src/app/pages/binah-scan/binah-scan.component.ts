@@ -17,6 +17,7 @@ import monitor, {
   VitalSignsResults,
 } from '@binah/web-sdk';
 import { ToastMessageService } from '../../service/toast-message.service';
+
 export enum InfoType {
   NONE = 'NONE',
   INSTRUCTION = 'INSTRUCTION',
@@ -34,234 +35,206 @@ export interface InfoData {
   styleUrls: ['./binah-scan.component.css'],
 })
 export class BinahScanComponent implements OnInit {
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+
   isStarted = false;
-  processingTime?: number;
-  licenseKey?: string;
-  session: HealthMonitorSession | null = null;
-  sessionState = new BehaviorSubject<SessionState | null>(null);
-  vitalSigns = new BehaviorSubject<any>({});
-  info = new BehaviorSubject<InfoData>({ type: InfoType.NONE });
-  warning = new BehaviorSubject<AlertData | null>(null);
-  error = new BehaviorSubject<AlertData | null>(null);
-  enabledVitalSigns = new BehaviorSubject<EnabledVitalSigns | null>(null);
-  offlineMeasurements = new BehaviorSubject<OfflineMeasurements | null>(null);
-  time: any;
+  isDismissing = false;
   measurementStarted = false;
 
-  isDismissing = false;
+  session: HealthMonitorSession | null = null;
 
-  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+  processingTime?: number;
+  licenseKey?: string;
+  timeInterval: any;
+
+  sessionState$ = new BehaviorSubject<SessionState | null>(null);
+  vitalSigns$ = new BehaviorSubject<any>({});
+  info$ = new BehaviorSubject<InfoData>({ type: InfoType.NONE });
+  warning$ = new BehaviorSubject<AlertData | null>(null);
+  error$ = new BehaviorSubject<AlertData | null>(null);
+  enabledVitalSigns$ = new BehaviorSubject<EnabledVitalSigns | null>(null);
+  offlineMeasurements$ = new BehaviorSubject<OfflineMeasurements | null>(null);
+  isMeasuring: boolean = false;
+
+  vitalCardsTop: any[] = [];
+  vitalCardsBottom: any[] = [];
 
   constructor(
     private monitorService: MonitorService,
     private authService: AuthService,
-    private router: Router, private toastService: ToastMessageService) { }
+    private router: Router,
+    private toastService: ToastMessageService
+  ) { }
 
   ngOnInit(): void { }
 
-  async startScan() {
+  async startScan(): Promise<void> {
     this.isStarted = true;
-    await this.startMonitorInitiation();
-  }
-  vitalCardsTop = [
-    { label: 'Heart Rate', value: this.vitalSigns?.value.pulseRate?.value, unit: 'BPM', icon: 'fa fa-heart' },
-    { label: 'Oxygen Saturation', value: this.vitalSigns?.value.oxygenSaturation?.value, unit: 'SpO2%', icon: 'fa fa-tint' },
-    { label: 'Respiration', value: this.vitalSigns?.value.respirationRate?.value, unit: 'RPM', icon: 'fa fa-stethoscope' },
-  ];
+    this.monitorService.getProcessingTime().subscribe(time => this.processingTime = time);
+    this.monitorService.getLicenseKey().subscribe(key => this.licenseKey = key);
 
-  vitalCardsBottom = [
-    { label: 'HRV-SDNN', value: this.vitalSigns?.value.hrvSdnn?.value, unit: 'High/Low', icon: 'fa fa-area-chart' },
-    { label: 'Stress Level', value: this.vitalSigns?.value.stressLevel?.value, unit: 'High/Low', icon: 'fa fa-deafness' },
-    { label: 'Blood Pressure', value: this.vitalSigns?.value.bloodPressure?.value, unit: 'mmHg', icon: 'fa fa-heartbeat' },
-  ];
-
-
-
-
-  async startMonitorInitiation() {
-    try {
-      this.monitorService.getProcessingTime().subscribe((time: number | undefined) => this.processingTime = time);
-      this.monitorService.getLicenseKey().subscribe((key: string | undefined) => this.licenseKey = key);
-
-      if (!this.licenseKey || !this.processingTime) {
-        console.error('License key or processing time not received.');
-        return;
-      }
-
-      await this.initializeMonitor(this.licenseKey, '');
-    } catch (e) {
-      console.error('Error initializing monitor:', e);
+    if (!this.licenseKey || !this.processingTime) {
+      console.error('Missing license key or processing time.');
+      return;
     }
+
+    await this.initializeMonitor(this.licenseKey);
   }
 
-  async initializeMonitor(licenseKey: string, productId: string) {
+  async initializeMonitor(licenseKey: string): Promise<void> {
     try {
-      console.log('Initializing monitor...');
       await monitor.initialize({ licenseKey });
 
-      if (this.session && this.session.getState() === SessionState.ACTIVE) {
+      if (this.session?.getState() === SessionState.ACTIVE) {
         this.session.terminate();
       }
 
       const options: FaceSessionOptions = {
         input: this.videoElement.nativeElement,
         cameraDeviceId: '',
-        processingTime: this.processingTime ?? 60,
-        onVitalSign: this.VitalSign.bind(this),
-        onFinalResults: this.FinalResults.bind(this),
-        onError: this.Error.bind(this),
-        onWarning: this.Warning.bind(this),
-        onStateChange: this.StateChange.bind(this),
+        processingTime: this.processingTime!,
         orientation: DeviceOrientation.PORTRAIT,
-        onImageData: this.ImageData.bind(this),
+        onVitalSign: this.onVitalSign.bind(this),
+        onFinalResults: this.onFinalResults.bind(this),
+        onError: this.onError.bind(this),
+        onWarning: this.onWarning.bind(this),
+        onStateChange: this.onStateChange.bind(this),
+        onImageData: this.onImageData.bind(this),
       };
 
       this.session = await monitor.createFaceSession(options);
-      console.log('Session created:', this.session);
-
-    } catch (e) {
-      console.error('Error initializing monitor session:', e);
+    } catch (error) {
+      console.error('Error initializing session:', error);
     }
   }
 
+  startMeasuring(): void {
+    if (!this.session || this.sessionState$.value !== SessionState.ACTIVE) {
+      this.toastService.showError('Error', 'Session not active.');
+      return;
+    }
 
-  startMeasuring() {
-    try {
-      if (this.session && this.sessionState.value === SessionState.ACTIVE) {
-        this.session.start();
-        this.measurementStarted = true;
-        if (this.time) {
-          clearInterval(this.time);
-        }
+    this.session.start();
+    this.measurementStarted = true;
+    this.isMeasuring = true;
+    this.clearTimer();
 
-        this.time = setInterval(() => {
-          if (this.processingTime! > 0) {
-            this.processingTime!--;
-          } else {
-            clearInterval(this.time);
-            this.measurementStarted = false;
-            this.session?.stop();
-          }
-        }, 1000);
+    this.timeInterval = setInterval(() => {
+      if (this.processingTime! > 0) {
+        this.processingTime!--;
       } else {
-        console.error('already started.');
+        this.stopMeasuring();
       }
-    }
-    catch {
-      this.measurementStarted = false;
-      this.toastService.showError('Error', 'Error starting measurement:');
-    }
-
+    }, 1000);
   }
-  stopMeasuring() {
-    if (this.session && this.session.getState() === SessionState.MEASURING) {
+
+  stopMeasuring(): void {
+    if (this.session?.getState() === SessionState.MEASURING) {
       this.session.stop();
     }
+    this.clearTimer();
+    this.measurementStarted = false;
+    this.isMeasuring = false;
   }
 
-  VitalSign(vitalSign: VitalSigns) {
-    console.log('Vital sign:', vitalSign);
+  private clearTimer(): void {
+    if (this.timeInterval) {
+      clearInterval(this.timeInterval);
+    }
+  }
+
+  private onVitalSign(vitalSign: VitalSigns): void {
     this.updateVitalSigns(vitalSign);
   }
 
-  FinalResults(vitalSignsResults: VitalSignsResults) {
-    console.log('Final results:', vitalSignsResults);
-    this.vitalSigns.next(null);
-    this.updateVitalSigns(vitalSignsResults.results);
+  private onFinalResults(results: VitalSignsResults): void {
+    this.vitalSigns$.next(null);
+    this.updateVitalSigns(results.results);
   }
 
-  Error(errorData: AlertData) {
-    console.log('Error:', errorData);
-    this.error.next(errorData);
+  private onError(error: AlertData): void {
+    console.error('Error:', error);
+    this.error$.next(error);
+    this.setInfoWithDismiss({ type: InfoType.INSTRUCTION, message: 'Error occurred. Please try again.' }, 5);
+    this.toastService.showError('Error', 'Error occurred. Please try again.');
+    this.stopMeasuring();
   }
 
-  Warning(warningData: AlertData) {
-    if (
-      warningData.code ===
-      HealthMonitorCodes.MEASUREMENT_CODE_MISDETECTION_DURATION_EXCEEDS_LIMIT_WARNING
-    ) {
-      console.log('Warning: Measurement duration exceeds limit');
-      this.vitalSigns.next(null);
+  private onWarning(warning: AlertData): void {
+    this.warning$.next(warning);
+    if (warning.code === HealthMonitorCodes.MEASUREMENT_CODE_MISDETECTION_DURATION_EXCEEDS_LIMIT_WARNING) {
+      this.vitalSigns$.next(null);
     }
-    console.log('Warning:', warningData);
-    this.warning.next(warningData);
   }
 
-  StateChange(state: SessionState) {
-    console.log('State:', state);
-    this.sessionState.next(state);
+  private onStateChange(state: SessionState): void {
+    this.sessionState$.next(state);
   }
 
-  FaceDetected(faceDetected: boolean) {
-    console.log('Face detected:', faceDetected);
-  }
+  private onImageData(imageValidity: ImageValidity): void {
+    let message = '';
+    switch (imageValidity) {
+      case ImageValidity.INVALID_DEVICE_ORIENTATION:
+        message = 'Unsupported Orientation';
+        break;
+      case ImageValidity.TILTED_HEAD:
+        message = 'Head Tilted';
+        break;
+      case ImageValidity.FACE_TOO_FAR:
+        message = 'You Are Too Far';
+        break;
+      case ImageValidity.UNEVEN_LIGHT:
+        message = 'Uneven Lighting';
+        break;
+      default:
+        message = 'Face Not Detected';
+    }
 
-  ImageData(imageValidity: ImageValidity) {
-    console.log('Image validity:', imageValidity);
-    let message: string;
     if (imageValidity !== ImageValidity.VALID) {
-      switch (imageValidity) {
-        case ImageValidity.INVALID_DEVICE_ORIENTATION:
-          message = 'Unsupported Orientation';
-          break;
-        case ImageValidity.TILTED_HEAD:
-          message = 'Head Tilted';
-          break;
-        case ImageValidity.FACE_TOO_FAR:
-          message = 'You Are Too Far';
-          break;
-        case ImageValidity.UNEVEN_LIGHT:
-          message = 'Uneven Lighting';
-          break;
-        default:
-          message = 'Face Not Detected';
-      }
-      this.info.next({ type: InfoType.INSTRUCTION, message });
-      console.log(this.info.value);
+      this.info$.next({ type: InfoType.INSTRUCTION, message });
     } else {
       this.setInfoWithDismiss({ type: InfoType.NONE });
     }
   }
 
-  onEnabledVitalSigns(vitalSigns: EnabledVitalSigns) {
-    this.enabledVitalSigns.next(vitalSigns);
+  private updateVitalSigns(vitalSigns: VitalSigns): void {
+    const updated = { ...this.vitalSigns$.value, ...vitalSigns };
+    this.vitalSigns$.next(updated);
+
+    this.vitalCardsTop = [
+      { label: 'Heart Rate', value: updated.pulseRate?.value, unit: 'BPM', icon: 'fa fa-heart' },
+      { label: 'Oxygen Saturation', value: updated.oxygenSaturation?.value, unit: 'SpO2%', icon: 'fa fa-tint' },
+      { label: 'Respiration', value: updated.respirationRate?.value, unit: 'RPM', icon: 'fa fa-stethoscope' },
+    ];
+
+    this.vitalCardsBottom = [
+      { label: 'Hemoglobin', value: updated.hemoglobin?.value, unit: 'g/dL', icon: 'fa fa-area-chart' },
+      { label: 'Stress Level', value: updated.stressLevel?.value, unit: 'High/Low', icon: 'fa fa-deafness' },
+      { label: 'Blood Pressure', value: `${updated.bloodPressure?.systolic ?? ""}/${updated.bloodPressure?.diastolic ?? ""}`, unit: 'mmHg', icon: 'fa fa-heartbeat' },
+    ];
   }
 
-  onOfflineMeasurement(offlineMeasurements: OfflineMeasurements) {
-    this.offlineMeasurements.next(offlineMeasurements);
-  }
-
-  setInfoWithDismiss(info: InfoData, seconds?: number) {
+  setInfoWithDismiss(info: InfoData, seconds?: number): void {
     if (!this.isDismissing) {
-      this.info.next(info);
+      this.info$.next(info);
       if (seconds) {
         this.isDismissing = true;
         setTimeout(() => {
-          this.info.next({ type: InfoType.NONE });
+          this.info$.next({ type: InfoType.NONE });
           this.isDismissing = false;
         }, seconds * 1000);
       }
     }
   }
 
-  updateVitalSigns(vitalSigns: VitalSigns) {
-    const updated = {
-      ...this.vitalSigns.value,
-      ...vitalSigns,
-    };
-    this.vitalSigns.next(updated);
-  }
-
-
-
-  onLogoutClick() {
+  onLogoutClick(): void {
     this.stopMeasuring();
     this.session?.terminate();
     this.authService.logOut();
     this.router.navigate(['/pharmacy-login']);
   }
 
-  getSessionState() {
-    return this.sessionState.value
+  getSessionState(): SessionState | null {
+    return this.sessionState$.value;
   }
 }

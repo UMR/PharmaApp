@@ -7,64 +7,56 @@
             </div>
             }
             @if (isStarted) {
-            <div class="col-md-12"
-                style="display: flex; justify-content: center; text-align: center; margin-top: 10px;">
-                <div class="monitor-wrapper" style="position: relative;">
-                    <div style="position: absolute; top: 10px; left: 10px;">
-                        @if(getSessionState() === 1){
-                        <button type="button" pButton>
-                            <i class="pi pi-circle-fill"
-                                style="color: green; font-size: 0.6rem; margin-right: 5px;"></i>
-                            Active
-                        </button>
-                        }
-                        @if (getSessionState() === 2) {
-                        <button type="button" pButton>Measuring</button>
-                        }
-                    </div>
-                    <div *ngIf="processingTime && processingTime > 0">
-                        <div style="position: absolute; top: 10px; right: 10px;">
-                            <i class="fa fa-clock-o" style="font-size: 25px;"></i> <span class="text-light px-1"
-                                style="font-weight: bold; font-size: 24px;">{{ processingTime
-                                }}</span> sec
+            <div class="col-md-12 d-flex justify-content-center text-center mt-2">
+                <div class="monitor-wrapper position-relative">
+                    <div class="video-mask-container">
+                        <div class="session-state" *ngIf="getSessionState() === 1">
+                            <button type="button" pButton>
+                                <i class="pi pi-circle-fill text-success me-1" style="font-size: 0.6rem;"></i>
+                                Active
+                            </button>
                         </div>
+                        <div class="session-state" *ngIf="getSessionState() === 2">
+                            <button type="button" pButton>Measuring</button>
+                        </div>
+                        <div class="timer" *ngIf="processingTime && processingTime > 0">
+                            <i class="fa fa-clock-o" style="font-size: 1.5rem;"></i>
+                            <span class="text-light px-1 fw-bold" style="font-size: 1.5rem;">{{ processingTime }}</span>
+                            sec
+                        </div>
+                        <video #videoElement id="video" muted autoplay playsinline></video>
+                        <img src="./assets/images/mask.svg" class="mask-overlay" />
                     </div>
-
-                    <div style="position: absolute; top: 430px;
-    right: 306px;">
-                        @if (error | async) {
-                        @let errorStatus = error | async;
-                        <p style="color: white;">{{ errorStatus?.code }}</p>
-                        }
-                        @if(warning | async) {
-                        @let warningStatus = warning | async;
-                        <p style="color: white;">{{ warningStatus?.code }}</p>
-                        }
-                        @if(info | async) {
-                        @let infoStatus = info | async;
-                        <p style="color: white;">{{ infoStatus?.message }}</p>
-                        }
-                    </div>
-                    <video #videoElement id="video" width="640" height="480" style="border-radius: 10px;" muted autoplay
-                        playsinline></video>
-                    <img src="./assets/images/mask.svg" width="640" height="480"
-                        style="position: absolute; top: 0; left: 0;border-radius: 10px;">
                 </div>
             </div>
+
             <div class="col-md-12">
-                <div style="text-align: center;">
+                <div style="text-align: center; margin: 20px;">
                     <button pButton (click)="startMeasuring()" [disabled]="measurementStarted">Start Scan</button>
                 </div>
                 <div style="text-align: center;">
                     <p style="font-weight: bold; color: red; padding: 10px;">Scanned Vital Chart</p>
                 </div>
 
-                <div class="vital-bar" *ngIf="vitalSigns | async as vitals">
+                <div class="vital-bar" *ngIf="vitalSigns$ | async as vitals">
                     <div class="vital-row">
                         <div class="vital-box" *ngFor="let card of vitalCardsTop">
                             <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
                             <div class="vital-title">{{ card.label }}</div>
-                            <div class="vital-value">{{ card.value }}</div>
+                            <div class="vital-value">
+                                <ng-container *ngIf="card.value; else loading">
+                                    {{ card.value }}
+                                </ng-container>
+
+                                <ng-template #loading>
+                                    <div class="wave-dots">
+                                        <span>.</span>
+                                        <span>.</span>
+                                        <span>.</span>
+                                    </div>
+                                </ng-template>
+                            </div>
+
                             <div class="vital-unit">{{ card.unit }}</div>
                         </div>
                     </div>
@@ -72,7 +64,17 @@
                         <div class="vital-box" *ngFor="let card of vitalCardsBottom">
                             <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
                             <div class="vital-title">{{ card.label }}</div>
-                            <div class="vital-value">{{ card.value }}</div>
+                            <ng-container *ngIf="card.value; else loading">
+                                {{ card.value }}
+                            </ng-container>
+
+                            <ng-template #loading>
+                                <div class="wave-dots">
+                                    <span>.</span>
+                                    <span>.</span>
+                                    <span>.</span>
+                                </div>
+                            </ng-template>
                             <div class="vital-unit">{{ card.unit }}</div>
                         </div>
                     </div>

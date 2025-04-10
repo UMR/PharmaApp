@@ -14,6 +14,7 @@ import { phoneNumberValidator } from '../../../common/Validator/phonenumber.vali
 })
 export class RegistrationComponent {
 
+
   userRegistrationForm: FormGroup | any;
   currentDate: any;
   loading = false;
@@ -100,4 +101,18 @@ export class RegistrationComponent {
   login() {
     this.router.navigate(['/pharmacy-login']);
   }
+
+  handleKeyDown(event: KeyboardEvent): void {
+    console.log(event.key);
+    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'];
+    if (
+      allowedKeys.includes(event.key) ||
+      (!isNaN(Number(event.key)) && event.key !== ' ')
+    ) {
+      return;
+    } else {
+      event.preventDefault();
+    }
+  }
+
 }
