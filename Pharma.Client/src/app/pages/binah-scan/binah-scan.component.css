@@ -12,6 +12,9 @@
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
 }
 
 .mask-overlay {
@@ -38,6 +41,17 @@
   z-index: 10;
   display: flex;
   align-items: center;
+}
+
+.alert {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .scan-button {

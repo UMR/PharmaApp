@@ -19,7 +19,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
-    "@binah/web-sdk": "./binah-web-sdk-v4.15.1-18.tgz",
+    "@biosensesignal/web-sdk": "./biosensesignal-web-sdk-v5.9.2-1.tgz",
     "@primeng/themes": "^19.0.9",
     "angular-phone-number-input": "^1.0.7",
     "bootstrap": "^5.3.3",

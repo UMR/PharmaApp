@@ -24,6 +24,12 @@
                             <span class="text-light px-1 fw-bold" style="font-size: 1.5rem;">{{ processingTime }}</span>
                             sec
                         </div>
+                        <div class="alert" *ngIf="infoMessage">
+                            <div>
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                <p>{{ infoMessage }}</p>
+                            </div>
+                        </div>
                         <video #videoElement id="video" muted autoplay playsinline></video>
                         <img src="./assets/images/mask.svg" class="mask-overlay" />
                     </div>
@@ -31,7 +37,7 @@
             </div>
 
             <div class="col-md-12">
-                <div style="text-align: center; margin: 20px;">
+                <div style="text-align: center; margin: 20px;" *ngIf="getSessionState() === 1">
                     <button pButton (click)="startMeasuring()" [disabled]="measurementStarted">Start Scan</button>
                 </div>
                 <div style="text-align: center;">
@@ -44,37 +50,47 @@
                             <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
                             <div class="vital-title">{{ card.label }}</div>
                             <div class="vital-value">
-                                <ng-container *ngIf="card.value; else loading">
+                                <ng-container *ngIf="isMeasuring && card.value; else noLoader">
                                     {{ card.value }}
                                 </ng-container>
 
-                                <ng-template #loading>
-                                    <div class="wave-dots">
-                                        <span>.</span>
-                                        <span>.</span>
-                                        <span>.</span>
-                                    </div>
+                                <ng-template #noLoader>
+                                    <ng-container *ngIf="isMeasuring; else empty">
+                                        <div class="wave-dots">
+                                            <span>.</span>
+                                            <span>.</span>
+                                            <span>.</span>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #empty>--</ng-template>
                                 </ng-template>
                             </div>
 
                             <div class="vital-unit">{{ card.unit }}</div>
                         </div>
                     </div>
+
                     <div class="vital-row mt-3">
                         <div class="vital-box" *ngFor="let card of vitalCardsBottom">
                             <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
                             <div class="vital-title">{{ card.label }}</div>
-                            <ng-container *ngIf="card.value; else loading">
-                                {{ card.value }}
-                            </ng-container>
+                            <div class="vital-value">
+                                <ng-container *ngIf="isMeasuring && card.value; else noLoader">
+                                    {{ card.value }}
+                                </ng-container>
 
-                            <ng-template #loading>
-                                <div class="wave-dots">
-                                    <span>.</span>
-                                    <span>.</span>
-                                    <span>.</span>
-                                </div>
-                            </ng-template>
+                                <ng-template #noLoader>
+                                    <ng-container *ngIf="isMeasuring; else empty">
+                                        <div class="wave-dots">
+                                            <span>.</span>
+                                            <span>.</span>
+                                            <span>.</span>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #empty>--</ng-template>
+                                </ng-template>
+                            </div>
+
                             <div class="vital-unit">{{ card.unit }}</div>
                         </div>
                     </div>
