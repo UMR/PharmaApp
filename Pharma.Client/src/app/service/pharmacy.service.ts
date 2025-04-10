@@ -36,7 +36,6 @@ export class PharmacyService {
     const token = user ? user.accessToken : null;
     if (token) {
       let decryptedToken = this.decryptJwtToken(token);
-      console.log(decryptedToken);
       const roles = decryptedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       return roles.includes(requiredRole);
     }

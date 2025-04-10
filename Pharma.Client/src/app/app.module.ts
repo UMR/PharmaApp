@@ -25,6 +25,7 @@ import { errorInterceptor } from './interceptor/error.interceptor';
 import { PayNowComponent } from './pages/customer-panel/pay-now/pay-now.component';
 import { ScanLogComponent } from './pages/pharmacist-dashboard-panel/scan-log/scan-log.component';
 import { DashboardComponent } from './pages/pharmacist-dashboard-panel/dashboard/dashboard.component';
+import { LedgerComponent } from './pages/pharmacist-dashboard-panel/ledger/ledger.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DashboardComponent } from './pages/pharmacist-dashboard-panel/dashboard
     PayNowComponent,
     ScanLogComponent,
     DashboardComponent,
+    LedgerComponent,
 
   ],
   imports: [

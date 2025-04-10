@@ -1,0 +1,78 @@
+<section class="content mt-3">
+    <div class="container-fluid">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <p-card [style]="{background: 'lavender'}">
+                    <p style="font-size:18px">Search Categories</p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p-select [(ngModel)]="selectedLedgerType" [options]="ledgerType" optionLabel="label"
+                                styleClass="select-button" optionValue="value" />
+                        </div>
+                        <div class="col-md-3">
+                            <p-datepicker [(ngModel)]="fromDate" [showIcon]="true" inputId="buttondisplay"
+                                [showOnFocus]="false" styleClass="date-picker" />
+                        </div>
+                        <div class="col-md-3">
+                            <p-datepicker [(ngModel)]="toDate" [showIcon]="true" inputId="buttondisplay"
+                                [showOnFocus]="false" styleClass="date-picker" />
+                        </div>
+                        <div class="col-md-3">
+                            <button pButton (click)="getAllPayment()">Submit</button>
+
+                        </div>
+                    </div>
+
+
+                </p-card>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p-card>
+                    <p-table [value]="ledgerPayment" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]"
+                        [scrollable]="true" scrollHeight="400px" [showCurrentPageReport]="true"
+                        [totalRecords]="totalRecords"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [resizableColumns]="true" columnResizeMode="fit" (onLazyLoad)="loadLedgerPayment($event)"
+                        [lazy]="true">
+                        <ng-template #header>
+                            <tr>
+                                <th>
+                                    Package Name
+                                </th>
+                                <th>
+                                    Package Price
+                                </th>
+                                <th>
+                                    Package Commission
+                                </th>
+                                <th>
+                                    Package Profit
+                                </th>
+                                <th pSortableColumn="createdDate">
+                                    Created Date
+                                    <p-sortIcon field="createdDate" />
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-payment>
+                            <tr>
+
+                                <td>{{ payment.packageName }}</td>
+                                <td style="text-align: right;">{{ payment.packagePrice | currency:
+                                    payment.packageCurrency }}</td>
+                                <td>{{ payment.packageCommission }}</td>
+                                <td style="text-align: right;">{{ payment.profit | currency: payment.packageCurrency }}
+                                </td>
+                                <td>{{ payment.createdDate | date }}</td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+
+                </p-card>
+            </div>
+        </div>
+    </div>
+</section>

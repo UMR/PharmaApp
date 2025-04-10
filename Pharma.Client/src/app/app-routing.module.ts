@@ -15,6 +15,7 @@ import { RoleType } from './common/model/role.model';
 import { roleGuard } from './guards/role.guard';
 import { ScanLogComponent } from './pages/pharmacist-dashboard-panel/scan-log/scan-log.component';
 import { DashboardComponent } from './pages/pharmacist-dashboard-panel/dashboard/dashboard.component';
+import { LedgerComponent } from './pages/pharmacist-dashboard-panel/ledger/ledger.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,14 @@ const routes: Routes = [
           roles: [RoleType.PHARMACIST]
         }
 
+      },
+      {
+        path: 'ledger',
+        component: LedgerComponent,
+        canActivate: [AuthGuard, roleGuard],
+        data: {
+          roles: [RoleType.PHARMACIST]
+        }
       },
       {
         path: 'scan-log',
@@ -76,7 +85,6 @@ const routes: Routes = [
   {
     path: 'pay-now',
     component: PayNowComponent,
-
   },
 
   {

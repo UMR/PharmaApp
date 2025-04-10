@@ -30,7 +30,7 @@ export class SidebarComponent {
       name: 'Dashboard',
       icon: 'fa fa-home',
       routerLink: '/',
-      roles: [],
+      roles: [RoleType.PHARMACIST, RoleType.ADMIN],
     },
     {
       number: '2',
@@ -54,21 +54,31 @@ export class SidebarComponent {
       roles: [RoleType.PHARMACIST],
     },
     {
+      number: '5',
+      name: 'Ledger',
+      icon: 'fa fa-dollar',
+      routerLink: '/ledger',
+      roles: [RoleType.PHARMACIST],
+    },
+    {
       number: '20',
       name: 'Log Out',
       icon: 'fa fa-sign-out',
       routerLink: null,
-      roles: [],
+      roles: [RoleType.PHARMACIST, RoleType.ADMIN],
     },
 
   ];
 
   ngOnInit(): void {
-    this.filteredMenu = this.menu;
+    const userRoles = this.getUserRoles();
+    this.filteredMenu = this.menu.filter((item) =>
+      item.roles.some((role) => userRoles.includes(role))
+    );
   }
 
   getUserRoles(): string[] {
-    return [''];
+    return this.authService.getRoles();
   }
 
 

@@ -1,0 +1,6 @@
+::ng-deep .select-button {
+  width: 100%;
+}
+::ng-deep .date-picker {
+  width: 100%;
+}
