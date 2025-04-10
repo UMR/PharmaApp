@@ -59,6 +59,7 @@ export class BinahScanComponent implements OnInit {
 
   vitalCardsTop: any[] = [];
   vitalCardsBottom: any[] = [];
+  hasFinalResults: boolean = false;
 
   constructor(
     private monitorService: MonitorService,
@@ -84,6 +85,7 @@ export class BinahScanComponent implements OnInit {
 
   async initializeMonitor(licenseKey: string): Promise<void> {
     try {
+
       await monitor.initialize({ licenseKey });
       const options: FaceSessionOptions = {
         input: this.videoElement.nativeElement,
@@ -148,8 +150,8 @@ export class BinahScanComponent implements OnInit {
 
   private onFinalResults(results: VitalSignsResults): void {
     this.vitalSigns$.next(null);
+    this.hasFinalResults = true;
     this.updateVitalSigns(results.results);
-    this.stopMeasuring();
   }
 
   private onError(error: AlertData): void {
