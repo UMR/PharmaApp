@@ -38,9 +38,9 @@ public class UserController : ControllerBase
 
     [Authorize(Policy = RoleConstant.Pharmacist)]
     [HttpGet("Get")]
-    public IActionResult Get()
+    public async Task<IActionResult> GetAsync()
     {
-        var userInfo = _currentUserService.User;
+        var userInfo = await _userService.GetByIdAsync(_currentUserService.UserId);
         return Ok(userInfo);
     }
 

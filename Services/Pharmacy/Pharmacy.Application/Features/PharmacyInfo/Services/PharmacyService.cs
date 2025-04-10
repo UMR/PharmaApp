@@ -83,9 +83,9 @@ public class PharmacyService : IPharmacyService
 
         var pharmacy = new Domain.Pharmacy();
         pharmacy.OwnerId = _currentUserService.UserId;
-        pharmacy.StoreName = request.StoreName;
-        pharmacy.AddressLine1 = request.AddressLine1;
-        pharmacy.AddressLine2 = request.AddressLine2;
+        pharmacy.StoreName = request.StoreName.Trim();
+        pharmacy.AddressLine1 = request.AddressLine1.Trim();
+        pharmacy.AddressLine2 = request.AddressLine2?.Trim();
 
         pharmacy.CreatedBy = _currentUserService.UserId;
         pharmacy.CreatedDate = DateTime.UtcNow;
@@ -120,9 +120,9 @@ public class PharmacyService : IPharmacyService
             filename = await UploadStoreLogoAsync(request.StoreLogo);
         }
 
-        pharmacy.StoreName = request.StoreName;
-        pharmacy.AddressLine1 = request.AddressLine1;
-        pharmacy.AddressLine2 = request.AddressLine2;
+        pharmacy.StoreName = request.StoreName.Trim();
+        pharmacy.AddressLine1 = request.AddressLine1.Trim();
+        pharmacy.AddressLine2 = request.AddressLine2.Trim();
 
         pharmacy.UpdatedDate = DateTime.UtcNow;
         pharmacy.UpdatedBy = _currentUserService.UserId;

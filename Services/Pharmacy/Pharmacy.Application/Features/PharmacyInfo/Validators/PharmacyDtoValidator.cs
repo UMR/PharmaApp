@@ -6,7 +6,6 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Validators
 {
     public class PharmacyDtoValidator : AbstractValidator<PharmacyDto>
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IPharmacyRepository _pharmacyRepository;
 
         public PharmacyDtoValidator(IServiceProvider serviceProvider)
@@ -37,11 +36,15 @@ namespace Pharmacy.Application.Features.PharmacyInfo.Validators
                 .SetValidator(new PharmacyLogoValidator())
                 .When(p => p.StoreLogo != null);
 
-            RuleFor(p => p.Id)
+            When(p =>  p.Id != Guid.Empty, () =>
+            {
+                RuleFor(p => p.Id)
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required")
                 .MustAsync(IsPharmacyAvailable).When(x => x.Id.HasValue)
                 .WithMessage("Pharmacy with the specified {PropertyName} does not exist.");
+
+            });
         }
 
         private async Task<bool> IsPharmacyAvailable(Guid? pharmacyId, CancellationToken cancellationToken)
