@@ -8,5 +8,6 @@ namespace Pharmacy.Application.Features.User.Services
         Task<bool> IsActiveAsync(Guid id);
         Task<UserInfoDto> GetByIdAsync(Guid id);
         Task UpdateAsync(Guid id, UserUpdateDto request);
+        ValueTask<bool> IsExistAsync(string loginId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Pharmacy.Application.Contracts.Persistence;
 using Pharmacy.Application.Features.TransactionDetails.Dtos;
 using Pharmacy.Application.Wrapper;
@@ -35,10 +36,33 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize)
     {
-        var paymentDetails = _context.PaymentDetails.Where(p =>
-            (p.CreatedDate).Date >= utcFromDate.Date && p.CreatedDate.Date <= utcToDate)
+        var paymentDetails = _context.PaymentDetails.AsNoTracking().Where(p =>
+            (p.CreatedDate).Date >= utcFromDate.Date && p.CreatedDate.Date <= utcToDate.Date)
             .Include(p => p.Package);
 
+        
+        var response = await GetTransactionDetailsResponse(paymentDetails, pageIndex, pageSize);
+
+        return response;
+    }
+
+    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize)
+    {
+        var paymentDetails = _context.PaymentDetails.AsNoTracking().Where(p =>
+            (p.CreatedDate).Month >= utcFromDate.Month && p.CreatedDate.Month <= utcToDate.Month)
+            .Include(p => p.Package);
+
+        var response = await GetTransactionDetailsResponse(paymentDetails, pageIndex, pageSize);
+        
+        return response;
+    }
+
+    #endregion
+
+    #region Private
+
+    private async Task<PaginatedList<TransactionDetailsResponseDto>> GetTransactionDetailsResponse(IIncludableQueryable<PaymentDetail, Package> paymentDetails, int pageIndex, int pageSize)
+    {
         var totalProfit = await paymentDetails.SumAsync(p => (p.PackagePrice * p.PackageCommissionInPercent) / 100);
         var totalPackagePrice = await paymentDetails.SumAsync(p => p.PackagePrice);
         var totalScan = await paymentDetails.CountAsync();

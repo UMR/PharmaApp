@@ -41,7 +41,19 @@ public class TransactionDetailsService: ITransactionDetailsService
         return result;
     }
 
-    #endregion
+    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyTransactionDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize)
+    {
+        if (pageIndex <= 0) pageIndex = 0;
+        if (pageSize <= 0) pageSize = 10;
+        if (fromDate == DateTimeOffset.MinValue) fromDate = DateTimeOffset.UtcNow;
+        if(toDate == DateTimeOffset.MinValue) toDate = DateTimeOffset.UtcNow;
 
+        var pharmayc = await _pharmacyService.GetAsync();
+        var result = await _paymentRepository.GetMonthlyPaymentDetailsAsync(pharmayc.Id, fromDate.ToUniversalTime(), toDate.ToUniversalTime(), pageIndex, pageSize);
+
+        return result;
+    }
+
+    #endregion
 }
 

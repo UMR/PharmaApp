@@ -44,5 +44,17 @@ public class UserController : ControllerBase
         return Ok(userInfo);
     }
 
+    [HttpGet("IsExist")]
+    [AllowAnonymous]
+    public async Task<IActionResult> IsExist(string loginId)
+    {
+        var result = await _userService.IsExistAsync(loginId);
+        return Ok(new {
+            LoginId = loginId,
+            Status = result,
+            Message = result? "User Login ID is Exist" : "User Login ID does not Exist",
+        });
+    }
+
     #endregion
 }
