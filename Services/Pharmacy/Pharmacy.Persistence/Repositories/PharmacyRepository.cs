@@ -30,12 +30,12 @@ namespace Pharmacy.Persistence.Repositories
 
         public async Task<Domain.Pharmacy?> GetByIdAsync(Guid pharmacyId)
         {
-            return await _context.Pharmacies.Where(p => p.Id == pharmacyId).FirstOrDefaultAsync();
+            return await _context.Pharmacies.AsNoTracking().Where(p => p.Id == pharmacyId).FirstOrDefaultAsync();
         }
 
         public async Task<Domain.Pharmacy> GetPharmacyByUserIdAsync(Guid userId)
         {
-            var result = await _context.Pharmacies.Where(p => p.OwnerId == userId).FirstOrDefaultAsync();
+            var result = await _context.Pharmacies.AsNoTracking().Where(p => p.OwnerId == userId).FirstOrDefaultAsync();
 
             return result;
         }

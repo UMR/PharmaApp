@@ -41,7 +41,7 @@ namespace Pharmacy.Persistence.Repositories
 
         public async Task<User> GetByIdAsync(Guid id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
             return user;
         }
 

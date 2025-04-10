@@ -36,7 +36,7 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize)
     {
-        var paymentDetails = _context.PaymentDetails.Where(p =>
+        var paymentDetails = _context.PaymentDetails.AsNoTracking().Where(p =>
             (p.CreatedDate).Date >= utcFromDate.Date && p.CreatedDate.Date <= utcToDate.Date)
             .Include(p => p.Package);
 
@@ -48,7 +48,7 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize)
     {
-        var paymentDetails = _context.PaymentDetails.Where(p =>
+        var paymentDetails = _context.PaymentDetails.AsNoTracking().Where(p =>
             (p.CreatedDate).Month >= utcFromDate.Month && p.CreatedDate.Month <= utcToDate.Month)
             .Include(p => p.Package);
 

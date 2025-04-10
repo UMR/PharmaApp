@@ -25,14 +25,14 @@ public class PackageRepository: IPackageRepository
     
     public async Task<Package>GetAsync()
     {
-        var result = await _context.Packages.OrderByDescending(p => p.CreatedDate).FirstOrDefaultAsync();
+        var result = await _context.Packages.AsNoTracking().OrderByDescending(p => p.CreatedDate).FirstOrDefaultAsync();
 
         return result;
     }
 
     public async Task<Package> GetAsync(Guid packageId)
     {
-        var result = await _context.Packages.Where(p => p.Id == packageId).FirstOrDefaultAsync();
+        var result = await _context.Packages.AsNoTracking().Where(p => p.Id == packageId).FirstOrDefaultAsync();
 
         return result;
     }

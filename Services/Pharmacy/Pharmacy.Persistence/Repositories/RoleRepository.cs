@@ -21,7 +21,7 @@ namespace Pharmacy.Persistence.Repositories
 
         public async Task<Role> GetByIdAsync(Guid id)
         {
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == id);
+            var role = await _context.Roles.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
             return role;
         }
 
@@ -33,7 +33,7 @@ namespace Pharmacy.Persistence.Repositories
 
         public async Task<List<string>> GetRolesByUserAsync(User user)
         {
-            var userRoles = await _context.UserRoles
+            var userRoles = await _context.UserRoles.AsNoTracking()
             .Where(ur => ur.UserId == user.Id)
             .Select(ur => ur.Role.Name)
             .ToListAsync();
@@ -43,7 +43,7 @@ namespace Pharmacy.Persistence.Repositories
 
         public async Task<List<string>> GetRolesByUserIdAsync(Guid id)
         {
-            var userRoles = await _context.UserRoles
+            var userRoles = await _context.UserRoles.AsNoTracking()
             .Where(ur => ur.UserId == id)
             .Select(ur => ur.Role.Name)
             .ToListAsync();
