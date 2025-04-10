@@ -22,12 +22,16 @@ namespace Pharmacy.Application.Features.Customer.Validators
                 .MinimumLength(3)
                 .WithMessage("{PropertyName} must be at least 3 characters");
 
-            RuleFor(c => c.LastName)
+            When(c => !string.IsNullOrEmpty(c.FirstName), () =>
+            {
+                RuleFor(c => c.LastName)
                 .MaximumLength(50)
                 .WithMessage("{PropertyName} must not exceed 50 characters")
                 .MinimumLength(3)
                 .WithMessage("{PropertyName} must be at least 3 characters");
 
+            });
+            
             RuleFor(c => c.Mobile)
                             .NotEmpty()
                             .WithMessage("{PropertyName} is required")
@@ -36,13 +40,18 @@ namespace Pharmacy.Application.Features.Customer.Validators
                             .Must(BeAValidMobile)
                             .WithMessage("{PropertyName} must be a valid mobile number");
 
-            RuleFor(c => c.Email)
+            When(c => !string.IsNullOrEmpty(c.Email), () =>
+            {
+                RuleFor(c => c.Email)
                 .Matches(RegexConstant.Email)
                 .When(c => !string.IsNullOrEmpty(c.Email))
                 .WithMessage("{PropertyName} is not a valid email address")
                 .MaximumLength(100)
                 .WithMessage("{PropertyName} must not exceed 100 characters");
 
+            });
+
+            
             RuleFor(c => c.Age)
                 .NotEmpty()
                 .WithMessage("{PropertyName} can not be empty")

@@ -96,10 +96,10 @@ public class CustomerService : ICustomerService
         var customer = new Domain.Customer();
 
         customer.Id = Guid.NewGuid();
-        customer.FirstName = customerInfo.FirstName;
-        customer.LastName = customerInfo.LastName;
-        customer.Email = customerInfo.Email;
-        customer.Mobile = customerInfo.Mobile;
+        customer.FirstName = customerInfo.FirstName.Trim();
+        customer.LastName = customerInfo.LastName?.Trim();
+        customer.Email = customerInfo.Email?.Trim();
+        customer.Mobile = customerInfo.Mobile!.Trim();
         customer.Age = customerInfo.Age;
         customer.Weight = customerInfo.Weight;
         customer.CreatedBy = customer.Id;
