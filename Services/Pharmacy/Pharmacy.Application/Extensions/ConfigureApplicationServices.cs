@@ -8,6 +8,7 @@ using Pharmacy.Application.Features.PackageFeature.Services;
 using Pharmacy.Application.Features.Payment.Services;
 using Pharmacy.Application.Features.PharmacyInfo.Services;
 using Pharmacy.Application.Features.PharmacyUrls.Services;
+using Pharmacy.Application.Features.TransactionDetails.Services;
 using Pharmacy.Application.Features.User.Services;
 using Pharmacy.Application.Features.UserLogs.Services;
 using Pharmacy.Application.Mappings;
@@ -30,6 +31,7 @@ namespace Pharmacy.Application.Extensions
             builder.Services.AddScoped<ICustomerPharmacyService, CustomerPharmacyService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IPackageService, PackageService>();
+            builder.Services.AddScoped<ITransactionDetailsService, TransactionDetailsService>();
             
             return builder;
         }
