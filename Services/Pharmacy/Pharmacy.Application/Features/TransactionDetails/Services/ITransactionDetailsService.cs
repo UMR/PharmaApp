@@ -8,5 +8,8 @@ public interface ITransactionDetailsService
 
     Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyTransactionDetailsAsync(DateTimeOffset fromDate,
         DateTimeOffset toDate, int pageIndex, int pageSize);
+
+    Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyTransactionDetailsAsync(DateTimeOffset fromDate,
+        DateTimeOffset toDate, int pageIndex, int pageSize);
 }
 

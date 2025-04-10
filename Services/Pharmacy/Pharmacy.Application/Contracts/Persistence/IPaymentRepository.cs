@@ -11,4 +11,6 @@ public interface IPaymentRepository
     Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyPaymentDetailsAsync(Guid pharmacyId,
         DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize);
 
+    Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyPaymentDetailsAsync(Guid pharmacyId,
+        DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize);
 }
