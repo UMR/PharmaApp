@@ -1,4 +1,6 @@
-﻿using Pharmacy.Application.Features.TransactionDetails.Services;
+﻿using Newtonsoft.Json;
+using Pharmacy.Application.Features.TransactionDetails.Dtos;
+using Pharmacy.Application.Features.TransactionDetails.Services;
 
 namespace Pharmacy.Api.Controllers.V1;
 
@@ -25,18 +27,20 @@ public class TransactionDetailsController : ControllerBase
     
     [HttpGet("daily/{fromDate}/{toDate}")]
     [Authorize(Policy = RoleConstant.Pharmacist)]
-    public async Task<IActionResult> GetDailyTranDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize)
+    public async Task<IActionResult> GetDailyTranDetailsAsync([FromRoute] DateTimeOffset fromDate, [FromRoute] DateTimeOffset toDate, [FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string filters)
     {
-        var result = await _transactionDetailsService.GetDailyTransactionDetailsAsync(fromDate, toDate, pageIndex, pageSize);
+        var filterRequest = JsonConvert.DeserializeObject<TransactionDetailsFiltersDto>(filters ?? "") ?? new TransactionDetailsFiltersDto();
+        var result = await _transactionDetailsService.GetDailyTransactionDetailsAsync(fromDate, toDate, pageIndex, pageSize, filterRequest);
 
         return Ok(result);
     }
 
     [HttpGet("monthly/{fromDate}/{toDate}")]
     [Authorize(Policy = RoleConstant.Pharmacist)]
-    public async Task<IActionResult> GetMonthlyTranDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize)
+    public async Task<IActionResult> GetMonthlyTranDetailsAsync([FromRoute] DateTimeOffset fromDate, [FromRoute] DateTimeOffset toDate, [FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string filters)
     {
-        var result = await _transactionDetailsService.GetMonthlyTransactionDetailsAsync(fromDate, toDate, pageIndex, pageSize);
+        var filterRequest = JsonConvert.DeserializeObject<TransactionDetailsFiltersDto>(filters ?? "") ?? new TransactionDetailsFiltersDto();
+        var result = await _transactionDetailsService.GetMonthlyTransactionDetailsAsync(fromDate, toDate, pageIndex, pageSize, filterRequest);
 
         return Ok(result);
     }
