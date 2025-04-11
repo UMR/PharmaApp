@@ -51,18 +51,26 @@ export class LedgerComponent implements OnInit {
   getAllPayment() {
     const pageNumber = (this.first / this.rows) + 1;
     const pageSize = this.rows;
-    const selectedLedgerType = "daily";
-    this.ledgerService.getTransactionDetails(this.fromDate.toISOString(), this.toDate.toISOString(), pageNumber.toString(), pageSize.toString(), selectedLedgerType).subscribe({
-      next: (res: any) => {
-        this.ledgerPayment = res.body.items;
-        this.totalRecords = res.body.totalCount;
-        console.log(res.body);
-      },
-      error: () => {
-        console.log("error");
-      }
-    })
+    if (this.selectedLedgerType === 'daily') {
+      this.ledgerService.getTransactionDetails(
+        this.fromDate.toISOString(),
+        this.toDate.toISOString(),
+        pageNumber.toString(),
+        pageSize.toString(),
+        this.selectedLedgerType
+      ).subscribe({
+        next: (res: any) => {
+          this.ledgerPayment = res.body.items;
+          this.totalRecords = res.body.totalCount;
+          console.log(this.ledgerPayment.length, res.body);
+        },
+        error: () => {
+          console.log("error");
+        }
+      });
+    }
   }
+
 }
 
 

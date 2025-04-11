@@ -11,7 +11,7 @@ export class LedgerService {
   apiUrl: string = environment.apiUrl;
 
   getTransactionDetails(fromDate: string, toDate: string, pageIndex: string, pageSize: string, ledgerType: string) {
-    const URI = `${this.apiUrl}/TransactionDetails/${ledgerType}/${fromDate}/${toDate}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const URI = `${this.apiUrl}/v1/TransactionDetails/${ledgerType}/${fromDate}/${toDate}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
     return this.http.get(URI, { observe: 'response' });
   }
 }
