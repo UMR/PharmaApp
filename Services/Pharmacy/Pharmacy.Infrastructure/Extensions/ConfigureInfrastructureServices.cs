@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Infrastructure.EmailClient;
+using Pharmacy.Infrastructure.EncryptionServices;
 using Pharmacy.Infrastructure.Identity;
 using Pharmacy.Infrastructure.Otp;
 using Pharmacy.Infrastructure.Payment.Razorpay;
@@ -24,6 +25,7 @@ public static class ConfigureInfrastructureServices
         builder.Services.AddScoped<ISMSService, SMSService>();
         builder.Services.AddSingleton<IUniqueIdService, UniqueIdService>();
         builder.Services.AddScoped<IRazorpayGatewayService, RazorpayGatewayService>();
+        builder.Services.AddScoped<ITokenGenerationService, TokenGenerationService>();
 
         return builder;
     }
