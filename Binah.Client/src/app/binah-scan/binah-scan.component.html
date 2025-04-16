@@ -1,0 +1,105 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center text-center mt-2">
+                <div class="monitor-wrapper position-relative">
+                    <div class="video-mask-container">
+                        <div class="session-state" *ngIf="getSessionState() === 1">
+                            <button type="button" pButton>
+                                <span class="flashing-light"></span>
+                                Active
+                            </button>
+                        </div>
+                        <div class="session-state" *ngIf="getSessionState() === 2">
+                            <button type="button" pButton>
+                                <span class="measuring-icon">
+                                    <span class="tick"></span>
+                                    <span class="tick"></span>
+                                    <span class="tick"></span>
+                                    <span class="tick"></span>
+                                    <span class="tick"></span>
+                                </span>
+                                Measuring
+                            </button>
+                        </div>
+
+                        <div class="timer" *ngIf="processingTime && processingTime > 0">
+                            <i class="fa fa-clock-o" style="font-size: 1.5rem;"></i>
+                            <span class="text-light px-1 fw-bold" style="font-size: 1.5rem;">{{ processingTime }}</span>
+                            sec
+                        </div>
+                        <div class="alert" *ngIf="infoMessage">
+                            <div>
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                <p>{{ infoMessage }}</p>
+                            </div>
+                        </div>
+                        <video #videoElement id="video" muted autoplay playsinline></video>
+                        <img src="./assets/images/mask.svg" class="mask-overlay" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div style="text-align: center; margin: 20px;" *ngIf="getSessionState() === 1">
+                    <button pButton (click)="startMeasuring()" [disabled]="measurementStarted">Start Scan</button>
+                </div>
+                <div style="text-align: center;">
+                    <p style="font-weight: bold; color: red; padding: 10px;">Scanned Vital Chart</p>
+                </div>
+
+                <div class="vital-bar" *ngIf="vitalSigns$ | async as vitals">
+                    <div class="vital-row">
+                        <div class="vital-box" *ngFor="let card of vitalCardsTop">
+                            <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
+                            <div class="vital-title">{{ card.label }}</div>
+                            <div class="vital-value">
+                                <ng-container *ngIf="isMeasuring && card.value && !hasFinalResults; else noLoader">
+                                    {{ card.value }}
+                                </ng-container>
+
+                                <ng-template #noLoader>
+                                    <ng-container *ngIf="isMeasuring && !hasFinalResults; else empty">
+                                        <div class="wave-dots">
+                                            <span>.</span>
+                                            <span>.</span>
+                                            <span>.</span>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #empty>{{ card.value || '--' }}</ng-template>
+                                </ng-template>
+                            </div>
+                            <div class="vital-unit">{{ card.unit }}</div>
+                        </div>
+                    </div>
+
+                    <div class="vital-row mt-3">
+                        <div class="vital-box" *ngFor="let card of vitalCardsBottom">
+                            <div class="vital-icon"><i [ngClass]="card.icon"></i></div>
+                            <div class="vital-title">{{ card.label }}</div>
+                            <div class="vital-value">
+                                <ng-container *ngIf="isMeasuring && card.value && !hasFinalResults; else noLoader">
+                                    {{ card.value }}
+                                </ng-container>
+
+                                <ng-template #noLoader>
+                                    <ng-container *ngIf="isMeasuring && !hasFinalResults; else empty">
+                                        <div class="wave-dots">
+                                            <span>.</span>
+                                            <span>.</span>
+                                            <span>.</span>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #empty>{{ card.value || '--' }}</ng-template>
+                                </ng-template>
+                            </div>
+                            <div class="vital-unit">{{ card.unit }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<p-confirmdialog />

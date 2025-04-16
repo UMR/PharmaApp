@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharmacy.Persistence", "Ser
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Pharmacy.Database", "Services\Pharmacy\Pharmacy.Database\Pharmacy.Database.sqlproj", "{B3EBBA09-3FBC-47AD-B05A-1C6531029E49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pharma.Client", "Pharma.Client\Pharma.Client.csproj", "{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pharma.Client", "Pharma.Client\Pharma.Client.csproj", "{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binah.Client", "Binah.Client\Binah.Client.csproj", "{401B9EBD-623D-47C5-8332-8CDACEC98594}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86877E4C-F3F7-4BA1-B7CA-1B602D72D8DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{401B9EBD-623D-47C5-8332-8CDACEC98594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{401B9EBD-623D-47C5-8332-8CDACEC98594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{401B9EBD-623D-47C5-8332-8CDACEC98594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{401B9EBD-623D-47C5-8332-8CDACEC98594}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
