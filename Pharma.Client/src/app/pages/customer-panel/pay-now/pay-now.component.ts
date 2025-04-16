@@ -113,7 +113,7 @@ export class PayNowComponent implements OnInit {
               this.toastService.showSuccess("success", 'Payment successful. Redirecting to the scan page.');
               this.displayModal = false;
               setTimeout(() => {
-                window.location.href = localAppUrl + `/?pharmacy=${this.user.pharmacyId}&customer=${this.user.id}&token=${res.body.token}`;
+                window.location.href = localAppUrl + `/?pharmacy=${this.user.pharmacyId}&customer=${this.user.id}&token=${encodeURIComponent(res.body.token)}`;
               }, 1000)
             } else {
               this.toastService.showError("Error", "Unable to verify payment information")
