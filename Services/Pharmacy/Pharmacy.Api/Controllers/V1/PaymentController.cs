@@ -58,7 +58,7 @@ public class PaymentController : ControllerBase
 
         string token = await _tokenGenerationService.GenerateTokenAsync(paymentInfoDto.PharmacyId, paymentInfoDto.CustomerId);
 
-        return Ok( new
+        return Ok(new
         {
             token = token
         });
@@ -71,7 +71,7 @@ public class PaymentController : ControllerBase
         return Ok(_razorpayGatewayService.GetKey());
     }
 
-    [HttpGet("VerityToken/{pharmacyId}/{customerId}")]
+    [HttpGet("VerifyToken/{pharmacyId}/{customerId}")]
     [AllowAnonymous]
     public async Task<IActionResult> VerifyTokenAsync([FromRoute] Guid pharmacyId, [FromRoute] Guid customerId, [FromQuery] string token)
     {
