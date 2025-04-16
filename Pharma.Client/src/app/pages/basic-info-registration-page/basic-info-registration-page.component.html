@@ -59,10 +59,10 @@
                     </angular-phone-number-input>
                 </p-floatlabel>
                 @if(submitted && f.mobile.errors){
-                @if(f.mobile.errors.required){
+                @if(f.mobile.errors?.required){
                 <p-message severity="error" variant="simple" size="small">Phone number is required!</p-message>
                 }
-                @if(submitted && f.mobile.errors?.invalidPhoneNumber){
+                @if(f.mobile.errors?.invalidPhoneNumber){
                 <p-message severity="error" variant="simple" size="small">Phone number is Invalid!</p-message>
                 }
                 }

@@ -66,6 +66,8 @@ export class PayNowComponent implements OnInit {
     });
   }
   payNow() {
+    debugger;
+    this.displayModal = false;
     this.createOrder()
 
   }
@@ -99,6 +101,7 @@ export class PayNowComponent implements OnInit {
         color: '#660033'
       },
       handler: (response: any) => {
+
         var request = {
           orderId: response.razorpay_order_id,
           paymentId: response.razorpay_payment_id,
@@ -111,9 +114,12 @@ export class PayNowComponent implements OnInit {
           next: (res: any) => {
             if (res.status === 200) {
               this.toastService.showSuccess("success", 'Payment successful. Redirecting to the scan page.');
-              this.displayModal = false;
+              document.cookie = `pharmacy=${this.user.pharmacyId}`
+              document.cookie = `customer=${this.user.id}`;
+              document.cookie = `token=${res.body.token}`;
+
               setTimeout(() => {
-                window.location.href = localAppUrl + `/?pharmacy=${this.user.pharmacyId}&customer=${this.user.id}&token=${encodeURIComponent(res.body.token)}`;
+                window.location.href = localAppUrl;
               }, 1000)
             } else {
               this.toastService.showError("Error", "Unable to verify payment information")

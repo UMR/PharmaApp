@@ -4,7 +4,7 @@
             <div class="col-md-12 d-flex justify-content-center text-center mt-2">
                 <div class="monitor-wrapper position-relative">
                     <div class="video-mask-container">
-                        <div class="session-state" *ngIf="getSessionState() === 1">
+                        <div class="session-state" *ngIf="getSessionState() === 1 ; else empty">
                             <button type="button" pButton>
                                 <span class="flashing-light"></span>
                                 Active
@@ -22,10 +22,17 @@
                                 Measuring
                             </button>
                         </div>
+                        <ng-template #empty>
+                            <button type="button" pButton class="btn btn-danger">
+                                <span class="inactive-light"></span>
+                                Inactive
+                            </button>
+                        </ng-template>
 
                         <div class="timer" *ngIf="processingTime && processingTime > 0">
                             <i class="fa fa-clock-o" style="font-size: 1.5rem;"></i>
-                            <span class="text-light px-1 fw-bold" style="font-size: 1.5rem;">{{ processingTime }}</span>
+                            <span class="text-light px-1 fw-bold" style="font-size: 1.5rem;">{{ processingTime
+                                }}</span>
                             sec
                         </div>
                         <div class="alert" *ngIf="infoMessage">

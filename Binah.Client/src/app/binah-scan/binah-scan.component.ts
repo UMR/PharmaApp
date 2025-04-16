@@ -65,9 +65,9 @@ export class BinahScanComponent implements OnInit {
   vitalCardsTop: any[] = [];
   vitalCardsBottom: any[] = [];
   hasFinalResults: boolean = false;
-  token: string = '';
-  pharmacyId: string = '';
-  customerId: string = '';
+  token: any;
+  pharmacyId: any;
+  customerId: any;
 
   constructor(
     private monitorService: MonitorService,
@@ -83,12 +83,9 @@ export class BinahScanComponent implements OnInit {
   }
 
   async verifyUser() {
-    this.route.queryParams.subscribe((params) => {
-      this.token = params['token'];
-      console.log(this.token);
-      this.pharmacyId = params['pharmacy'];
-      this.customerId = params['customer'];
-    });
+    this.token = this.getCookieValue('token') || null;
+    this.pharmacyId = this.getCookieValue('pharmacy') || null;
+    this.customerId = this.getCookieValue('customer') || null;
     if (!this.token && !this.pharmacyId && !this.customerId) {
       this.toastService.showError('Error', 'Token, Pharmacy ID, and Customer ID are required.');
       return;
@@ -108,7 +105,7 @@ export class BinahScanComponent implements OnInit {
             header: 'Confirmation',
             icon: 'fa fa-exclamation-circle',
             accept: () => {
-              
+
             },
             reject: () => {
               window.location.href = 'https://umrtest.com/pharmacyPortal/pay-now';
@@ -120,6 +117,16 @@ export class BinahScanComponent implements OnInit {
       );
     }
 
+  }
+  getCookieValue(key: string) {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      const [k, ...v] = cookie.trim().split('=');
+      if (k === key) {
+        return v.join('=');
+      }
+    }
+    return null;
   }
 
   async startScan() {
