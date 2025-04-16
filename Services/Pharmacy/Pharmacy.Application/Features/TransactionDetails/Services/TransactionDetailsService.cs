@@ -28,7 +28,7 @@ public class TransactionDetailsService: ITransactionDetailsService
 
     #region Methods
 
-    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyTransactionDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize)
+    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyTransactionDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize, TransactionDetailsFiltersDto filters)
     {
         if (pageIndex <= 0) pageIndex = 0;
         if (pageSize <= 0) pageSize = 10;
@@ -36,12 +36,12 @@ public class TransactionDetailsService: ITransactionDetailsService
         if(toDate == DateTimeOffset.MinValue) toDate = DateTimeOffset.UtcNow;
 
         var pharmayc = await _pharmacyService.GetAsync();
-        var result = await _paymentRepository.GetDailyPaymentDetailsAsync(pharmayc.Id, fromDate.ToUniversalTime(), toDate.ToUniversalTime(), pageIndex, pageSize);
+        var result = await _paymentRepository.GetDailyPaymentDetailsAsync(pharmayc.Id, fromDate.ToUniversalTime(), toDate.ToUniversalTime(), pageIndex, pageSize, filters);
 
         return result;
     }
 
-    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyTransactionDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize)
+    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyTransactionDetailsAsync(DateTimeOffset fromDate, DateTimeOffset toDate, int pageIndex, int pageSize, TransactionDetailsFiltersDto filters)
     {
         if (pageIndex <= 0) pageIndex = 0;
         if (pageSize <= 0) pageSize = 10;
@@ -49,7 +49,7 @@ public class TransactionDetailsService: ITransactionDetailsService
         if(toDate == DateTimeOffset.MinValue) toDate = DateTimeOffset.UtcNow;
 
         var pharmayc = await _pharmacyService.GetAsync();
-        var result = await _paymentRepository.GetMonthlyPaymentDetailsAsync(pharmayc.Id, fromDate.ToUniversalTime(), toDate.ToUniversalTime(), pageIndex, pageSize);
+        var result = await _paymentRepository.GetMonthlyPaymentDetailsAsync(pharmayc.Id, fromDate.ToUniversalTime(), toDate.ToUniversalTime(), pageIndex, pageSize, filters);
 
         return result;
     }

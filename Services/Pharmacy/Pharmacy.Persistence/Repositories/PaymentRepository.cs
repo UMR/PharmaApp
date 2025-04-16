@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Pharmacy.Application.Contracts.Persistence;
+using Pharmacy.Application.Features.PharmacyInfo.Dtos;
 using Pharmacy.Application.Features.TransactionDetails.Dtos;
 using Pharmacy.Application.Wrapper;
 using Pharmacy.Domain;
@@ -34,25 +35,48 @@ public class PaymentRepository : IPaymentRepository
         return result > 0;
     }
 
-    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize)
+    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize, TransactionDetailsFiltersDto filters)
     {
         var paymentDetails = _context.PaymentDetails.AsNoTracking().Where(p =>
-            (p.CreatedDate).Date >= utcFromDate.Date && p.CreatedDate.Date <= utcToDate.Date)
-            .Include(p => p.Package);
+            (p.CreatedDate).Date >= utcFromDate.Date && p.CreatedDate.Date <= utcToDate.Date);
 
-        
-        var response = await GetTransactionDetailsResponse(paymentDetails, pageIndex, pageSize);
+        IOrderedQueryable<PaymentDetail> orderedPaymentDetails = null;
+
+        if (filters.CreatedDate.Equals("ASC", StringComparison.OrdinalIgnoreCase))
+        {
+            orderedPaymentDetails = paymentDetails.OrderBy(p => p.CreatedDate);
+        }
+        else
+        {
+            orderedPaymentDetails = paymentDetails.OrderByDescending(p => p.CreatedDate);
+        }
+       
+      
+        var response = await GetTransactionDetailsResponse(orderedPaymentDetails.Include(p => p.Package), pageIndex, pageSize);
 
         return response;
     }
 
-    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize)
+    public async Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyPaymentDetailsAsync(Guid pharmacyId, DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize, TransactionDetailsFiltersDto filters)
     {
         var paymentDetails = _context.PaymentDetails.AsNoTracking().Where(p =>
-            (p.CreatedDate).Month >= utcFromDate.Month && p.CreatedDate.Month <= utcToDate.Month)
-            .Include(p => p.Package);
+            (
+                (p.CreatedDate).Month >= utcFromDate.Month && p.CreatedDate.Month <= utcToDate.Month) && 
+                (p.CreatedDate.Year >= utcFromDate.Year && p.CreatedDate.Year <= utcToDate.Year)
+            );
+        
+        IOrderedQueryable<PaymentDetail> orderedPaymentDetails = null;
 
-        var response = await GetTransactionDetailsResponse(paymentDetails, pageIndex, pageSize);
+        if (filters.CreatedDate.Equals("ASC", StringComparison.OrdinalIgnoreCase))
+        {
+            orderedPaymentDetails = paymentDetails.OrderBy(p => p.CreatedDate);
+        }
+        else
+        {
+            orderedPaymentDetails = paymentDetails.OrderByDescending(p => p.CreatedDate);
+        }
+
+        var response = await GetTransactionDetailsResponse(orderedPaymentDetails.Include(p => p.Package), pageIndex, pageSize);
         
         return response;
     }

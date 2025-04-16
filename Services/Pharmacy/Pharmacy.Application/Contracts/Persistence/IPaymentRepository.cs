@@ -9,8 +9,8 @@ public interface IPaymentRepository
     ValueTask<bool> CreatePaymentAsync(PaymentDetail paymentDetail);
 
     Task<PaginatedList<TransactionDetailsResponseDto>> GetDailyPaymentDetailsAsync(Guid pharmacyId,
-        DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize);
+        DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize, TransactionDetailsFiltersDto filters);
 
     Task<PaginatedList<TransactionDetailsResponseDto>> GetMonthlyPaymentDetailsAsync(Guid pharmacyId,
-        DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize);
+        DateTimeOffset utcFromDate, DateTimeOffset utcToDate, int pageIndex, int pageSize, TransactionDetailsFiltersDto filters);
 }

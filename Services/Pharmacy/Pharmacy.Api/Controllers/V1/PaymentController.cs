@@ -12,15 +12,17 @@ public class PaymentController : ControllerBase
 
     private readonly IPaymentService _paymentService;
     private readonly IRazorpayGatewayService _razorpayGatewayService;
+    private readonly ITokenGenerationService _tokenGenerationService;
 
     #endregion
 
     #region Ctor
 
-    public PaymentController(IPaymentService paymentService, IRazorpayGatewayService razorpayGatewayService)
+    public PaymentController(IPaymentService paymentService, IRazorpayGatewayService razorpayGatewayService, ITokenGenerationService tokenGenerationService)
     {
         _paymentService = paymentService;
         _razorpayGatewayService = razorpayGatewayService;
+        _tokenGenerationService = tokenGenerationService;
     }
 
     #endregion
@@ -49,12 +51,17 @@ public class PaymentController : ControllerBase
 
         var result = await _paymentService.CreatePaymentAsync(paymentInfoDto);
 
-        if (result)
+        if (!result)
         {
             return StatusCode(500, "Unable to create payment.");
         }
 
-        return Ok();
+        string token = await _tokenGenerationService.GenerateTokenAsync(paymentInfoDto.PharmacyId, paymentInfoDto.CustomerId);
+
+        return Ok( new
+        {
+            token = token
+        });
     }
 
     [HttpGet("getkey")]
@@ -62,6 +69,20 @@ public class PaymentController : ControllerBase
     public IActionResult GetKeyAsync()
     {
         return Ok(_razorpayGatewayService.GetKey());
+    }
+
+    [HttpGet("VerityToken/{pharmacyId}/{customerId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> VerifyTokenAsync([FromRoute] Guid pharmacyId, [FromRoute] Guid customerId, [FromQuery] string token)
+    {
+        bool isValid = await _tokenGenerationService.VerifyTokenAsync(token, pharmacyId, customerId);
+
+        if (isValid)
+        {
+            return Ok();
+        }
+
+        return StatusCode(500, "Invalid Token");
     }
 
     #endregion
