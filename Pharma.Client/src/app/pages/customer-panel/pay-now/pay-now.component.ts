@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { customerInfo } from '../../../common/constant/auth-key';
+import { customerInfo, scanAppUrl } from '../../../common/constant/auth-key';
 import { PaymentService } from '../../../service/payment.service';
 import { ToastMessageService } from '../../../service/toast-message.service';
 
@@ -110,14 +110,19 @@ export class PayNowComponent implements OnInit {
           packageId: this.packageInfo.id,
         }
         this.paymentService.createPayment(request).subscribe({
-          next: (res) => {
-            this.toastService.showSuccess("success", 'Payment successful');
-            this.displayModal = false;
-            window.location.href = '/binah';
+          next: (res: any) => {
+            if(res.status === 200){
+              this.toastService.showSuccess("success", 'Payment successful. Redirecting to the scan page.');
+              this.displayModal = false;
+              setTimeout(() => {
+                window.location.href = scanAppUrl+`/?pharmacy=${this.user.pharmacyId}&customer=${this.user.id}&token=${res.body.token}`;
+              }, 1000)
+            }else{
+              this.toastService.showError("Error", "Unable to verify payment information")
+            }
           },
           error: (err) => {
             this.toastService.showError("failed", 'Payment failed');
-            window.location.href = '/binah';
           }
         });
 
