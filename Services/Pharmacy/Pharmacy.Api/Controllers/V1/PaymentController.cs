@@ -1,4 +1,5 @@
-﻿using Pharmacy.Application.Contracts.Infrastructure;
+﻿using System.Web;
+using Pharmacy.Application.Contracts.Infrastructure;
 using Pharmacy.Application.Features.Payment.Dtos;
 using Pharmacy.Application.Features.Payment.Services;
 
@@ -75,7 +76,9 @@ public class PaymentController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> VerifyTokenAsync([FromRoute] Guid pharmacyId, [FromRoute] Guid customerId, [FromQuery] string token)
     {
-        bool isValid = await _tokenGenerationService.VerifyTokenAsync(token, pharmacyId, customerId);
+        var decodedToken = HttpUtility.UrlDecode(token);
+        
+        bool isValid = await _tokenGenerationService.VerifyTokenAsync(decodedToken, pharmacyId, customerId);
 
         if (isValid)
         {
