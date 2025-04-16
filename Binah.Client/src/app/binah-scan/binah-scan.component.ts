@@ -108,7 +108,7 @@ export class BinahScanComponent implements OnInit {
 
             },
             reject: () => {
-              window.location.href = 'https://umrtest.com/pharmacyPortal/pay-now';
+              window.location.href = 'https://umrtest.com/pharmacyportal/pay-now';
             }
           });
         },
