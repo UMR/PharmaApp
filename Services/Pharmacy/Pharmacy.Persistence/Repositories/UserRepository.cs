@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pharmacy.Application.Contracts.Persistence;
+using Pharmacy.Application.Wrapper;
 using Pharmacy.Domain;
+using Pharmacy.Domain.Enums;
 
 namespace Pharmacy.Persistence.Repositories
 {
@@ -75,6 +77,37 @@ namespace Pharmacy.Persistence.Repositories
         {
             var result = await _context.Users.AsNoTracking().AnyAsync(u => u.Id != id && u.Mobile == mobile.Trim());
             return result;
+        }
+
+        public async Task<bool> UpdateUserStatusAsync(Guid id, string status)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                user.Status = byte.Parse(status);
+                _context.Users.Update(user);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public async Task<PaginatedList<User>> GetAllUserAsync(string search, int pageNumber, int pageSize)
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.FirstName.Contains(search) || x.LastName.Contains(search) || x.Email.Contains(search) || x.Mobile.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedList<User>(items, totalCount, pageSize, pageNumber);
         }
     }
 }

@@ -107,6 +107,19 @@
 
             </div>
         </div>
+        @if(this.isVerified){
+        <div>
+            <p>Your payment will expire in {{formatTime(tokenExpirationTime)}} minutes. Please scan within this time
+                period!
+            </p>
+        </div>
+        }
+        @else {
+        <div class="alert alert-danger" role="alert">
+            <p>Payment Expired!</p>
+        </div>
+        }
+
     </div>
 </section>
 <p-confirmdialog />

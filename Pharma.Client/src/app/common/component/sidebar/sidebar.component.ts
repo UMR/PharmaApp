@@ -61,6 +61,13 @@ export class SidebarComponent {
       roles: [RoleType.PHARMACIST],
     },
     {
+      number: '6',
+      name: 'Users',
+      icon: 'fa fa-users',
+      routerLink: '/manage-user',
+      roles: [RoleType.ADMIN],
+    },
+    {
       number: '20',
       name: 'Log Out',
       icon: 'fa fa-sign-out',

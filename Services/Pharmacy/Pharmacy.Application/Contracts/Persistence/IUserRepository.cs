@@ -1,4 +1,5 @@
-﻿using Pharmacy.Domain;
+﻿using Pharmacy.Application.Wrapper;
+using Pharmacy.Domain;
 
 namespace Pharmacy.Application.Contracts.Persistence
 {
@@ -13,5 +14,7 @@ namespace Pharmacy.Application.Contracts.Persistence
         Task<bool> UpdateAsync(User user);
         Task<bool> IsExistEmailAsync(Guid id, string email);
         Task<bool> IsExistMobileAsync(Guid id, string mobile);
+        Task<bool> UpdateUserStatusAsync(Guid id, string status);
+        Task<PaginatedList<User>> GetAllUserAsync(string? search, int pageNumber, int pageSize);
     }
 }

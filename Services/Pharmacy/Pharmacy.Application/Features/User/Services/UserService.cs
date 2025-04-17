@@ -2,13 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Application.Contracts.Persistence;
 using Pharmacy.Application.Exceptions;
+using Pharmacy.Application.Features.Authentication.Validators;
 using Pharmacy.Application.Features.User.Dtos;
 using Pharmacy.Application.Features.User.Validators;
+using Pharmacy.Application.Wrapper;
 using Pharmacy.Domain.Enums;
 
 namespace Pharmacy.Application.Features.User.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IServiceProvider _serviceProvider;
@@ -45,7 +47,7 @@ namespace Pharmacy.Application.Features.User.Services
         public async Task<UserInfoDto> GetByIdAsync(Guid id)
         {
             var userFromRepo = await _userRepository.GetByIdAsync(id);
-            var userToReturn = _mapper.Map<UserInfoDto>(userFromRepo);       
+            var userToReturn = _mapper.Map<UserInfoDto>(userFromRepo);
 
             return userToReturn;
         }
@@ -103,6 +105,34 @@ namespace Pharmacy.Application.Features.User.Services
         public async ValueTask<bool> IsExistAsync(string loginId)
         {
             return await _userRepository.IsExistAsync(loginId);
+        }
+
+        public async Task<bool> UpdateUserStatusAsync(Guid id, string status)
+        {
+            return await _userRepository.UpdateUserStatusAsync(id, status);
+        }
+
+        public async Task<bool> IsUserExistsAsync(UserRegisterRequestDto userInfoDto)
+        {
+            var validator = new UserRegisterDtoValidator(_serviceProvider);
+            var validationResult = await validator.ValidateAsync(userInfoDto);
+
+            if (validationResult.IsValid == false)
+            {
+                throw new ValidationRequestException(validationResult.Errors);
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<PaginatedList<UserInfoDto>> GetAllUserAsync(string? search, int pageNumber, int pageSize)
+        {
+            var users = await _userRepository.GetAllUserAsync(search, pageNumber, pageSize);
+            var usersToReturn = _mapper.Map<PaginatedList<UserInfoDto>>(users);
+            return usersToReturn;
         }
     }
 }

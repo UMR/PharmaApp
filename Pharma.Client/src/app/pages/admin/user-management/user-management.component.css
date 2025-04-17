@@ -1,0 +1,17 @@
+.select-button {
+  width: 100%;
+}
+.dialog-content {
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+.user-info-div p {
+  margin: 0.5rem 0;
+}
+
+h3 {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}

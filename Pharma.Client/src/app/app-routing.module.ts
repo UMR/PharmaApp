@@ -16,6 +16,7 @@ import { roleGuard } from './guards/role.guard';
 import { ScanLogComponent } from './pages/pharmacist-dashboard-panel/scan-log/scan-log.component';
 import { DashboardComponent } from './pages/pharmacist-dashboard-panel/dashboard/dashboard.component';
 import { LedgerComponent } from './pages/pharmacist-dashboard-panel/ledger/ledger.component';
+import { UserManagementComponent } from './pages/admin/user-management/user-management.component';
 
 const routes: Routes = [
   {
@@ -27,7 +28,7 @@ const routes: Routes = [
         component: DashboardComponent,
         canActivate: [AuthGuard, roleGuard],
         data: {
-          roles: [RoleType.PHARMACIST
+          roles: [RoleType.PHARMACIST, RoleType.ADMIN
           ]
         }
       },
@@ -54,6 +55,14 @@ const routes: Routes = [
         canActivate: [AuthGuard, roleGuard],
         data: {
           roles: [RoleType.PHARMACIST]
+        }
+      },
+      {
+        path: 'manage-user',
+        component: UserManagementComponent,
+        canActivate: [AuthGuard, roleGuard],
+        data: {
+          roles: [RoleType.ADMIN]
         }
       }
     ]

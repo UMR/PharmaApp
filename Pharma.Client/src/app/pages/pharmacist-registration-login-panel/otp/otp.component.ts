@@ -32,6 +32,9 @@ export class OtpComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getUser();
     this._otpTimer = this.pharmacyService.otpTimer$.subscribe((timer) => this.otpTimer = this.getTimer(timer));
+    if (this.user === null) {
+      this.router.navigate(['pharmacy-registration']);
+    }
   }
 
 

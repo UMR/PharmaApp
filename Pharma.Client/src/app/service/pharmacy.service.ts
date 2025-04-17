@@ -31,16 +31,23 @@ export class PharmacyService {
     return this.pharmacyData.asObservable();
   }
 
-  hasRole(requiredRole: string): boolean {
+  hasRole(requiredRoles: string[]): boolean {
     const user = JSON.parse(localStorage.getItem(authCookieKey)!) || null;
     const token = user ? user.accessToken : null;
     if (token) {
       let decryptedToken = this.decryptJwtToken(token);
       const roles = decryptedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      return roles.includes(requiredRole);
+
+      if (!roles) return false;
+
+      if (Array.isArray(roles)) {
+        return requiredRoles.some(role => roles.includes(role));
+      }
+      return requiredRoles.includes(roles);
     }
     return false;
   }
+
 
   decryptJwtToken(token: any) {
     const payload = token.split('.')[1];
@@ -60,6 +67,11 @@ export class PharmacyService {
   getCurrentUser() {
     const URI = `${environment.apiUrl}/v1/User/Get`;
     return this.http.get(URI, { observe: 'response' });
+  }
+
+  isUserExists(request: any) {
+    const URI = `${environment.apiUrl}/v1/User/IsUserExists`;
+    return this.http.post(URI, request, { observe: 'response' });
   }
 
 }

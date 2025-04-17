@@ -68,12 +68,13 @@ export class BinahScanComponent implements OnInit {
   token: any;
   pharmacyId: any;
   customerId: any;
+  tokenExpirationTime: number = 900;
+  tokenTimeInterval: any;
+  isVerified: boolean = false;
 
   constructor(
     private monitorService: MonitorService,
-    private router: Router,
     private toastService: ToastMessageService,
-    private route: ActivatedRoute,
     private tokenService: TokenService,
     private confirmationService: ConfirmationService,
   ) { }
@@ -91,33 +92,47 @@ export class BinahScanComponent implements OnInit {
       return;
     }
     else {
-      this.tokenService.verifyToken(encodeURIComponent(this.token), this.pharmacyId, this.customerId).subscribe({
-        next: async (response) => {
-          if (response.status === 200) {
-            console.log('Token verified successfully:', response.body);
-            await this.startScan();
-          }
-        },
-        error: (error) => {
-          this.toastService.showError('Error', 'Token verification failed.');
-          this.confirmationService.confirm({
-            message: 'Token verification failed. Do you want to retry?',
-            header: 'Confirmation',
-            icon: 'fa fa-exclamation-circle',
-            accept: () => {
-
-            },
-            reject: () => {
-              window.location.href = 'https://umrtest.com/pharmacyportal/pay-now';
-            }
-          });
-        },
-      }
-
-      );
+      this.verifyToken();
     }
 
   }
+  verifyToken() {
+    this.tokenService.verifyToken(encodeURIComponent(this.token), this.pharmacyId, this.customerId).subscribe({
+      next: async (response) => {
+        if (response.status === 200) {
+          this.isVerified = true;
+          await this.startScan();
+          this.startTokenCountdown();
+        }
+      },
+      error: () => {
+        this.isVerified = false;
+        this.toastService.showError('Error', 'Token verification failed.');
+        this.confirmationService.confirm({
+          message: 'Token verification failed. Your session is expired! Do you want to pay now?',
+          header: 'Confirmation',
+          icon: 'fa fa-exclamation-circle',
+          accept: () => {
+            window.location.href = 'https://umrtest.com/pharmacyportal/pay-now';
+          }
+        });
+      },
+    }
+
+    );
+  }
+  startTokenCountdown(): void {
+    this.tokenTimeInterval = setInterval(() => {
+      if (this.tokenExpirationTime > 0) {
+        this.tokenExpirationTime--;
+      } else {
+        clearInterval(this.tokenTimeInterval);
+        this.toastService.showError('Error', 'Token expired. Please refresh the page.');
+        window.location.reload();
+      }
+    }, 1000);
+  }
+
   getCookieValue(key: string) {
     const cookies = document.cookie.split(';');
     for (let cookie of cookies) {
@@ -127,6 +142,12 @@ export class BinahScanComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  formatTime(second: any): string {
+    const minutes = `${Math.floor(second / 60)}`.padStart(2, "0");
+    const seconds = `${second - Number(minutes) * 60}`.padStart(2, "0");
+    return `${minutes}:${seconds}`;
   }
 
   async startScan() {
@@ -165,24 +186,29 @@ export class BinahScanComponent implements OnInit {
   }
 
   startMeasuring(): void {
-    if (!this.session || this.sessionState$.value !== SessionState.ACTIVE) {
+    if (!this.session || this.getSessionState() !== SessionState.ACTIVE) {
       this.toastService.showError('Error', 'Session not active.');
       return;
     }
 
     this.session.start();
-    this.measurementStarted = true;
-    this.isMeasuring = true;
-    this.clearTimer();
+    if (this.session.getState() === SessionState.MEASURING) {
+      this.measurementStarted = true;
+      this.isMeasuring = true;
+      this.clearTimer();
 
-    this.timeInterval = setInterval(() => {
-      console.log('Processing time:', this.processingTime);
-      if (this.processingTime! > 0) {
-        this.processingTime!--;
-      } else {
-        this.stopMeasuring();
-      }
-    }, 1000);
+      this.timeInterval = setInterval(() => {
+        console.log('Processing time:', this.processingTime);
+        if (this.processingTime! > 0) {
+          this.processingTime!--;
+        } else {
+          this.stopMeasuring();
+        }
+      }, 1000);
+    }
+    else {
+      this.toastService.showError('Error', 'Measurement not started, SDK not ready.');
+    }
   }
 
   stopMeasuring(): void {
@@ -372,8 +398,6 @@ export class BinahScanComponent implements OnInit {
       }
     }
   }
-
-
   getSessionState(): SessionState | null {
     return this.sessionState$.value;
   }

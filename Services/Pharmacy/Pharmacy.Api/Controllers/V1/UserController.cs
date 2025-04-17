@@ -1,4 +1,6 @@
-﻿using Pharmacy.Application.Common.Constants;
+﻿using IdentityModel.Client;
+using Pharmacy.Application.Common.Constants;
+using Pharmacy.Application.Features.Authentication.Dtos;
 using Pharmacy.Application.Features.CurrentUser.Services;
 using Pharmacy.Application.Features.User.Dtos;
 using Pharmacy.Application.Features.User.Services;
@@ -36,7 +38,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Policy = RoleConstant.Pharmacist)]
+    [Authorize(Roles = RoleConstant.Pharmacist + "," + RoleConstant.Admin)]
     [HttpGet("Get")]
     public async Task<IActionResult> GetAsync()
     {
@@ -49,11 +51,20 @@ public class UserController : ControllerBase
     public async Task<IActionResult> IsExist(string loginId)
     {
         var result = await _userService.IsExistAsync(loginId);
-        return Ok(new {
+        return Ok(new
+        {
             LoginId = loginId,
             Status = result,
-            Message = result? "User Login ID is Exist" : "User Login ID does not Exist",
+            Message = result ? "User Login ID is Exist" : "User Login ID does not Exist",
         });
+    }
+
+    [HttpPost("IsUserExists")]
+    [AllowAnonymous]
+    public async Task<IActionResult> IsUserExists([FromBody] UserRegisterRequestDto userInfoDto)
+    {
+        var result = await _userService.IsUserExistsAsync(userInfoDto);
+        return Ok(result);
     }
 
     #endregion

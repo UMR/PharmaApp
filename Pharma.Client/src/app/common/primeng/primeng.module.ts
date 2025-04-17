@@ -44,6 +44,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AccordionModule } from 'primeng/accordion';
 import { PickListModule } from 'primeng/picklist';
 import { MessageModule } from 'primeng/message';
+import { RadioButton } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [],
@@ -91,7 +92,8 @@ import { MessageModule } from 'primeng/message';
     ProgressSpinnerModule,
     AccordionModule,
     PickListModule,
-    MessageModule
+    MessageModule,
+    RadioButton
   ],
   exports: [
     ToastModule,
@@ -136,7 +138,8 @@ import { MessageModule } from 'primeng/message';
     ProgressSpinnerModule,
     AccordionModule,
     PickListModule,
-    MessageModule
+    MessageModule,
+    RadioButton
   ],
   providers: [
     MessageService, ConfirmationService

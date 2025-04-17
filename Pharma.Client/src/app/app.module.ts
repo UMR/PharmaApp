@@ -26,6 +26,8 @@ import { PayNowComponent } from './pages/customer-panel/pay-now/pay-now.componen
 import { ScanLogComponent } from './pages/pharmacist-dashboard-panel/scan-log/scan-log.component';
 import { DashboardComponent } from './pages/pharmacist-dashboard-panel/dashboard/dashboard.component';
 import { LedgerComponent } from './pages/pharmacist-dashboard-panel/ledger/ledger.component';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
+import { UserManagementComponent } from './pages/admin/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { LedgerComponent } from './pages/pharmacist-dashboard-panel/ledger/ledge
     ScanLogComponent,
     DashboardComponent,
     LedgerComponent,
+    AdminDashboardComponent,
+    UserManagementComponent,
 
   ],
   imports: [

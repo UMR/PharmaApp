@@ -7,7 +7,7 @@ import { ToastMessageService } from '../service/toast-message.service';
 export const roleGuard: CanActivateFn = (route, state) => {
   const authService = inject(PharmacyService);
   const toastService = inject(ToastMessageService);
-  const requiredRoles = route.data['roles'] as RoleType;
+  const requiredRoles = route.data['roles'] as RoleType[];
 
   if (authService.hasRole(requiredRoles)) {
     return true;

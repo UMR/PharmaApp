@@ -18,6 +18,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         accountService.logOut();
         router.navigate(['/pharmacy-login']);
       }
+      if ([400].includes(err.status)) {
+        toastService.showError("error", err.error.error);
+      }
       const error = err.statusText;
       return throwError(() => error);
     })

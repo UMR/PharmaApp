@@ -5,6 +5,7 @@ import { AuthService } from '../../../service/auth.service';
 import { first } from 'rxjs';
 import { PharmacyService } from '../../../service/pharmacy.service';
 import { phoneNumberValidator } from '../../../common/Validator/phonenumber.validator';
+import { ToastMessageService } from '../../../service/toast-message.service';
 
 @Component({
   selector: 'app-registration',
@@ -24,7 +25,7 @@ export class RegistrationComponent {
   /**
    *
    */
-  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService, private route: ActivatedRoute, private pharmacyService: PharmacyService) {
+  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService, private route: ActivatedRoute, private pharmacyService: PharmacyService, private toastService: ToastMessageService) {
 
   }
   ngOnInit(): void {
@@ -39,10 +40,24 @@ export class RegistrationComponent {
     if (this.userRegistrationForm.invalid) {
       return;
     }
+    var request = {
+      firstName: this.userRegistrationForm.value.firstName,
+      lastName: this.userRegistrationForm.value.lastName,
+      email: this.userRegistrationForm.value.email,
+      mobile: this.userRegistrationForm.value.mobile,
+      pin: this.userRegistrationForm.value.pin,
+    }
+    this.pharmacyService.isUserExists(request).subscribe({
+      next: (res: any) => {
+        if (res.body === false) {
+          this.generateOtp('1');
+          this.pharmacyService.setUser(this.userRegistrationForm.value);
+        }
+      },
+      error: (err) => {
 
-    this.loading = true;
-    this.generateOtp('1');
-    this.pharmacyService.setUser(this.userRegistrationForm.value);
+      }
+    });
   }
 
 
