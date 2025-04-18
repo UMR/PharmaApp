@@ -114,9 +114,9 @@ export class PayNowComponent implements OnInit {
           next: (res: any) => {
             if (res.status === 200) {
               this.toastService.showSuccess("success", 'Payment successful. Redirecting to the scan page.');
-              document.cookie = `pharmacy=${this.user.pharmacyId}`
-              document.cookie = `customer=${this.user.id}`;
-              document.cookie = `token=${res.body.token}`;
+              document.cookie = `pharmacy=${this.user.pharmacyId}; path=/`
+              document.cookie = `customer=${this.user.id}; path=/`;
+              document.cookie = `token=${res.body.token}; path=/`;
 
               setTimeout(() => {
                 window.location.href = localAppUrl;

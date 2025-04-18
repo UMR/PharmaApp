@@ -19,10 +19,13 @@ namespace Pharmacy.Application.Features.Authentication.Validators
                 .Length(3, 30)
                 .WithMessage("{PropertyName} must be between 3 to 30 characters");
 
-            RuleFor(u => u.LastName)
-                .Length(3, 30)
-                .WithMessage("{PropertyName} must be between 3 to 30 characters")
-                .When(u => !u.LastName.IsNullOrEmpty());
+            When(u => !string.IsNullOrEmpty(u.LastName), () =>
+            {
+                RuleFor(u => u.LastName)
+                    .Length(3, 30)
+                    .WithMessage("{PropertyName} must be between 3 to 30 characters")
+                    .When(u => !u.LastName.IsNullOrEmpty());
+            });
 
             When(u => !u.Email.IsNullOrEmpty(), () =>
             {
