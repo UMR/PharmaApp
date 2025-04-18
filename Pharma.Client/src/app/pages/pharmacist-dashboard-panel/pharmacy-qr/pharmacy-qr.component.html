@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <div class="row mt-2">
         <p-card>
+            @if(dataLoaded){
             @if(user && pharmacy){
             @if(user.status === 3){
             <div class="col-12">
@@ -21,7 +22,7 @@
                 </p-message>
             </div>
             }
-
+            }
             @if(displayModal){
             <p-dialog [(visible)]="displayModal" modal="true" header="Register User" [closable]="true"
                 (onHide)="cancelRegistration()" [maximizable]="true" appendTo="body"

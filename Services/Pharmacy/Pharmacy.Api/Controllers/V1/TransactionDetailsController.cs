@@ -22,12 +22,12 @@ public class TransactionDetailsController : ControllerBase
     }
 
     #endregion
-    
+
     #region Methods
-    
+
     [HttpGet("daily/{fromDate}/{toDate}")]
     [Authorize(Policy = RoleConstant.Pharmacist)]
-    public async Task<IActionResult> GetDailyTranDetailsAsync([FromRoute] DateTimeOffset fromDate, [FromRoute] DateTimeOffset toDate, [FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string filters)
+    public async Task<IActionResult> GetDailyTranDetailsAsync([FromRoute] DateTimeOffset fromDate, [FromRoute] DateTimeOffset toDate, [FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string? filters)
     {
         var filterRequest = JsonConvert.DeserializeObject<TransactionDetailsFiltersDto>(filters ?? "") ?? new TransactionDetailsFiltersDto();
         var result = await _transactionDetailsService.GetDailyTransactionDetailsAsync(fromDate, toDate, pageIndex, pageSize, filterRequest);
@@ -37,7 +37,7 @@ public class TransactionDetailsController : ControllerBase
 
     [HttpGet("monthly/{fromDate}/{toDate}")]
     [Authorize(Policy = RoleConstant.Pharmacist)]
-    public async Task<IActionResult> GetMonthlyTranDetailsAsync([FromRoute] DateTimeOffset fromDate, [FromRoute] DateTimeOffset toDate, [FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string filters)
+    public async Task<IActionResult> GetMonthlyTranDetailsAsync([FromRoute] DateTimeOffset fromDate, [FromRoute] DateTimeOffset toDate, [FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string? filters)
     {
         var filterRequest = JsonConvert.DeserializeObject<TransactionDetailsFiltersDto>(filters ?? "") ?? new TransactionDetailsFiltersDto();
         var result = await _transactionDetailsService.GetMonthlyTransactionDetailsAsync(fromDate, toDate, pageIndex, pageSize, filterRequest);

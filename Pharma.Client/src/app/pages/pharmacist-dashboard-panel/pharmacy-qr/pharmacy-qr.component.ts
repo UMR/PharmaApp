@@ -3,7 +3,7 @@ import { BinahScanService } from '../../../service/binah-scan-service.service';
 import { PharmacyService } from '../../../service/pharmacy.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FileUpload } from 'primeng/fileupload';
-import { Observable, Subscription } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastMessageService } from '../../../service/toast-message.service';
 
@@ -42,13 +42,27 @@ export class PharmacyQrComponent implements OnInit {
   chipInput: any;
   resizeObservable$: Observable<Event> | any;
   resizeSubscription$: Subscription | any;
+  dataLoaded: boolean = false;
 
 
   ngOnInit(): void {
-    this.getCurrentUser();
-    this.getPharmacy();
+    forkJoin([
+      this.pharmaService.getCurrentUser(),
+      this.pharmaService.getPharmacy()
+    ]).subscribe({
+      next: ([userRes, pharmacyRes]) => {
+        this.user = userRes.body;
+        this.pharmacy = pharmacyRes.body;
+        this.dataLoaded = true;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  
     this.getQrCode();
   }
+  
 
   getPharmacy() {
     this.pharmaService.getPharmacy().subscribe({
