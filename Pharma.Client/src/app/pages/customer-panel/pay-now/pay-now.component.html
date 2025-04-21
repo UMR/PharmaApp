@@ -38,7 +38,8 @@
             </p>
         </div>
     </div>
-    <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()">Next</button>
+    <button class="btn btn-primary rounded-pill mt-4 px-5 py-2" (click)="payNowmodal()"
+        [disabled]="sdkLoaded">Next</button>
     <div class="container">
         <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="true" [resizable]="false" [baseZIndex]="10000">
 

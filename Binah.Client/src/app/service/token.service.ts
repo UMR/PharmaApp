@@ -9,6 +9,7 @@ export class TokenService {
 
   constructor(private http: HttpClient) { }
   apiUrl: string = 'https://umrtest.com/pharmaAuthApi/api/v1';
+  // apiUrl: string = 'http://localhost:7001/api/v1';
 
 
   verifyToken(token: string, pharmacyId: string, customerId: string): Observable<any> {

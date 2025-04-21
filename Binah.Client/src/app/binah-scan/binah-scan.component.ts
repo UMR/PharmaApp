@@ -158,8 +158,14 @@ export class BinahScanComponent implements OnInit {
       console.error('Missing license key or processing time.');
       return;
     }
+    try {
 
-    await this.initializeMonitor(this.licenseKey);
+      await this.initializeMonitor(this.licenseKey);
+    }
+    catch {
+      this.toastService.showError('Error', 'Failed to initialize monitor.');
+    }
+
   }
 
   async initializeMonitor(licenseKey: string): Promise<void> {
@@ -186,29 +192,36 @@ export class BinahScanComponent implements OnInit {
   }
 
   startMeasuring(): void {
-    if (!this.session || this.getSessionState() !== SessionState.ACTIVE) {
-      this.toastService.showError('Error', 'Session not active.');
-      return;
+    try {
+      if (!this.session || this.getSessionState() !== SessionState.ACTIVE) {
+        this.toastService.showError('Error', 'Session not active.');
+        return;
+      }
+
+      this.session.start();
+      if (this.session.getState() === SessionState.MEASURING) {
+        this.measurementStarted = true;
+        this.isMeasuring = true;
+        this.clearTimer();
+
+        this.timeInterval = setInterval(() => {
+          console.log('Processing time:', this.processingTime);
+          if (this.processingTime! > 0) {
+            this.processingTime!--;
+          } else {
+            this.stopMeasuring();
+          }
+        }, 1000);
+      }
+      else {
+        this.toastService.showError('Error', 'Measurement not started, SDK not ready.');
+      }
+    }
+    catch (error) {
+      console.error('Error starting measurement:', error);
+      this.toastService.showError('Error', 'Failed to start measurement.');
     }
 
-    this.session.start();
-    if (this.session.getState() === SessionState.MEASURING) {
-      this.measurementStarted = true;
-      this.isMeasuring = true;
-      this.clearTimer();
-
-      this.timeInterval = setInterval(() => {
-        console.log('Processing time:', this.processingTime);
-        if (this.processingTime! > 0) {
-          this.processingTime!--;
-        } else {
-          this.stopMeasuring();
-        }
-      }, 1000);
-    }
-    else {
-      this.toastService.showError('Error', 'Measurement not started, SDK not ready.');
-    }
   }
 
   stopMeasuring(): void {

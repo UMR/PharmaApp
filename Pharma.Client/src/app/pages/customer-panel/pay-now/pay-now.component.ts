@@ -10,12 +10,7 @@ import { ToastMessageService } from '../../../service/toast-message.service';
   styleUrl: './pay-now.component.css'
 })
 export class PayNowComponent implements OnInit {
-
-  /**
-   *
-   */
   constructor(private paymentService: PaymentService, private toastService: ToastMessageService) {
-
   }
 
   ngOnInit(): void {
@@ -30,6 +25,7 @@ export class PayNowComponent implements OnInit {
   displayModal: boolean = false;
   packageInfo: any;
   apiKey: any;
+  sdkLoaded: boolean = false;
 
   payNowmodal() {
     this.displayModal = true;
@@ -66,8 +62,8 @@ export class PayNowComponent implements OnInit {
     });
   }
   payNow() {
-    debugger;
     this.displayModal = false;
+    this.sdkLoaded = true;
     this.createOrder()
 
   }
@@ -114,12 +110,14 @@ export class PayNowComponent implements OnInit {
           next: (res: any) => {
             if (res.status === 200) {
               this.toastService.showSuccess("success", 'Payment successful. Redirecting to the scan page.');
+              this.sdkLoaded = false;
               document.cookie = `pharmacy=${this.user.pharmacyId}; path=/`
               document.cookie = `customer=${this.user.id}; path=/`;
               document.cookie = `token=${res.body.token}; path=/`;
 
               setTimeout(() => {
                 window.location.href = localAppUrl;
+                // window.location.href = "http://localhost:9003";
               }, 1000)
             } else {
               this.toastService.showError("Error", "Unable to verify payment information")
@@ -127,6 +125,7 @@ export class PayNowComponent implements OnInit {
           },
           error: (err) => {
             this.toastService.showError("failed", 'Payment failed');
+            this.sdkLoaded = false;
           }
         });
 
@@ -134,6 +133,7 @@ export class PayNowComponent implements OnInit {
       modal: {
         ondismiss: () => {
           this.toastService.showError("failed", 'Payment dismissed by User');
+          this.sdkLoaded = false;
         }
       },
       onerror: () => {
